@@ -22,7 +22,7 @@
     <PackageReleaseNotes>https://raw.githubusercontent.com/systemathics/sdk-csharp/master/RELEASE_NOTES.md</PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/systemathics/sdk-csharp</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageIcon>logo-square.svg</PackageIcon>
+    <PackageIcon>logo-64x64.png</PackageIcon>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/systemathics/sdk-csharp</RepositoryUrl>
@@ -48,7 +48,7 @@
     <Protobuf Include="google\type\*.proto" GrpcServices="None" />
   </ItemGroup>
     <ItemGroup>
-    <None Include="../docs/logo-square.svg">
+    <None Include="../docs/logo-64x64.png">
       <Pack>true</Pack>
       <PackagePath>$(PackageIconUrl)</PackagePath>
     </None>
