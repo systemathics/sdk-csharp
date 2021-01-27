@@ -1,0 +1,56 @@
+<Project Sdk="Microsoft.NET.Sdk">
+<PropertyGroup>
+    <!-- General -->
+    <AssemblyName>Systemathics.Apis</AssemblyName>
+    <Description>Csharp grpc client for Systemathics APIs.</Description>
+    <Copyright>Copyright 2021 Systemathics</Copyright>
+    <Authors>contact@systemathics.com</Authors>
+    <NeutralLanguage>en-US</NeutralLanguage>
+
+    <!-- Build settings -->
+    <TargetFramework>net5.0</TargetFramework>
+    <DebugType>portable</DebugType>
+    <OutputType>Library</OutputType>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <IncludeSymbols>true</IncludeSymbols>
+
+    <!-- NuGet settings -->
+    <PackageId>Systemathics.Apis</PackageId>
+    <PackageTags>grpc;Systemathics</PackageTags>
+    <PackageReleaseNotes>https://raw.githubusercontent.com/systemathics/sdk-csharp/master/RELEASE_NOTES.md</PackageReleaseNotes>
+    <PackageProjectUrl>https://github.com/systemathics/sdk-csharp</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageIcon>logo-square.svg</PackageIcon>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/systemathics/sdk-csharp</RepositoryUrl>
+
+    <!-- SourceLink settings -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Grpc.Net.Client" Version="2.34.0" />
+    <PackageReference Include="Google.Protobuf" Version="3.14.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.34.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.*" PrivateAssets="All" />
+  </ItemGroup>
+  <ItemGroup>
+    <Protobuf Include="systemathics\apis\services\**\*.proto" GrpcServices="Client" />
+    <Protobuf Include="systemathics\apis\type\**\*.proto" GrpcServices="None" />
+    <Protobuf Include="google\type\*.proto" GrpcServices="None" />
+  </ItemGroup>
+    <ItemGroup>
+    <None Include="../docs/logo-square.svg">
+      <Pack>true</Pack>
+      <PackagePath>$(PackageIconUrl)</PackagePath>
+    </None>
+  </ItemGroup>
+</Project>
