@@ -12,6 +12,8 @@ namespace Systemathics.Apis.Tests
     #region Usings
 
     using System;
+    using System.IO;
+    using System.Threading.Tasks;
 
     using Google.Protobuf.WellKnownTypes;
 
@@ -20,8 +22,12 @@ namespace Systemathics.Apis.Tests
     using Systemathics.Apis.Type.V1;
     using Systemathics.Apis.Services.V1;
 
+    using Auth0.AuthenticationApi;
+    using Auth0.AuthenticationApi.Models;
+
     using Google.Type;
 
+    using Microsoft.Extensions.Configuration;
     using Microsoft.VisualBasic;
 
     using NUnit.Framework;
@@ -34,14 +40,115 @@ namespace Systemathics.Apis.Tests
     /// <summary>
     /// The cs unit tests.
     /// </summary>
+    [TestFixture]
     public class Tests
     {
         /// <summary>
-        /// The setup.
+        /// The get app settings.
         /// </summary>
-        [SetUp]
-        public void Setup()
+        /// <returns>
+        /// The <see cref="IConfiguration"/>.
+        /// </returns>
+        /// 
+        internal static IConfiguration GetAppSettings()
         {
+            // Build configuration from local json
+            var directory = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName;
+            Console.WriteLine($"Current 'appsettings.json' folder: {directory}");
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(directory)
+                .AddJsonFile("appsettings.json");
+
+            return builder.Build();
+        }
+
+        /// <summary>
+        /// The get access token.
+        /// </summary>
+        /// <returns>
+        /// The <see cref="Task"/>.
+        /// </returns>
+        internal static async Task<string> GetAccessToken()
+        {
+            var configuration = GetAppSettings();
+            var appAuth0Settings = configuration.GetSection("Auth0");
+            var auth0Client = new AuthenticationApiClient(appAuth0Settings["Domain"]);
+            var tokenRequest = new ClientCredentialsTokenRequest()
+            {
+                ClientId = appAuth0Settings["ClientId"],
+                ClientSecret = appAuth0Settings["ClientSecret"],
+                Audience = appAuth0Settings["Audience"]
+            };
+            var tokenResponse = await auth0Client.GetTokenAsync(tokenRequest);
+            return tokenResponse.AccessToken;
+
+        }
+
+        /// <summary>
+        /// The test constraints.
+        /// </summary>
+        [Test]
+        public async Task TestBarsRequest()
+        {
+            // --> Constraints
+            var today = DateTime.Today;
+            var dateIntervals = new DateInterval
+            {
+                StartDate = new Date { Year = 2017, Month = 01, Day = 01 },
+                EndDate = new Date { Year = today.Year, Month = today.Month, Day = today.Day }
+            };
+
+            var timeInterval = new TimeInterval
+            {
+                StartTime = new TimeOfDay { Hours = 00, Minutes = 00, Seconds = 00 },
+                EndTime = new TimeOfDay { Hours = 06, Minutes = 00, Seconds = 00 }
+            };
+
+            var excludedDays = new[] { DayOfWeek.Saturday, DayOfWeek.Sunday };
+
+            // Create constraints
+            var constraints = new Constraints();
+            constraints.DateIntervals.Add(dateIntervals);
+            constraints.ExcludedDays.Add(excludedDays);
+            constraints.TimeIntervals.Add(timeInterval);
+
+            // Generate bars request
+            var memo = new Memo { Provider = "ICE", Group = "FUTURES_599", Stream = "L1", Ticker = @"F:NK225M\J20" };
+            var begintime = new TimeOfDay { Hours = 00, Minutes = 00, Seconds = 00 };
+            var duration = new Duration { Seconds = 5 * 60 };
+            var request = new BarsRequest
+            {
+                Constraints = constraints,
+                BeginTime = begintime,
+                Memo = memo,
+                Sampling = duration
+            };
+
+            Assert.IsNotNull(request);
+
+            // Retrieve access token
+            var accessToken = await GetAccessToken();
+            Assert.IsNotNull(accessToken);
+
+            // Create channel and grpc client
+            var uri = "https://indicators-bars.apis.systemathics.cloud";
+            var channel = GrpcChannel.ForAddress(uri);
+            var client = new BarsService.BarsServiceClient(channel);
+            var headers = new Metadata();
+
+            headers.Add("Authorization", $"Bearer {accessToken}");
+
+            var reply = client.Bars(request, headers);
+
+            if (reply.Error != null)
+            {
+                Console.WriteLine(reply.Error);
+            }
+            var bars = reply.Bars;
+            Assert.IsNotNull(bars);
+            Console.WriteLine($"Number of bars: {bars.Count}");
+
+
         }
 
         /// <summary>
@@ -79,69 +186,6 @@ namespace Systemathics.Apis.Tests
             Assert.IsNotNull(constraints.DateIntervals);
             Assert.IsNotNull(constraints.ExcludedDays);
             Assert.IsNotNull(constraints.TimeIntervals);
-        }
-
-        /// <summary>
-        /// The test constraints.
-        /// </summary>
-        [Test]
-        public void TestBarsRequest()
-        {
-            // --> Constraints
-            var today = DateTime.Today;
-            var dateIntervals = new DateInterval
-                                    {
-                                        StartDate = new Date { Year = 2017, Month = 01, Day = 01 },
-                                        EndDate = new Date { Year = today.Year, Month = today.Month, Day = today.Day }
-                                    };
-
-            var timeInterval = new TimeInterval
-                                   {
-                                       StartTime = new TimeOfDay { Hours = 00, Minutes = 00, Seconds = 00 },
-                                       EndTime = new TimeOfDay { Hours = 06, Minutes = 00, Seconds = 00 }
-                                   };
-
-            var excludedDays = new[] { DayOfWeek.Saturday, DayOfWeek.Sunday };
-
-            // Create constraints
-            var constraints = new Constraints();
-            constraints.DateIntervals.Add(dateIntervals);
-            constraints.ExcludedDays.Add(excludedDays);
-            constraints.TimeIntervals.Add(timeInterval);
-
-            // Generate bars request
-            var memo = new Memo { Provider = "ICE", Group = "FUTURES_599", Stream = "L1", Ticker = @"F:NK225M\J20" };
-            var begintime = new TimeOfDay { Hours = 00, Minutes = 00, Seconds = 00 };
-            var duration = new Duration { Seconds = 5 * 60 };
-            var request = new BarsRequest
-                              {
-                                  Constraints = constraints,
-                                  BeginTime = begintime,
-                                  Memo = memo,
-                                  Sampling = duration
-            };
-
-            Assert.IsNotNull(request);
-
-            // Token
-            var token = Environment.GetEnvironmentVariable("AUTH0_TOKEN");
-
-            // Create channel and grpc client
-            var uri = "https://indicators-bars.apis.systemathics.cloud";
-            var channel = GrpcChannel.ForAddress(uri);
-            var service = new BarsService.BarsServiceClient(channel);
-            var headers = new Metadata();
-             
-            headers.Add("Authorization", $"Bearer {token}");
-
-            var reply = service.Bars(request, headers);
-
-            if (reply.Error != null)
-            {
-                Console.WriteLine(reply.Error);
-            }
-            var bars = reply.Bars;
-            Console.WriteLine($"Bars: {bars.Count}");
         }
 
         /// <summary>

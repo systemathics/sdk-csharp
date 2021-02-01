@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Systemathics.Apis", "src\Systemathics.Apis.csproj", "{A96839D2-432D-4166-8D1D-B5E2AAEEBD0F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Systemathics.Apis.Tests", "Systemathics.Apis.Tests\Systemathics.Apis.Tests.csproj", "{3E634EAB-9A7C-4808-9616-49F0B229E511}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Systemathics.Apis.Tests", "tests\Systemathics.Apis.Tests.csproj", "{3E634EAB-9A7C-4808-9616-49F0B229E511}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
