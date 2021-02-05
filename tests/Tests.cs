@@ -49,7 +49,6 @@ namespace Systemathics.Apis.Tests
         /// <returns>
         /// The <see cref="IConfiguration"/>.
         /// </returns>
-        /// 
         internal static IConfiguration GetAppSettings()
         {
             // Build configuration from local json
@@ -70,13 +69,15 @@ namespace Systemathics.Apis.Tests
         /// </returns>
         internal static async Task<string> GetAccessToken()
         {
+            var clientId = Environment.GetEnvironmentVariable("AUTH0_CLIENT_ID") ?? throw new Exception("Missing environment variable AUTH0_CLIENT_ID");
+            var clientSecret = Environment.GetEnvironmentVariable("AUTH0_CLIENT_SECRET") ?? throw new Exception("Missing environment variable AUTH0_CLIENT_SECRET");
             var configuration = GetAppSettings();
             var appAuth0Settings = configuration.GetSection("Auth0");
             var auth0Client = new AuthenticationApiClient(appAuth0Settings["Domain"]);
             var tokenRequest = new ClientCredentialsTokenRequest()
             {
-                ClientId = appAuth0Settings["ClientId"],
-                ClientSecret = appAuth0Settings["ClientSecret"],
+                ClientId = clientId,
+                ClientSecret = clientSecret,
                 Audience = appAuth0Settings["Audience"]
             };
             var tokenResponse = await auth0Client.GetTokenAsync(tokenRequest);
@@ -131,7 +132,7 @@ namespace Systemathics.Apis.Tests
             Assert.IsNotNull(accessToken);
 
             // Create channel and grpc client
-            var uri = "https://indicators-bars.apis.systemathics.cloud";
+            var uri = "https://apis.systemathics.cloud";
             var channel = GrpcChannel.ForAddress(uri);
             var client = new BarsService.BarsServiceClient(channel);
             var headers = new Metadata();
@@ -140,15 +141,8 @@ namespace Systemathics.Apis.Tests
 
             var reply = client.Bars(request, headers);
 
-            if (reply.Error != null)
-            {
-                Console.WriteLine(reply.Error);
-            }
             var bars = reply.Bars;
-            Assert.IsNotNull(bars);
-            Console.WriteLine($"Number of bars: {bars.Count}");
-
-
+            Assert.IsNotEmpty(bars);
         }
 
         /// <summary>
