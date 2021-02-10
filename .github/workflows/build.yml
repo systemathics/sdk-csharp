@@ -20,8 +20,8 @@ env:
   GITHUB_USER: rfrerebe-stx
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   # Official NuGet Feed settings
-  NUGET_FEED: https://apiint.nugettest.org/v3/index.json
-  NUGET_KEY: ${{ secrets.INT_NUGET_ORG_API_KEY }}
+  NUGET_FEED: https://api.nuget.org/v3/index.json
+  NUGET_KEY: ${{ secrets.NUGET_ORG_API_KEY }}
 jobs:
   build:
     runs-on: ubuntu-latest
