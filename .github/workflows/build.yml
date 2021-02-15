@@ -58,7 +58,7 @@ jobs:
           echo Clean Version: $VERSION
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
       - name: Create Release NuGet package
-        run: dotnet pack -v normal -c Release --include-symbols --include-source -p:PackageVersion=$${{ env.VERSION }} -o nupkg src/$PROJECT_NAME.*proj
+        run: dotnet pack -v normal -c Release --include-symbols --include-source -p:PackageVersion=${{ env.VERSION }} -o nupkg src/$PROJECT_NAME.*proj
       - name: Push to Nuget Feed
         run: dotnet nuget push ./nupkg/*.nupkg
 
