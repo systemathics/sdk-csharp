@@ -53,7 +53,7 @@ namespace Systemathics.Apis.Tests
         {
             // Build configuration from local json
             var directory = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName;
-            var builder = new ConfigurationBuilder().SetBasePath(directory).AddJsonFile("appsettings.json").AddEnvironmentVariables("AUTH0_");
+            var builder = new ConfigurationBuilder().SetBasePath(directory).AddJsonFile("appsettings.json").AddEnvironmentVariables();
             if (File.Exists(Path.Combine(directory, "appsettings.private.json")))
             {
                 builder.AddJsonFile("appsettings.private.json");
@@ -71,8 +71,8 @@ namespace Systemathics.Apis.Tests
         internal static async Task<string> GetAccessToken()
         {
             var configuration = GetAppSettings();
-            var clientId = configuration["AUTH0_CLIENT_ID"] ?? throw new Exception("Missing environment variable AUTH0_CLIENT_ID");
-            var clientSecret = configuration["AUTH0_CLIENT_SECRET"] ?? throw new Exception("Missing environment variable AUTH0_CLIENT_SECRET");
+            var clientId = configuration["CLIENT_ID"] ?? throw new Exception("Missing environment variable CLIENT_ID");
+            var clientSecret = configuration["CLIENT_SECRET"] ?? throw new Exception("Missing environment variable CLIENT_SECRET");
             var appAuth0Settings = configuration.GetSection("Auth0");
             var auth0Client = new AuthenticationApiClient(appAuth0Settings["Domain"]);
             var tokenRequest = new ClientCredentialsTokenRequest()
