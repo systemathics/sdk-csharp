@@ -34,6 +34,7 @@ namespace Systemathics.Apis.Tests
 
     using DateInterval = Systemathics.Apis.Type.V1.DateInterval;
     using DayOfWeek = Google.Type.DayOfWeek;
+    using Field = Systemathics.Apis.Type.V1.Field;
 
     #endregion
 
@@ -144,6 +145,67 @@ namespace Systemathics.Apis.Tests
 
             var bars = reply.Bars;
             Assert.IsNotEmpty(bars);
+        }
+
+        /// <summary>
+        /// The test constraints.
+        /// </summary>
+        [Test]
+        public async Task TestBollingerBandsRequest()
+        {
+            // Space (Nikkei 225, April 2020)
+            var memo = new Memo { Provider = "ICE", Group = "FUTURES_599", Stream = "L1", Ticker = @"F:NK225M\J20" };
+
+            // Time
+            Constraints Constraints()
+            {
+                var dateIntervals = new DateInterval
+                                        {
+                                            StartDate = new Date { Year = 2020, Month = 03, Day = 15 },
+                                            EndDate = new Date { Year = 2020, Month = 03, Day = 16 }
+                                        };
+
+                var timeInterval = new TimeInterval
+                                       {
+                                           StartTime = new TimeOfDay { Hours = 00, Minutes = 00, Seconds = 00 },
+                                           EndTime = new TimeOfDay { Hours = 06, Minutes = 00, Seconds = 00 }
+                                       };
+
+                var excludedDays = new[] { DayOfWeek.Saturday, DayOfWeek.Sunday };
+
+                // Create constraints
+                var constraints = new Constraints();
+                constraints.DateIntervals.Add(dateIntervals);
+                constraints.ExcludedDays.Add(excludedDays);
+                constraints.TimeIntervals.Add(timeInterval);
+                return constraints;
+            }
+
+            // Bollinger Bands request
+            var request = new BollingerBandsRequest
+                              {
+                                  Memo = memo,
+                                  Constraints = Constraints(),
+                                  Field = Field.TradePrice,
+                                  Length = 100,
+                                  Deviations = 0.4
+                              };
+
+            // Create channel and gRPC client
+            var channel = GrpcChannel.ForAddress("https://apis.systemathics.cloud");
+            var headers = new Metadata { { "Authorization", $"Bearer {await GetAccessToken()}" } };
+            var client = new BollingerBandsService.BollingerBandsServiceClient(channel);
+
+            var counter = 0;
+            await foreach (var reply in client.BollingerBands(request, headers).ResponseStream.ReadAllAsync())
+            {
+                counter++;
+                Assert.Greater(reply.LowerBand, 0);
+                Assert.Greater(reply.MiddleBand, 0);
+                Assert.Greater(reply.UpperBand, 0);
+            }
+
+            TestContext.WriteLine($"Received {counter:N0} {nameof(BollingerBandsResponse)}");
         }
 
         /// <summary>
