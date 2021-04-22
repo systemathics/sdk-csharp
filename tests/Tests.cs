@@ -116,14 +116,14 @@ namespace Systemathics.Apis.Tests
             constraints.TimeIntervals.Add(timeInterval);
 
             // Generate bars request
-            var memo = new Memo { Provider = "ICE", Group = "FUTURES_599", Stream = "L1", Ticker = @"F:NK225M\J20" };
+            var identifier = new Identifier { Exchange = "BATS", Ticker = "TSLA"};
             var begintime = new TimeOfDay { Hours = 00, Minutes = 00, Seconds = 00 };
             var duration = new Duration { Seconds = 5 * 60 };
             var request = new BarsRequest
             {
                 Constraints = constraints,
                 BeginTime = begintime,
-                Memo = memo,
+                Identifier = identifier,
                 Sampling = duration
             };
 
@@ -153,8 +153,8 @@ namespace Systemathics.Apis.Tests
         [Test]
         public async Task TestBollingerBandsRequest()
         {
-            // Space (Nikkei 225, April 2020)
-            var memo = new Memo { Provider = "ICE", Group = "FUTURES_599", Stream = "L1", Ticker = @"F:NK225M\J20" };
+            // Space (Tesla on Bats)
+            var identifier = new Identifier { Exchange = "BATS", Ticker = "TSLA"};
 
             // Time
             Constraints Constraints()
@@ -184,7 +184,7 @@ namespace Systemathics.Apis.Tests
             // Bollinger Bands request
             var request = new BollingerBandsRequest
                               {
-                                  Memo = memo,
+                                  Identifier = identifier,
                                   Constraints = Constraints(),
                                   Field = Field.TradePrice,
                                   Length = 100,
