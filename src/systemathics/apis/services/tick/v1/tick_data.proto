@@ -54,8 +54,8 @@ message TickDataRequest
     // [Mandatory] Level representing either Trades only(Level 1) or Trades + Book (Level 1 and Level 2)
     systemathics.apis.type.shared.v1.Level level = 2;
     
-    // [Optional] The time constraints used to define the look-back period
-    // If empty, then all the available data is used 
+    // [Optional] The time constraints used to define the look-back period.
+	// If empty, then all the available data is retrieved.
     systemathics.apis.type.shared.v1.Constraints constraints = 3;
 }
 
