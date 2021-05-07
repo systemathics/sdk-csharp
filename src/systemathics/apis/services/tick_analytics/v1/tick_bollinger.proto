@@ -31,6 +31,7 @@ import "google/protobuf/duration.proto";
 
 import "systemathics/apis/type/shared/v1/constraints.proto";
 import "systemathics/apis/type/shared/v1/identifier.proto";
+import "google/protobuf/wrappers.proto";
 
 package systemathics.apis.services.tick_analytics.v1;
 
@@ -81,17 +82,23 @@ message TickBollingerRequest
 // Contains the tick Bollinger bands data: date, lower, middle and upper.
 message TickBollingerResponse
 {
-	// The timestamp
+	// The time stamp of the bollinger bands
 	google.protobuf.Timestamp time_stamp = 1;
 	
+	// The data used to calculate the Bollinger bands of the day
+	double value = 2;
+
 	// Bollinger lower band value of the day
-	double lower = 2;
+	// <br><i>Lower band = Middle band - (k * n-period standard deviation)</i>
+	google.protobuf.DoubleValue lower = 3;
 
 	// Bollinger upper band value of the day
-	double upper = 3;
+	// <br><i>Upper band = Middle band + (k * n-period standard deviation)</i>
+	google.protobuf.DoubleValue upper = 4;
 
 	// Bollinger middle band value of the day
-	double middle = 4;
+	// <br><i>Middle band = n-period moving average</i>
+	google.protobuf.DoubleValue middle = 5;
 }
 
 // The price types used to compute the bollinger bands

@@ -29,6 +29,7 @@ syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/duration.proto";
+import "google/protobuf/wrappers.proto";
 
 import "systemathics/apis/type/shared/v1/constraints.proto";
 import "systemathics/apis/type/shared/v1/identifier.proto";
@@ -79,11 +80,14 @@ message TickEmaRequest
 // Contains the exponential moving average data: timestamp and value.
 message TickEmaResponse
 {
-	// The timestamp
+	// The time stamp the exponential moving average
 	google.protobuf.Timestamp time_stamp = 1;
 	
-	// Exponential moving average value of the day
+	// The data used to calculate the average
 	double value = 2;
+
+	// The exponential moving average value
+	google.protobuf.DoubleValue average = 3;
 }
 
 // The price types used to compute the avarage

@@ -27,10 +27,10 @@ syntax = "proto3";
 import "google/protobuf/timestamp.proto";
 
 import "systemathics/apis/type/shared/v1/constraints.proto";
-import "systemathics/apis/type/shared/v1/stream.proto";
+import "systemathics/apis/type/shared/v1/level.proto";
 import "systemathics/apis/type/shared/v1/identifier.proto";
 
-package systemathics.apis.services.tick_analytics.v1;
+package systemathics.apis.services.tick.v1;
 
 // Called to request tick by tick raw data.
 // <br>Packages required:
@@ -53,7 +53,7 @@ message TickRawRequest
 	systemathics.apis.type.shared.v1.Constraints constraints = 2;
 
 	// [Mandatory] The stream level (Level 1 or Level 1 and 2)
-    systemathics.apis.type.shared.v1.Stream level = 3;
+    systemathics.apis.type.shared.v1.Level level = 3;
 }
 
 // Contains the ticks in raw provider format.
