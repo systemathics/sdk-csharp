@@ -41,7 +41,6 @@ jobs:
 
         with:
           dotnet-version: 5.0.x
-          source-url: ${{ secrets.NUGET_FEED }}
       - name: Set VERSION environment variable
         run: |
           echo GitHub_ref: $GITHUB_REF
