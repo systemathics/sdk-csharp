@@ -28,11 +28,6 @@ jobs:
         run: dotnet restore
       - name: Build
         run: dotnet build -c Release --no-restore
-      - name: Test
-        env:
-          CLIENT_ID: ${{ secrets.CLIENT_ID }}
-          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-        run: dotnet test -c Release
   deploy:
     needs: build
     # commit contains a tag => deploy
@@ -59,6 +54,10 @@ jobs:
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
       - name: Create Release NuGet package
         run: dotnet pack -v normal -c Release --include-symbols --include-source -p:PackageVersion=${{ env.VERSION }} -o nupkg src/$PROJECT_NAME.*proj
-      - name: Push to Nuget Feed
+      - name: Push to Github private Nuget Feed
         run: dotnet nuget push ./nupkg/*.nupkg
+      - name: Publish the package to nuget.org
+        run: dotnet nuget push ./nupkg/*.nupkg -k $NUGET_AUTH_TOKEN -s https://api.nuget.org/v3/index.json
+        env:
+          NUGET_AUTH_TOKEN: ${{ secrets.NUGET_ORG_TOKEN }}
 
