@@ -2,12 +2,8 @@
 // <copyright file="TokenHelpers.cs" company="Systemathics SAS">
 //   Copyright (c) Systemathics (rd@systemathics.com)
 // </copyright>
-// <summary>
-//   Helps to create tokens to access Systemathics Ganymede authenticated APIs.
-// </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-// ReSharper disable once CheckNamespace
 namespace Systemathics.Apis.Helpers
 {
     #region Usings
@@ -18,6 +14,8 @@ namespace Systemathics.Apis.Helpers
     using System.Net.Http.Headers;
     using System.Text;
     using System.Text.Json;
+
+    using Grpc.Core;
 
     #endregion
 
@@ -70,8 +68,22 @@ namespace Systemathics.Apis.Helpers
                 return CreateBearerTokenUsingRest(clientId, clientSecret, audience ?? DefaultAudience, tenant ?? DefaultTenant, out _);
             }
 
-            throw new Exception($"AUTH0_TOKEN environment variable is not set, therefore CLIENT_ID and CLIENT_SECRET (and optionally AUDIENCE and TENANT) environment variables must be set");
+            throw new Exception(
+                                "AUTH0_TOKEN environment variable is not set, therefore CLIENT_ID and CLIENT_SECRET (and optionally AUDIENCE and TENANT) environment variables must be set");
         }
+
+        /// <summary>
+        /// Get a JWT Authorization token suitable to call Ganymede gRPC APIs.
+        /// We either use 'AUTH0_TOKEN' environment variable (if present) to create a bearer token from it.
+        /// Or 'CLIENT_ID' and 'CLIENT_SECRET' environment variables (optionally 'AUDIENCE' can override <see cref="DefaultAudience"/> and 'TENANT' can override <see cref="DefaultTenant"/>).
+        /// </summary>
+        /// <returns>
+        /// A JWT Authorization token suitable to call Ganymede gRPC APIs as <see cref="Metadata"/>. That is with Authorization => GetToken().
+        /// </returns>
+        public static Metadata GetTokenAsMetaData() => new Metadata
+                                                           {
+                                                               { "Authorization", GetToken() }
+                                                           };
 
         #endregion
 
@@ -152,7 +164,8 @@ namespace Systemathics.Apis.Helpers
                             return $"{tokenType} {accessToken}";
                         }
 
-                        throw new Exception($"Returned JSON doesn't contain 'token_type' and/or 'access_token'. Check your client ID, client secret, audience and tenant: {jsonResponse}");
+                        throw new Exception(
+                                            $"Returned JSON doesn't contain 'token_type' and/or 'access_token'. Check your client ID, client secret, audience and tenant: {jsonResponse}");
                     }
                 }
             }
