@@ -2,6 +2,9 @@
 // <copyright file="ChannelHelpers.cs" company="Systemathics SAS">
 //   Copyright (c) Systemathics (rd@systemathics.com)
 // </copyright>
+// <summary>
+//   Helps to create channels to access Systemathics Ganymede authenticated APIs.
+// </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 // ReSharper disable once CheckNamespace
@@ -25,7 +28,7 @@ namespace Systemathics.Apis.Helpers
         /// <summary>
         /// The default endpoint.
         /// </summary>
-        private const string DefaultEndpoint = "grpc.ganymede.cloud";
+        private const string DefaultEndpoint = "https://grpc.ganymede.cloud";
 
         #endregion
 
@@ -33,39 +36,22 @@ namespace Systemathics.Apis.Helpers
 
         /// <summary>
         /// Get a channel suitable to call Ganymede gRPC APIs.
-        /// We use <see cref="GetGrpcApiEndpoint"/> to discover the gRPC APIs endpoint.
+        /// This uses the GRPC_APIS environment variable in the form http[s]://fdqn[:port] (if no scheme is give, we'll assume https).
+        /// If none is detected, use <see cref="DefaultEndpoint" />.
         /// </summary>
         /// <returns>
         /// A channel suitable to call Ganymede gRPC APIs.
         /// </returns>
-        public static GrpcChannel GetChannel() => GrpcChannel.ForAddress(GetGrpcApiEndpoint());
-
-        /// <summary>
-        /// Get the gRPC APIs endpoint.
-        /// This uses the GRPC_APIS environment variable in the form fdqn:port.
-        /// </summary>
-        /// <returns>
-        /// The gRPC APIs endpoint (secure, e.g: https).
-        /// </returns>
-        public static Uri GetGrpcApiEndpoint()
+        public static GrpcChannel GetChannel() 
         {
-            var grpcApis = Environment.GetEnvironmentVariable("GRPC_APIS");
-            grpcApis = grpcApis ?? DefaultEndpoint;
-            return new Uri($"https://{grpcApis}");
-        }
+            var endpoint = Environment.GetEnvironmentVariable("GRPC_APIS") ?? DefaultEndpoint;
+            if (!endpoint.StartsWith("http"))
+            {
+                // Assume https if no scheme was given
+                endpoint = $"https://{endpoint}";
+            }
 
-        /// <summary>
-        /// Get the gRPC APIs endpoint.
-        /// This uses the GRPC_APIS environment variable in the form fdqn:port.
-        /// </summary>
-        /// <returns>
-        /// The gRPC APIs endpoint (insecure, e.g: http).
-        /// </returns>
-        public static Uri GetInsecureGrpcApiEndpoint()
-        {
-            var grpcApis = Environment.GetEnvironmentVariable("GRPC_APIS");
-            grpcApis = grpcApis ?? DefaultEndpoint;
-            return new Uri($"http://{grpcApis}");
+            return GrpcChannel.ForAddress(new Uri(endpoint));
         }
 
         #endregion

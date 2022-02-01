@@ -2,6 +2,9 @@
 // <copyright file="TokenHelpers.cs" company="Systemathics SAS">
 //   Copyright (c) Systemathics (rd@systemathics.com)
 // </copyright>
+// <summary>
+//   Helps to create tokens to access Systemathics Ganymede authenticated APIs.
+// </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 // ReSharper disable once CheckNamespace
@@ -42,7 +45,7 @@ namespace Systemathics.Apis.Helpers
         /// <summary>
         /// Get a JWT Authorization token suitable to call Ganymede gRPC APIs.
         /// We either use 'AUTH0_TOKEN' environment variable (if present) to create a bearer token from it.
-        /// Or 'CLIENT_ID' and 'CLIENT_SECRET' environment variables (optionally 'AUDIENCE' if <see cref="DefaultAudience"/> is not what you need, and 'TENANT' if default value <see cref="DefaultTenant"/> must be changed).
+        /// Or 'CLIENT_ID' and 'CLIENT_SECRET' environment variables (optionally 'AUDIENCE' can override <see cref="DefaultAudience"/> and 'TENANT' can override <see cref="DefaultTenant"/>).
         /// </summary>
         /// <returns>
         /// A JWT Authorization token suitable to call Ganymede gRPC APIs.
@@ -58,7 +61,7 @@ namespace Systemathics.Apis.Helpers
             // If we have AUTH0_TOKEN, generate a bearer token
             if (!string.IsNullOrEmpty(auth0Token))
             {
-                return CreateBearerToken(auth0Token);
+                return $"Bearer {auth0Token}";
             }
 
             // If we don't, look for CLIENT_ID, CLIENT_SECRET, AUDIENCE and TENANT to create a token using Auth0 API
@@ -67,23 +70,12 @@ namespace Systemathics.Apis.Helpers
                 return CreateBearerTokenUsingRest(clientId, clientSecret, audience ?? DefaultAudience, tenant ?? DefaultTenant, out _);
             }
 
-            throw new Exception($"{nameof(GetToken)}: AUTH0_TOKEN environment variable is not set, therefore CLIENT_ID and CLIENT_SECRET (and optionally AUDIENCE and TENANT) environment variables must be set");
+            throw new Exception($"AUTH0_TOKEN environment variable is not set, therefore CLIENT_ID and CLIENT_SECRET (and optionally AUDIENCE and TENANT) environment variables must be set");
         }
 
         #endregion
 
         #region Methods
-
-        /// <summary>
-        /// Create bearer token.
-        /// </summary>
-        /// <param name="auth0Token">
-        /// The auth0 token.
-        /// </param>
-        /// <returns>
-        /// The <see cref="string"/>.
-        /// </returns>
-        private static string CreateBearerToken(string auth0Token) => $"Bearer {auth0Token}";
 
         /// <summary>
         /// Create bearer token using a POST request to https://{tenant}/oauth/token/.
@@ -106,8 +98,28 @@ namespace Systemathics.Apis.Helpers
         /// <returns>
         /// The <see cref="string"/>.
         /// </returns>
-        private static string CreateBearerTokenUsingRest(string clientId, string clientSecret, string audience, string tenant, out string scope)
+        internal static string CreateBearerTokenUsingRest(string clientId, string clientSecret, string audience, string tenant, out string scope)
         {
+            if (string.IsNullOrEmpty(clientId))
+            {
+                throw new ArgumentException("Cannot be null or empty", nameof(clientId));
+            }
+
+            if (string.IsNullOrEmpty(clientSecret))
+            {
+                throw new ArgumentException("Cannot be null or empty", nameof(clientSecret));
+            }
+
+            if (string.IsNullOrEmpty(audience))
+            {
+                throw new ArgumentException("Cannot be null or empty", nameof(audience));
+            }
+
+            if (string.IsNullOrEmpty(tenant))
+            {
+                throw new ArgumentException("Cannot be null or empty", nameof(tenant));
+            }
+
             var jsonContent = $@"{{ 
   ""client_id"": ""{clientId}"", 
   ""client_secret"": ""{clientSecret}"", 
@@ -115,7 +127,6 @@ namespace Systemathics.Apis.Helpers
   ""audience"":  ""{audience}""
 }}";
 
-            string jsonResponse = null;
             var endPoint = new Uri($"https://{tenant}/oauth/token");
             using (var client = new HttpClient())
             using (var request = new HttpRequestMessage(HttpMethod.Post, endPoint))
@@ -125,13 +136,12 @@ namespace Systemathics.Apis.Helpers
                 var response = client.SendAsync(request).GetAwaiter().GetResult();
                 if (!response.IsSuccessStatusCode)
                 {
-                    throw new Exception(
-                                        $"{nameof(CreateBearerTokenUsingRest)} POST {endPoint} failed: StatusCode={response.StatusCode} ReasonPhrase={response.ReasonPhrase}");
+                    throw new Exception($"POST {endPoint} failed: StatusCode={response.StatusCode} ReasonPhrase={response.ReasonPhrase}");
                 }
 
                 using (var streamReader = new StreamReader(response.Content.ReadAsStreamAsync().GetAwaiter().GetResult()))
                 {
-                    jsonResponse = streamReader.ReadToEnd();
+                    var jsonResponse = streamReader.ReadToEnd();
                     using (var jsonDocument = JsonDocument.Parse(jsonResponse))
                     {
                         var tokenType = jsonDocument.RootElement.GetProperty("token_type").GetString();
@@ -141,12 +151,11 @@ namespace Systemathics.Apis.Helpers
                         {
                             return $"{tokenType} {accessToken}";
                         }
+
+                        throw new Exception($"Returned JSON doesn't contain 'token_type' and/or 'access_token'. Check your client ID, client secret, audience and tenant: {jsonResponse}");
                     }
                 }
             }
-
-            throw new Exception(
-                                $"{nameof(CreateBearerTokenUsingRest)}: Returned JSON doesn't contain 'token_type' and/or 'access_token'. Check your client ID, client secret, audience and tenant: {jsonResponse}");
         }
 
         #endregion
