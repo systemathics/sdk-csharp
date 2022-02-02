@@ -2,8 +2,12 @@
 // <copyright file="TokenHelpers.cs" company="Systemathics SAS">
 //   Copyright (c) Systemathics (rd@systemathics.com)
 // </copyright>
+// <summary>
+//   Helps to create tokens to access Systemathics Ganymede authenticated APIs.
+// </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+// ReSharper disable once CheckNamespace
 namespace Systemathics.Apis.Helpers
 {
     #region Usings
@@ -68,8 +72,7 @@ namespace Systemathics.Apis.Helpers
                 return CreateBearerTokenUsingRest(clientId, clientSecret, audience ?? DefaultAudience, tenant ?? DefaultTenant, out _);
             }
 
-            throw new Exception(
-                                "AUTH0_TOKEN environment variable is not set, therefore CLIENT_ID and CLIENT_SECRET (and optionally AUDIENCE and TENANT) environment variables must be set");
+            throw new Exception("AUTH0_TOKEN environment variable is not set, therefore CLIENT_ID and CLIENT_SECRET (and optionally AUDIENCE and TENANT) environment variables must be set");
         }
 
         /// <summary>
@@ -161,11 +164,11 @@ namespace Systemathics.Apis.Helpers
                         scope = jsonDocument.RootElement.GetProperty("scope").GetString();
                         if (!string.IsNullOrEmpty(tokenType) && !string.IsNullOrEmpty(accessToken))
                         {
+                            Environment.SetEnvironmentVariable("AUTH0_TOKEN", accessToken); // Push to env
                             return $"{tokenType} {accessToken}";
                         }
 
-                        throw new Exception(
-                                            $"Returned JSON doesn't contain 'token_type' and/or 'access_token'. Check your client ID, client secret, audience and tenant: {jsonResponse}");
+                        throw new Exception($"Returned JSON doesn't contain 'token_type' and/or 'access_token'. Check your client ID, client secret, audience and tenant: {jsonResponse}");
                     }
                 }
             }
