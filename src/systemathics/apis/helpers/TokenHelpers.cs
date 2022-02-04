@@ -69,7 +69,12 @@ namespace Systemathics.Apis.Helpers
             // If we don't, look for CLIENT_ID, CLIENT_SECRET, AUDIENCE and TENANT to create a token using Auth0 API
             if (!string.IsNullOrEmpty(clientId) && !string.IsNullOrEmpty(clientSecret))
             {
-                return CreateBearerTokenUsingRest(clientId, clientSecret, audience ?? DefaultAudience, tenant ?? DefaultTenant, out _);
+                return CreateBearerTokenUsingRest(
+                                                  clientId,
+                                                  clientSecret,
+                                                  string.IsNullOrEmpty(audience) ? DefaultAudience : audience,
+                                                  string.IsNullOrEmpty(tenant) ? DefaultTenant : tenant,
+                                                  out _);
             }
 
             throw new Exception("AUTH0_TOKEN environment variable is not set, therefore CLIENT_ID and CLIENT_SECRET (and optionally AUDIENCE and TENANT) environment variables must be set");

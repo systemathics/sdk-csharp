@@ -44,7 +44,8 @@ namespace Systemathics.Apis.Helpers
         /// </returns>
         public static GrpcChannel GetChannel() 
         {
-            var endpoint = Environment.GetEnvironmentVariable("GRPC_APIS") ?? DefaultEndpoint;
+            var endpoint = Environment.GetEnvironmentVariable("GRPC_APIS");
+            endpoint = string.IsNullOrEmpty(endpoint) ? DefaultEndpoint : endpoint;
             if (!endpoint.StartsWith("http"))
             {
                 // Assume https if no scheme was given
