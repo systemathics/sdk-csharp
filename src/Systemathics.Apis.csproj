@@ -45,6 +45,7 @@
 		CMA;SMA;EMA;MACD;bollinger;VWAP;bars;volatility;spread;
 		dividends;splits;components;reference-data;
 		</PackageTags>
+		<PackageReleaseNotes>https://ganymede.cloud/api-documentation.html#updates</PackageReleaseNotes>
 
 		<!-- SourceLink settings -->
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -60,14 +61,6 @@
   	</PropertyGroup>
   	<ItemGroup>
     	<None Include="../README.md" Pack="true" PackagePath="\" Visible="false" />
-  	</ItemGroup>
-
-	<!-- Add RELEASE_NOTES.md -->
-	<PropertyGroup>
-		<PackageReleaseNotes>RELEASE_NOTES.md</PackageReleaseNotes>
-  	</PropertyGroup>
-  	<ItemGroup>
-    	<None Include="../RELEASE_NOTES.md" Pack="true" PackagePath="\" Visible="false" />
   	</ItemGroup>
 
 	<!-- Add logo-64x64.png -->
