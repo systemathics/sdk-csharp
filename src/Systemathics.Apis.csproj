@@ -53,6 +53,7 @@
 		<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
 		<IncludeSymbols>true</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<IncludeGoogleApiCommonProtos>true</IncludeGoogleApiCommonProtos>
 	</PropertyGroup>
 	
 	<!-- Add README.md -->
@@ -74,7 +75,8 @@
     <!-- build -->
 	<ItemGroup>
 		<PackageReference Include="Grpc.Net.Client" Version="2.52.0" />
-		<PackageReference Include="Google.Protobuf" Version="3.21.5" />
+		<PackageReference Include="Google.Api.CommonProtos" Version="2.12.0" />
+		<PackageReference Include="Google.Protobuf" Version="3.23.0" />
 		<PackageReference Include="Grpc.Tools" Version="2.48.1">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
