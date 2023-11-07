@@ -18,11 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-// <i>The Volume Weighted Average Price</i> is similar to a moving average, except volume is included to weight the average price over a one trading day period.
-// <br>It serves as a reference point for one trading day prices. Comparing current prices with the VWAP values enables to:
-// <br>- mesure trading efficiency by comparing individual trades to VWAP
-// <br>- highlight liquidity points as vwap reflects prices levels weighted by volume
-// <br>- determine the market trend, etc.
+// Daily calendars illustrates daily holidays for an instrument over a look back period.
 syntax = "proto3";
 
 
@@ -34,20 +30,20 @@ import "systemathics/apis/type/shared/v1/date_interval.proto";
 
 package systemathics.apis.services.daily.v1;
 
-// Called to request daily VWAP data. 
-service DailyVwapsService
+// Called to request daily calendars data. 
+service DailyCalendarsService
 {
-  // Gets daily historical VWAPs
-  rpc DailyVwaps(DailyVwapsRequest) returns (DailyVwapsResponse)
+  // Gets daily historical calendars
+  rpc DailyCalendars(DailyCalendarsRequest) returns (DailyCalendarsResponse)
   {
 	  option (google.api.http) = {
-			get: "/v1/daily/vwaps"
+			get: "/v1/daily/calendars"
 	  };
   }
 }
 
-// The required input to request the DailyVwapsService
-message DailyVwapsRequest
+// The required input to request the DailyCalendarsService
+message DailyCalendarsRequest
 {
 	// [Mandatory] The instrument identifier: a ticker and exchange 
 	systemathics.apis.type.shared.v1.Identifier identifier = 1;
@@ -55,32 +51,31 @@ message DailyVwapsRequest
 	// [Optional] The date interval used to define the look-back period.
 	// If empty, then all the available data is retrieved.
 	systemathics.apis.type.shared.v1.DateInterval date_interval = 2;
-
-	// [Optional] The corporate action adjustment (dividends).
-	// By default the value is set to false : the split is applied in all cases
-	bool adjustment = 3;
 }
 
-// Represents a daily VWAPs response.
-message DailyVwapsResponse
+// Represents a daily calendars response.
+message DailyCalendarsResponse
 {
-	// The daily vwaps: an array of DailyVwap objects
-	repeated DailyVwap data = 1;
+	// The daily calendars: an array of DailyCalendar objects
+	repeated DailyCalendar data = 1;
 }
 
-// Contains the daily vwaps data: date, vwap and volume.
-message DailyVwap 
+// Contains the daily calendars data: date, name, description and isholiday.
+message DailyCalendar 
 {
-	// Date of the vwap
+	// Date of the calendar
 	google.type.Date date = 1;
 	
-	// Vwap of the day
-	double price = 2;
+	// The calendar's name
+	string name = 2;
 	
-	// Total traded volume of the day
-	double volume = 3;
+	// The additional information to describe the calendar
+	string description = 3;
+
+	// The value indicating whether the day is holiday (market closed)
+	bool is_holiday = 4;
 
 	// The data quality scoring : from 0 (bad) to 100 (good)
-	double score = 4;
+	double score = 5;
 }
  
