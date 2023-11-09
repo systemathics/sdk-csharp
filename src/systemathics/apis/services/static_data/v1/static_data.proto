@@ -126,8 +126,12 @@ message StaticDataRequest
 	// [Optional] Ticker
 	google.protobuf.StringValue ticker = 25;
 
-	// [Optional] Underlying
+	// [Optional] Underlying : Ticker-Exchange
 	google.protobuf.StringValue underlying = 26;
+
+	// [Optional] Classification : CFI (Classification of Financial Instruments)
+	google.protobuf.StringValue classification = 27;
+
 }
 
 // Represents a reference data response grouped by asset type.
@@ -230,23 +234,23 @@ message EquityEntry
 	string cusip = 30;
 	// Mapping: sedol code : Stock Exchange Daily Official List
 	string sedol = 31;
-	
+	// The CFI (Classification of Financial Instruments) code
+	string classification = 32;
+
 	// Specific values for the equity: cik (Central Index Key number). The Cik is used as a unique identifier for financial filings with the Security and Exchange Commision of the USA
-	string cik = 32;
+	string cik = 33;
     // Specific values for the equity: sectors definitions
-	map<string, string> sectors = 33;
+	map<string, string> sectors = 34;
     // Specific values for the equity: market capitalization
-    google.protobuf.DoubleValue capitalization = 34;
+    google.protobuf.DoubleValue capitalization = 35;
 	// Specific values for the equity: the main address of the company
-	string address = 35;
+	string address = 36;
 	// Specific values for the equity: the main phone of the company
-	string phone = 36;
+	string phone = 37;
 	// Specific values for the equity: the main email of the company
-	string email = 37;
+	string email = 38;
 	// Specific values for the equity: the website link of the company
-	string url = 38;
-	// Specific values for the equity: the CFI (Classification of Financial Instruments) code
-	string classification = 39;
+	string url = 39;
 	// Specific values for the equity: the main shareholders of the company
 	map<string, double> holders = 40;
 }
@@ -320,27 +324,29 @@ message EtfEntry
 	string cusip = 30;
 	// Mapping: sedol code : Stock Exchange Daily Official List
 	string sedol = 31;
+	// The CFI (Classification of Financial Instruments) code
+	string classification = 32;
 
 	// Specific values for the etf: cik (Central Index Key number). The Cik is used as a unique identifier for financial filings with the Security and Exchange Commision of the USA
-	string cik = 32;
+	string cik = 33;
     // Specific values for the etf: sectors definitions
-	map<string, string> sectors = 33;
+	map<string, string> sectors = 34;
     // Specific values for the etf: market capitalization
-    google.protobuf.DoubleValue capitalization = 34;
+    google.protobuf.DoubleValue capitalization = 35;
 	// Specific values for the etf: the main address of the exchange traded fund
-	string address = 35;
+	string address = 36;
 	// Specific values for the etf: the main phone of the exchange traded fund
-	string phone = 36;
+	string phone = 37;
 	// Specific values for the etf: the main email of the exchange traded fund
-	string email = 37;
+	string email = 38;
 	// Specific values for the etf: the website link of the exchange traded fund
-	string url = 38;
+	string url = 39;
 	// Specific values for the etf: the exchange traded fund issuer
-	string issuer = 39;
+	string issuer = 40;
 	// Specific values for the etf: the exchange traded fund type
-	string fund_type = 40;
+	string fund_type = 41;
 	// Specific values for the etf: the exchange traded fund issue date
-	google.type.Date issue_date = 41;
+	google.type.Date issue_date = 42;
 }
 
 // Contains the reference data for futures.
@@ -412,21 +418,23 @@ message FutureEntry
 	string cusip = 30;
 	// Mapping: sedol code : Stock Exchange Daily Official List
 	string sedol = 31;
+	// The CFI (Classification of Financial Instruments) code
+	string classification = 32;
 
 	// Specific values for the future: the future underlying asset code
-	string underlying = 32;
+	string underlying = 33;
 	// Specific values for the future: the future contract code
-	string contract = 33;
+	string contract = 34;
 	// Specific values for the future: the future category
-	map<string, string> category = 34;
+	map<string, string> category = 35;
 	// Specific values for the future: the future chain codes
-	string chain = 35;
+	string chain = 36;
 	// Specific values for the future: the future maturity date
-	google.type.Date maturity = 36;
+	google.type.Date maturity = 37;
 	// Specific values for the future: the future month code
-	string month = 37;
+	string month = 38;
 	// Specific values for the future: the future year
-	int32 year = 38;
+	int32 year = 39;
 }
 
 // Contains the reference data for indices.
@@ -498,21 +506,23 @@ message IndexEntry
 	string cusip = 30;
 	// Mapping: sedol code : Stock Exchange Daily Official List
 	string sedol = 31;
+	// The CFI (Classification of Financial Instruments) code
+	string classification = 32;
 
 	// Specific values for the index: the index category
-	string category = 32;
+	string category = 33;
 	// Specific values for the index: the index weighting methodology
-	string methodology = 33;
+	string methodology = 34;
 	// Specific values for the index: the index issuer
-	string issuer = 34;
+	string issuer = 35;
 	// Specific values for the index: the index issue date
-	google.type.Date issue_date = 35;
+	google.type.Date issue_date = 36;
 	// Specific values for the index: the index rebalancing frequency
-	FrequencyType frequency = 36;
+	FrequencyType frequency = 37;
 	// Specific values for the index: the index components (equal weight)
-	map<string, double> components = 37;
+	map<string, double> components = 38;
 	// Specific values for the index: the index components number
-	int64 count = 38;
+	int64 count = 39;
 }
 
 // Contains the reference data for crypto currencies.
@@ -584,21 +594,23 @@ message CryptoEntry
 	string cusip = 30;
 	// Mapping: sedol code : Stock Exchange Daily Official List
 	string sedol = 31;
+	// The CFI (Classification of Financial Instruments) code
+	string classification = 32;
 
 	// Specific values for the crypto: the quote currency code
-	string quote_currency = 32;
+	string quote_currency = 33;
 	// Specific values for the crypto: the consensus mechanisms array (POW, POS, DPOS)
-	repeated string consensus = 33;
+	repeated string consensus = 34;
 	// Specific values for the crypto: the issue date of the crypto
-	google.type.Date issue_date = 34;
+	google.type.Date issue_date = 35;
 	// Specific values for the crypto: the market capitalization
-	google.protobuf.DoubleValue capitalization = 35;
+	google.protobuf.DoubleValue capitalization = 36;
 		// Specific values for the crypto: the number of coins that are circulating in the market and in the general public's hands
-	int32 circulating_supply = 36;
+	int32 circulating_supply = 37;
 	// Specific values for the crypto: the maximum amount of coins that will ever exist in the lifetime of the cryptocurrency
-	int32 max_supply = 37;
+	int32 max_supply = 38;
 	// Specific values for the crypto: the total amount of coins in existence right now (minus any coins that have been verifiably burned)
-	int32 total_supply = 38;
+	int32 total_supply = 39;
 }
 
 // Contains the reference data for Forex pairs.
@@ -670,9 +682,11 @@ message ForexEntry
 	string cusip = 30;
 	// Mapping: sedol code : Stock Exchange Daily Official List
 	string sedol = 31;
+	// The CFI (Classification of Financial Instruments) code
+	string classification = 32;
 
 	// Specific values for the Forex: the quote currency code
-	string quote_currency = 32;
+	string quote_currency = 33;
 }
 
 // Contains the reference data for options.
@@ -744,17 +758,19 @@ message OptionEntry
 	string cusip = 30;
 	// Mapping: sedol code : Stock Exchange Daily Official List
 	string sedol = 31;
+	// The CFI (Classification of Financial Instruments) code
+	string classification = 32;
 
 	// Specific values for the option: the option underlying asset code
-	string underlying = 32;
+	string underlying = 33;
 	// Specific values for the option: the option strike. The exercise price, which is the price at which the underlying transaction will occur upon exercise.
-	double strike = 33;
+	double strike = 34;
 	// Specific values for the option: the option expiry date. The expiration date, or expiry, which is the last date the option can be exercised.
-	google.type.Date expiry = 34;
+	google.type.Date expiry = 35;
 	// Specific values for the option: the option type: Call or Put.
-	OptionType option_type = 35;
+	OptionType option_type = 36;
 	// Specific values for the option: the option exercise type. Determines when, how, and under what circumstances, the option holder may exercise it.
-	ExerciseType exercise = 36;
+	ExerciseType exercise = 37;
 }
 
 // Contains the reference data for bonds.
@@ -826,19 +842,29 @@ message BondEntry
 	string cusip = 30;
 	// Mapping: sedol code : Stock Exchange Daily Official List
 	string sedol = 31;
+	// The CFI (Classification of Financial Instruments) code
+	string classification = 32;
 
 	// Specific values for the bond: the issuer
-	string issuer = 32;
+	string issuer = 33;
 	// Specific values for the bond: the bond maturity date
-	google.type.Date maturity = 33;
+	google.type.Date maturity = 34;
 	// Specific values for the bond: the bond's type
-	BondType bond_type = 34;
+	BondType bond_type = 35;
 	// Specific values for the bond: the bond's frequency. Number of times per year interest is paid
-	FrequencyType frequency = 35;
+	FrequencyType frequency = 36;
 	// Specific values for the bond: the bond's coupon type. Type of interest to be paid to the investors
-	CouponType coupon_type = 36;
+	CouponType coupon_type = 37;
 	// Specific values for the bond: the bond's coupon rate. Current interest rate of the bond
-	double coupon_rate = 37;
+	double coupon_rate = 38;
+	// Specific values for the bond: the issue date
+	google.type.Date issue_date = 39;
+	// Specific values for the bond: the bond's denomination
+	double denomination = 40;
+	// Specific values for the bond: the bond's issue price
+	double issue_price = 41;
+	// Specific values for the bond: the bond's total
+	double total = 42;
 }
 
 // Contains the reference data for Credit default swap (CDS).
@@ -910,17 +936,19 @@ message CdsEntry
 	string cusip = 30;
 	// Mapping: sedol code : Stock Exchange Daily Official List
 	string sedol = 31;
+	// The CFI (Classification of Financial Instruments) code
+	string classification = 32;
 
 	// Specific values for the cds: the cds underlying asset code
-	string underlying = 32;
+	string underlying = 33;
 	// Specific values for the cds: the cds maturity date
-	google.type.Date maturity = 33;
+	google.type.Date maturity = 34;
 	// Specific values for the cds: the cds's frequency.
-	FrequencyType frequency = 34;
+	FrequencyType frequency = 35;
 	// Specific values for the cds: the tenor
-	string tenor = 35;
+	string tenor = 36;
 	// Specific values for the cds: the recovery.
-	double recovery = 36;
+	double recovery = 37;
 }
 
 
