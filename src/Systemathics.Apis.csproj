@@ -87,7 +87,6 @@
 	<ItemGroup>
 		<Protobuf Include="systemathics\apis\services\**\*.proto" GrpcServices="Client" />
 		<Protobuf Include="systemathics\apis\type\**\*.proto" GrpcServices="None" />
-		<Protobuf Include="google\type\*.proto" GrpcServices="None" />
 	</ItemGroup>
 	<ItemGroup>
 		<Compile Include="systemathics\apis\helpers\ChannelHelpers.cs" />
