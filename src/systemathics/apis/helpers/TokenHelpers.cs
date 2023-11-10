@@ -1,9 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="TokenHelpers.cs" company="Systemathics SAS">
 //   Copyright (c) Systemathics (rd@systemathics.com)
 // </copyright>
 // <summary>
-//   Helps to create tokens to access Systemathics Ganymede authenticated APIs.
+//   Helps to create tokens to access Systemathics Ganymede authenticated API.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -45,12 +45,12 @@ namespace Systemathics.Apis.Helpers
         #region Public Methods
 
         /// <summary>
-        /// Get a JWT Authorization token suitable to call Ganymede gRPC APIs.
+        /// Get a JWT Authorization token suitable to call Ganymede gRPC API.
         /// We either use 'AUTH0_TOKEN' environment variable (if present) to create a bearer token from it.
         /// Or 'CLIENT_ID' and 'CLIENT_SECRET' environment variables (optionally 'AUDIENCE' can override <see cref="DefaultAudience"/> and 'TENANT' can override <see cref="DefaultTenant"/>).
         /// </summary>
         /// <returns>
-        /// A JWT Authorization token suitable to call Ganymede gRPC APIs.
+        /// A JWT Authorization token suitable to call Ganymede gRPC API.
         /// </returns>
         public static string GetToken()
         {
@@ -81,12 +81,12 @@ namespace Systemathics.Apis.Helpers
         }
 
         /// <summary>
-        /// Get a JWT Authorization token suitable to call Ganymede gRPC APIs.
+        /// Get a JWT Authorization token suitable to call Ganymede gRPC API.
         /// We either use 'AUTH0_TOKEN' environment variable (if present) to create a bearer token from it.
         /// Or 'CLIENT_ID' and 'CLIENT_SECRET' environment variables (optionally 'AUDIENCE' can override <see cref="DefaultAudience"/> and 'TENANT' can override <see cref="DefaultTenant"/>).
         /// </summary>
         /// <returns>
-        /// A JWT Authorization token suitable to call Ganymede gRPC APIs as <see cref="Metadata"/>. That is with Authorization => GetToken().
+        /// A JWT Authorization token suitable to call Ganymede gRPC API as <see cref="Metadata"/>. That is with Authorization => GetToken().
         /// </returns>
         public static Metadata GetTokenAsMetaData() => new Metadata
                                                            {

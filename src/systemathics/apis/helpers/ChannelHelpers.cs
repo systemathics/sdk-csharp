@@ -1,9 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ChannelHelpers.cs" company="Systemathics SAS">
 //   Copyright (c) Systemathics (rd@systemathics.com)
 // </copyright>
 // <summary>
-//   Helps to create channels to access Systemathics Ganymede authenticated APIs.
+//   Helps to create channels to access Systemathics Ganymede authenticated API.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -35,12 +35,12 @@ namespace Systemathics.Apis.Helpers
         #region Public Methods
 
         /// <summary>
-        /// Get a channel suitable to call Ganymede gRPC APIs.
+        /// Get a channel suitable to call Ganymede gRPC API.
         /// This uses the GRPC_APIS environment variable in the form http[s]://fdqn[:port] (if no scheme is give, we'll assume https).
         /// If none is detected, use <see cref="DefaultEndpoint" />.
         /// </summary>
         /// <returns>
-        /// A channel suitable to call Ganymede gRPC APIs.
+        /// A channel suitable to call Ganymede gRPC API.
         /// </returns>
         public static GrpcChannel GetChannel() 
         {

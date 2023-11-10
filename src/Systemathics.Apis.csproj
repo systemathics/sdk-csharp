@@ -1,9 +1,12 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<!-- General -->
 		<AssemblyName>Systemathics.Apis</AssemblyName>
-		<Description>Csharp grpc client for Systemathics APIs.</Description>
-		<Copyright>Copyright 2021 Systemathics</Copyright>
+		<Product>.NET gRPC clients to plug to ganymede.cloud API</Product>
+		<Description>
+		Ganymede is a cloud native, fully managed platform, continuously updated with high-quality, curated, and cross validated data. Ganymede is purpose built for the financial data markets ever increasing data volumes, allowing clients to query against large data sets, including tick-by-tick, sampled, daily, corporate actions, ESG and reference data. Packed with a broad range of analytics, the solution is optimized for fast response times, supports full order book natively and allows fine grained/customizable trade and quote conditions mapping and filtering.
+		</Description>
+		<Copyright>Copyright (c) Systemathics SAS - 2, Cote de la Jonchère - 78380 Bougival - France</Copyright>
 		<Authors>contact@systemathics.com</Authors>
 		<NeutralLanguage>en-US</NeutralLanguage>
 
@@ -18,14 +21,31 @@
 
 		<!-- NuGet settings -->
 		<PackageId>Systemathics.Apis</PackageId>
-		<PackageTags>grpc;Systemathics</PackageTags>
-		<PackageReleaseNotes>https://raw.githubusercontent.com/systemathics/sdk-csharp/master/RELEASE_NOTES.md</PackageReleaseNotes>
-		<PackageProjectUrl>https://github.com/systemathics/sdk-csharp</PackageProjectUrl>
+		<PackageProjectUrl>https://github.com/systemathics/sdk-dotnet</PackageProjectUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageIcon>logo-64x64.png</PackageIcon>
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 		<RepositoryType>git</RepositoryType>
-		<RepositoryUrl>https://github.com/systemathics/sdk-csharp</RepositoryUrl>
+		<RepositoryUrl>https://github.com/systemathics/sdk-dotnet</RepositoryUrl>
+		<PackageTags>
+		tick;tick-data;raw-data;normalized-data;historical-data;daily-data;sampled-data;intraday-data;
+		quote;trade;trade-condition;trading-condition;
+		full-snapshot;incremental-updates;
+		full-order-book;FOB;
+		market-by-limit;MBL;
+		market-by-order;MBO;
+		market-by-price;MBP;
+		algorithmic-trading;algo;algorithm;algo-trading;strategy;
+		back-test;stress-test;strategy-validation;
+		equity;stock;warrant;ETF;forex;bond;future;option;crypto;index;
+		systemathics;ganymede;
+		indicators;analytics;sampling;
+		API;gRPC;protobuf;
+		market-abuse;transaction-cost-analysis;TCA;PRIIPS;
+		jupyter;
+		CMA;SMA;EMA;MACD;bollinger;VWAP;bars;volatility;spread;
+		dividends;splits;components;reference-data;
+		</PackageTags>
+		<PackageReleaseNotes>https://ganymede.cloud/api-documentation.html#updates</PackageReleaseNotes>
 
 		<!-- SourceLink settings -->
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -33,30 +53,43 @@
 		<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
 		<IncludeSymbols>true</IncludeSymbols>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<IncludeGoogleApiCommonProtos>true</IncludeGoogleApiCommonProtos>
 	</PropertyGroup>
+	
+	<!-- Add README.md -->
+	<PropertyGroup>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+  	</PropertyGroup>
+  	<ItemGroup>
+    	<None Include="../.nuget/README.md" Pack="true" PackagePath="\" Visible="false" />
+  	</ItemGroup>
+
+	<!-- Add logo-64x64.png -->
+	<PropertyGroup>
+		<PackageIcon>logo-64x64.png</PackageIcon>
+  	</PropertyGroup>
+  	<ItemGroup>
+    	<None Include="../.nuget/logo-64x64.png" Pack="true" PackagePath="\" Visible="false" />
+  	</ItemGroup>
+
+    <!-- build -->
 	<ItemGroup>
-		<PackageReference Include="Grpc.Net.Client" Version="2.42.0" />
-		<PackageReference Include="Google.Protobuf" Version="3.19.4" />
-		<PackageReference Include="Grpc.Tools" Version="2.43.0">
+		<PackageReference Include="Grpc.Net.Client" Version="2.52.0" />
+		<PackageReference Include="Google.Api.CommonProtos" Version="2.12.0" />
+		<PackageReference Include="Google.Protobuf" Version="3.23.0" />
+		<PackageReference Include="Grpc.Tools" Version="2.48.1">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.*" PrivateAssets="All" />
-		<PackageReference Include="System.Text.Json" Version="6.0.1" />
+		<PackageReference Include="System.Text.Json" Version="6.0.5" />
 	</ItemGroup>
 	<ItemGroup>
 		<Protobuf Include="systemathics\apis\services\**\*.proto" GrpcServices="Client" />
 		<Protobuf Include="systemathics\apis\type\**\*.proto" GrpcServices="None" />
-		<Protobuf Include="google\type\*.proto" GrpcServices="None" />
 	</ItemGroup>
 	<ItemGroup>
 		<Compile Include="systemathics\apis\helpers\ChannelHelpers.cs" />
 		<Compile Include="systemathics\apis\helpers\TokenHelpers.cs" />
-	</ItemGroup>
-	<ItemGroup>
-		<None Include="../docs/logo-64x64.png">
-			<Pack>true</Pack>
-			<PackagePath>$(PackageIconUrl)</PackagePath>
-		</None>
 	</ItemGroup>
 </Project>
