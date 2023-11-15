@@ -137,33 +137,124 @@ message StaticDataRequest
 // Represents a reference data response grouped by asset type.
 message StaticDataResponse
 {
-	// The reference data for futures: the futures array
-	repeated FutureEntry futures  = 1;
+	// The reference data for futures: the future array
+	optional FutureResponse future  = 1;
 
-	// The reference data for equities: the equities array
-	repeated EquityEntry equities  = 2;
+	// The reference data for equities: the equity array
+	optional EquityResponse equity  = 2;
 
-	// The reference data for etfs: the etfs array
-	repeated EtfEntry etfs  = 3;
+	// The reference data for etfs: the etf array
+	optional EtfResponse etf  = 3;
 
-	// The reference data for indices: the indices array
-	repeated IndexEntry indices  = 4;
+	// The reference data for indices: the index array
+	optional IndexResponse index  = 4;
 
-	// The reference data for crypto currencies: the cryptos array
-	repeated CryptoEntry cryptos  = 5;
+	// The reference data for crypto currencies: the crypto array
+	optional CryptoResponse crypto = 5;
 
 	// The reference data for forex pairs: the forex array
-	repeated ForexEntry forex  = 6;
+	optional ForexResponse forex  = 6;
 
-	// The reference data for options: the options array
-	repeated OptionEntry options  = 7;
+	// The reference data for options: the option array
+	optional OptionResponse option  = 7;
 
-	// The reference data for bonds: the bonds array
-	repeated BondEntry bonds  = 8;
+	// The reference data for bonds: the bond array
+	optional BondResponse bond  = 8;
 
-	// The reference data for cds: the credit default swaps array
-	repeated CdsEntry cds  = 9;
+	// The reference data for CDSs: the credit default swaps array
+	optional CdsResponse cds  = 9;
 }
+
+// Contain data about bonds
+message BondResponse
+{
+	// The reference data for bonds: the bonds array
+	repeated BondEntry assets  = 1;
+
+	// The total count of bonds entry available
+	int64 total_count = 2;
+}
+
+// Contain data about CDS
+message CdsResponse
+{
+	// The reference data for CDS: the CDS array
+	repeated CdsEntry assets  = 1;
+
+	// The total count of CDS entry available
+	int64 total_count = 2;
+}
+
+// Contain data about Crypto
+message CryptoResponse
+{
+	// The reference data for cryptos: the cryptos array
+	repeated CryptoEntry assets  = 1;
+
+	// The total count of cryptos entry available
+	int64 total_count = 2;
+}
+
+// Contain data about equities
+message EquityResponse
+{
+	// The reference data for equities: the equities array
+	repeated EquityEntry assets  = 1;
+
+	// The total count of equities entry available
+	int64 total_count = 2;
+}
+
+// Contain data about ETFs
+message EtfResponse
+{
+	// The reference data for ETFs: the ETFs array
+	repeated EtfEntry assets  = 1;
+
+	// The total count of ETFs entry available
+	int64 total_count = 2;
+}
+
+// Contain data about Forex
+message ForexResponse
+{
+	// The reference data for forex: the Forex array
+	repeated ForexEntry assets  = 1;
+
+	// The total count of forex entry available
+	int64 total_count = 2;
+}
+
+// Contain data about futures
+message FutureResponse
+{
+	// The reference data for futures: the futures array
+	repeated FutureEntry assets  = 1;
+
+	// The total count of futures entry available
+	int64 total_count = 2;
+}
+
+// Contain data about indexes
+message IndexResponse
+{
+	// The reference data for indexes: the index array
+	repeated IndexEntry assets  = 1;
+
+	// The total count of indexes entry available
+	int64 total_count = 2;
+}
+
+// Contain data about options
+message OptionResponse
+{
+	// The reference data for options: the option array
+	repeated OptionEntry assets  = 1;
+
+	// The total count of option entry available
+	int64 total_count = 2;
+}
+
 
 // Contains the reference data for equities.
 message EquityEntry
