@@ -132,37 +132,60 @@ message StaticDataRequest
 	// [Optional] Classification : CFI (Classification of Financial Instruments)
 	google.protobuf.StringValue classification = 27;
 
+	// [Optional] Maturity for bond, future and options. For options, it's the maturity of the option, not the maturity of the underlying.
+	StaticDataDateRange maturity = 28;
+
+	// [Optional] Capitalization for equity, etf and index
+	StaticDataDoubleRange capitalization = 29;
+}
+
+// Used to specify a date range search
+message StaticDataDateRange
+{
+	// The upper bound date (excluded)
+	google.type.Date less_than = 1;
+	// The lower bound date (included)
+	google.type.Date greater_or_equal_than = 2;
+}
+
+// Used to specify either a specific date od a date range
+message StaticDataDoubleRange
+{
+	// The upper bound value (excluded)
+	google.protobuf.DoubleValue less_than = 1;
+	// The lower bound value (included)
+	google.protobuf.DoubleValue greater_or_equal_than = 2;
 }
 
 // Represents a reference data response grouped by asset type.
 message StaticDataResponse
 {
 	// The reference data for futures: the future array
-	optional FutureResponse future  = 1;
+	FutureResponse future  = 1;
 
 	// The reference data for equities: the equity array
-	optional EquityResponse equity  = 2;
+	EquityResponse equity  = 2;
 
 	// The reference data for etfs: the etf array
-	optional EtfResponse etf  = 3;
+	EtfResponse etf  = 3;
 
 	// The reference data for indices: the index array
-	optional IndexResponse index  = 4;
+	IndexResponse index  = 4;
 
 	// The reference data for crypto currencies: the crypto array
-	optional CryptoResponse crypto = 5;
+	CryptoResponse crypto = 5;
 
 	// The reference data for forex pairs: the forex array
-	optional ForexResponse forex  = 6;
+	ForexResponse forex  = 6;
 
 	// The reference data for options: the option array
-	optional OptionResponse option  = 7;
+	OptionResponse option  = 7;
 
 	// The reference data for bonds: the bond array
-	optional BondResponse bond  = 8;
+	BondResponse bond  = 8;
 
 	// The reference data for CDSs: the credit default swaps array
-	optional CdsResponse cds  = 9;
+	CdsResponse cds  = 9;
 }
 
 // Contain data about bonds
