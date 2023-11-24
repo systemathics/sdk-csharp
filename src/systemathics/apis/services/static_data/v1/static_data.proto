@@ -145,7 +145,7 @@ message StaticDataRequest
 	// [Optional] Option type for option (Call/Put)
 	OptionType option_type = 31;
 
-	// [Optional] Exercice type for option (European/American/Bermudan)
+	// [Optional] Exercise type for option (European/American/Bermudan)
 	ExerciseType exercise_type = 32;
 
 	// [Optional] Bond type (Gov/Corp/...)
@@ -1191,7 +1191,7 @@ enum ExerciseType
     EXERCISE_TYPE_EUROPEAN = 2;
 
 	// The Bermudan-style options contracts may only be exercised on specified dates.
-    EXERCISE_TYPE_BERMUDEAN = 3;
+    EXERCISE_TYPE_BERMUDAN = 3;
 }
 
 // Contains the bond types.
