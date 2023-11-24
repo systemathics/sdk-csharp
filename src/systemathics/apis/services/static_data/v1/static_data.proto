@@ -979,6 +979,10 @@ message BondEntry
 	double issue_price =  41;
 	// Specific values for the bond: Current amount of the issue outstanding. 
 	double total =  42;
+	// Specific values for the bond: The face amount. 
+	double face_amount =  43;
+	// Specific values for the bond: The seniority or guarantee. 
+	string seniority =  44;
 }	
 	
 // Contains the reference data for Credit default swap (CDS).	
