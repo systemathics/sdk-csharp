@@ -132,11 +132,28 @@ message StaticDataRequest
 	// [Optional] Classification : CFI (Classification of Financial Instruments)
 	google.protobuf.StringValue classification = 27;
 
-	// [Optional] Maturity for bond, future and options. For options, it's the maturity of the option, not the maturity of the underlying.
+	// [Optional] Maturity for bond, future.
 	StaticDataDateRange maturity = 28;
 
 	// [Optional] Capitalization for equity, etf and index
 	StaticDataDoubleRange capitalization = 29;
+
+	// [Optional] Expiry for option
+	StaticDataDateRange expiry = 30;
+
+	
+	// [Optional] Option type for option (Call/Put)
+	OptionType option_type = 31;
+
+	// [Optional] Exercice type for option (European/American/Bermudan)
+	ExerciseType exercise_type = 32;
+
+	// [Optional] Bond type (Gov/Corp/...)
+	BondType bond_type = 33;
+
+	// [Optional] Seniority for bond
+	google.protobuf.StringValue seniority = 34;
+
 }
 
 // Used to specify a date range search
@@ -636,7 +653,7 @@ message IndexEntry
 	// Specific values for the index: List of components identified by their ticker and exchange.
 	map<string, double> components =  38;
 	// Specific values for the index: Number of components in the index.
-	int64 count =  39;
+	int64 components_count =  39;
 }	
 	
 // Contains the reference data for crypto currencies.	
@@ -884,7 +901,7 @@ message OptionEntry
 	// Specific values for the option: Indicates whether the security is a put or call. 
 	OptionType option_type =  36;
 	// Specific values for the option: The way the option can be exercised:  American, European or Bermudan.
-	ExerciseType exercise =  37;
+	ExerciseType exercise_type =  37;
 }	
 	
 // Contains the reference data for bonds.	
