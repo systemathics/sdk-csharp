@@ -1,0 +1,89 @@
+// Copyright (c) 2021 Systemathics
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+// Customizable screener to retrieve reference data : this is a prototype, to be completed
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/duration.proto";
+import "google/type/date.proto";
+
+import "systemathics/apis/type/shared/v1/identifier.proto";
+import "systemathics/apis/type/shared/v1/constraints.proto";
+import "systemathics/apis/services/static_data/v1/static_data.proto";
+
+package systemathics.apis.services.screener_data.v1;
+
+// Called to request screener data.
+service ScreenerService
+{
+  // Gets screener data
+  rpc Screener(ScreenerRequest) returns (ScreenerResponse)
+  {
+	  	option (google.api.http) = {
+			get: "/v1/screenerdata"
+		};
+  }
+}
+
+// The required input to request the ScreenerService.
+message ScreenerRequest
+{
+	// [Optional] Define the first element index to be retrieved
+    google.protobuf.Int32Value start = 1;
+
+    // [Optional] Select the first elements retrieved, by default count is set to 100
+    google.protobuf.Int32Value count = 2;
+
+	// [Optional] Base Currency for underlying and options
+	google.protobuf.StringValue base_currency = 3;
+
+	// [Optional] Exchange for underlying
+	google.protobuf.StringValue exchange = 4;
+
+	// [Optional] Capitalization for underlying
+	systemathics.apis.services.static_data.v1.StaticDataDoubleRange capitalization = 5;
+
+	// [Optional] Expiry for option
+	systemathics.apis.services.static_data.v1.StaticDataDateRange expiry = 6;
+
+	// [Optional] Option type for option (Call/Put)
+	systemathics.apis.services.static_data.v1.OptionType option_type = 7;
+
+	// [Optional] Exercise type for option (European/American/Bermudan)
+	systemathics.apis.services.static_data.v1.ExerciseType exercise_type = 8;
+
+	// [Optional] Delta for option
+	systemathics.apis.services.static_data.v1.StaticDataDoubleRange delta = 9;
+
+	// [Optional] Implied volatility for option
+	systemathics.apis.services.static_data.v1.StaticDataDoubleRange implied_volatility = 10;
+
+	// [Optional] Open interest for option
+	systemathics.apis.services.static_data.v1.StaticDataDoubleRange open_interest = 11;
+}
+
+// Represents a reference data response grouped by asset type.
+message ScreenerResponse
+{
+	// The reference data for equities: the equity array
+	systemathics.apis.services.static_data.v1.EquityResponse equity  = 1;
+}
