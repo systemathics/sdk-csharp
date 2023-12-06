@@ -63,10 +63,10 @@ message ReferenceRequest
 	systemathics.apis.services.static_data.v1.AssetType asset_type = 1;
 
 	// The ticker code
-	google.protobuf.StringValue ticker = 2;
+	string ticker = 2;
 
 	// The exchange code
-	google.protobuf.StringValue exchange = 3;
+	string exchange = 3;
 }
 
 // Represents a reference data response.
