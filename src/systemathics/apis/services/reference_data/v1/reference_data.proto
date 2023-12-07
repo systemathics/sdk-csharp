@@ -22,12 +22,7 @@
 syntax = "proto3";
 
 import "google/api/annotations.proto";
-import "google/protobuf/wrappers.proto";
-import "google/protobuf/duration.proto";
-import "google/type/date.proto";
 
-import "systemathics/apis/type/shared/v1/identifier.proto";
-import "systemathics/apis/type/shared/v1/constraints.proto";
 import "systemathics/apis/services/static_data/v1/static_data.proto";
 
 import "systemathics/apis/services/daily/v1/daily_bars.proto";
