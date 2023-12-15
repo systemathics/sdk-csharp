@@ -57,7 +57,7 @@ message StaticDataRequest
 	// [Optional] Define the first element index to be retrieved
     google.protobuf.Int32Value start = 2;
 
-    // [Optional] Select the first elements retrieved, by default count is set to 100
+    // [Optional] Select the first elements retrieved, by default count is set to 500, and the max count value is set to 500
     google.protobuf.Int32Value count = 3;
 
 	// [Optional] Bloomberg
@@ -140,8 +140,7 @@ message StaticDataRequest
 
 	// [Optional] Expiry for option
 	StaticDataDateRange expiry = 30;
-
-	
+		
 	// [Optional] Option type for option (Call/Put)
 	OptionType option_type = 31;
 
@@ -154,6 +153,8 @@ message StaticDataRequest
 	// [Optional] Seniority for bond
 	google.protobuf.StringValue seniority = 34;
 
+	// [Optional] issuer
+	google.protobuf.StringValue issuer = 35;
 }
 
 // Used to specify a date range search
