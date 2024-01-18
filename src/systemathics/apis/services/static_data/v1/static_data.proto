@@ -57,7 +57,7 @@ message StaticDataRequest
 	// [Optional] Define the first element index to be retrieved
     google.protobuf.Int32Value start = 2;
 
-    // [Optional] Select the first elements retrieved, by default count is set to 100
+    // [Optional] Select the first elements retrieved, by default count is set to 500, and the max count value is set to 500
     google.protobuf.Int32Value count = 3;
 
 	// [Optional] Bloomberg
@@ -140,8 +140,7 @@ message StaticDataRequest
 
 	// [Optional] Expiry for option
 	StaticDataDateRange expiry = 30;
-
-	
+		
 	// [Optional] Option type for option (Call/Put)
 	OptionType option_type = 31;
 
@@ -154,6 +153,8 @@ message StaticDataRequest
 	// [Optional] Seniority for bond
 	google.protobuf.StringValue seniority = 34;
 
+	// [Optional] issuer
+	google.protobuf.StringValue issuer = 35;
 }
 
 // Used to specify a date range search
@@ -365,7 +366,7 @@ message EquityEntry
 	string cusip =  30;
 	// Mapping: The Stock Exchange Daily Official List number (SEDOL) identifier. Numbers issued prior to March 8, 2004 consist of 7 digits.  SEDOLs issued after this date consist of 7 alphanumeric characters, where the first character is always a letter. 
 	string sedol =  31;
-	// Mapping: The Classification of Financial Instruments (CFI), is a six-letter-code�used in the financial services industry to classify and describe the structure and function of a financial instrument. (ISO 10962)
+	// Mapping: The Classification of Financial Instruments (CFI), is a six-letter-code used in the financial services industry to classify and describe the structure and function of a financial instrument. (ISO 10962)
 	string classification =  32;
 	
 	// Specific values for the equity: The Central Index Key (CIK) number is a unique number assigned to an individual, company, filing agent or foreign government by the United States Securities and Exchange Commission.  The numbers are up to ten digits in length and are permanent identifiers that may not be changed
@@ -455,10 +456,10 @@ message EtfEntry
 	string cusip =  30;
 	// Mapping: The Stock Exchange Daily Official List number (SEDOL) identifier. Numbers issued prior to March 8, 2004 consist of 7 digits.  SEDOLs issued after this date consist of 7 alphanumeric characters, where the first character is always a letter. 
 	string sedol =  31;
-	// Mapping: The Classification of Financial Instruments (CFI), is a six-letter-code�used in the financial services industry to classify and describe the structure and function of a financial instrument. (ISO 10962)
+	// Mapping: The Classification of Financial Instruments (CFI), is a six-letter-code used in the financial services industry to classify and describe the structure and function of a financial instrument. (ISO 10962)
 	string classification =  32;
 	
-	// Specific values for the etf: The�Central Index Key�(CIK)�number is a unique number assigned to an individual, company, filing agent or foreign government by the�United States Securities and Exchange Commission.  The numbers are up to ten digits in length and are permanent identifiers that may not be changed
+	// Specific values for the etf: The Central Index Key (CIK) number is a unique number assigned to an individual, company, filing agent or foreign government by the United States Securities and Exchange Commission.  The numbers are up to ten digits in length and are permanent identifiers that may not be changed
 	string cik =  33;
 	// Specific values for the etf:  sectors definitions: The market sector assigned to the instrument in the commonly used market sector classification.  The output is presented as a collection of pairs of classification description (BICS, SIC, GICS, TRBC, etc) with its code.
 	map<string, string> sectors =  34;
@@ -549,7 +550,7 @@ message FutureEntry
 	string cusip =  30;
 	// Mapping: The Stock Exchange Daily Official List number (SEDOL) identifier. Numbers issued prior to March 8, 2004 consist of 7 digits.  SEDOLs issued after this date consist of 7 alphanumeric characters, where the first character is always a letter. 
 	string sedol =  31;
-	// Mapping: The Classification of Financial Instruments (CFI), is a six-letter-code�used in the financial services industry to classify and describe the structure and function of a financial instrument. (ISO 10962)
+	// Mapping: The Classification of Financial Instruments (CFI), is a six-letter-code used in the financial services industry to classify and describe the structure and function of a financial instrument. (ISO 10962)
 	string classification =  32;
 	
 	// Specific values for the future: Ticker of the underling instrument.
@@ -637,7 +638,7 @@ message IndexEntry
 	string cusip =  30;
 	// Mapping: The Stock Exchange Daily Official List number (SEDOL) identifier. Numbers issued prior to March 8, 2004 consist of 7 digits.  SEDOLs issued after this date consist of 7 alphanumeric characters, where the first character is always a letter. 
 	string sedol =  31;
-	// Mapping: The Classification of Financial Instruments (CFI), is a six-letter-code�used in the financial services industry to classify and describe the structure and function of a financial instrument. (ISO 10962)
+	// Mapping: The Classification of Financial Instruments (CFI), is a six-letter-code used in the financial services industry to classify and describe the structure and function of a financial instrument. (ISO 10962)
 	string classification =  32;
 	
 	// Specific values for the index: Category group (Energies, Metals, Agriculture, etc.)  where belongs the future contract.
@@ -725,7 +726,7 @@ message CryptoEntry
 	string cusip =  30;
 	// Mapping: The Stock Exchange Daily Official List number (SEDOL) identifier. Numbers issued prior to March 8, 2004 consist of 7 digits.  SEDOLs issued after this date consist of 7 alphanumeric characters, where the first character is always a letter. 
 	string sedol =  31;
-	// Mapping: The Classification of Financial Instruments (CFI), is a six-letter-code�used in the financial services industry to classify and describe the structure and function of a financial instrument. (ISO 10962)
+	// Mapping: The Classification of Financial Instruments (CFI), is a six-letter-code used in the financial services industry to classify and describe the structure and function of a financial instrument. (ISO 10962)
 	string classification =  32;
 	
 	// Specific values for the crypto: Currency in which the instrument is priced (ISO 4217)
@@ -813,7 +814,7 @@ message ForexEntry
 	string cusip =  30;
 	// Mapping: The Stock Exchange Daily Official List number (SEDOL) identifier. Numbers issued prior to March 8, 2004 consist of 7 digits.  SEDOLs issued after this date consist of 7 alphanumeric characters, where the first character is always a letter. 
 	string sedol =  31;
-	// Mapping: The Classification of Financial Instruments (CFI), is a six-letter-code�used in the financial services industry to classify and describe the structure and function of a financial instrument. (ISO 10962)
+	// Mapping: The Classification of Financial Instruments (CFI), is a six-letter-code used in the financial services industry to classify and describe the structure and function of a financial instrument. (ISO 10962)
 	string classification =  32;
 	
 	// Specific values for the Forex: Currency in which the instrument is priced (ISO 4217)
@@ -889,7 +890,7 @@ message OptionEntry
 	string cusip =  30;
 	// Mapping: The Stock Exchange Daily Official List number (SEDOL) identifier. Numbers issued prior to March 8, 2004 consist of 7 digits.  SEDOLs issued after this date consist of 7 alphanumeric characters, where the first character is always a letter. 
 	string sedol =  31;
-	// Mapping: The Classification of Financial Instruments (CFI), is a six-letter-code�used in the financial services industry to classify and describe the structure and function of a financial instrument. (ISO 10962)
+	// Mapping: The Classification of Financial Instruments (CFI), is a six-letter-code used in the financial services industry to classify and describe the structure and function of a financial instrument. (ISO 10962)
 	string classification =  32;
 	
 	// Specific values for the option: Ticker of the underling instrument.
@@ -973,7 +974,7 @@ message BondEntry
 	string cusip =  30;
 	// Mapping: The Stock Exchange Daily Official List number (SEDOL) identifier. Numbers issued prior to March 8, 2004 consist of 7 digits.  SEDOLs issued after this date consist of 7 alphanumeric characters, where the first character is always a letter. 
 	string sedol =  31;
-	// Mapping: The Classification of Financial Instruments (CFI), is a six-letter-code�used in the financial services industry to classify and describe the structure and function of a financial instrument. (ISO 10962)
+	// Mapping: The Classification of Financial Instruments (CFI), is a six-letter-code used in the financial services industry to classify and describe the structure and function of a financial instrument. (ISO 10962)
 	string classification =  32;
 	
 	// Specific values for the bond: Name of the issuing entity of the instrument.
@@ -1071,7 +1072,7 @@ message CdsEntry
 	string cusip =  30;
 	// Mapping: The Stock Exchange Daily Official List number (SEDOL) identifier. Numbers issued prior to March 8, 2004 consist of 7 digits.  SEDOLs issued after this date consist of 7 alphanumeric characters, where the first character is always a letter. 
 	string sedol =  31;
-	// Mapping: The Classification of Financial Instruments (CFI), is a six-letter-code�used in the financial services industry to classify and describe the structure and function of a financial instrument. (ISO 10962)
+	// Mapping: The Classification of Financial Instruments (CFI), is a six-letter-code used in the financial services industry to classify and describe the structure and function of a financial instrument. (ISO 10962)
 	string classification =  32;
 	
 	// Specific values for the cds: Ticker of the underling instrument.
