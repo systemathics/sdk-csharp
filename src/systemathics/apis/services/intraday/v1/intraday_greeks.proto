@@ -32,20 +32,20 @@ import "systemathics/apis/type/shared/v1/sampling.proto";
 
 package systemathics.apis.services.intraday.v1;
 
-// Called to request intraday greecks data. 
-service IntradayGreecksService
+// Called to request intraday greeks data. 
+service IntradayGreeksService
 {
   // Gets intraday historical greeks data.
-  rpc IntradayGreecks(IntradayGreecksRequest) returns (IntradayGreecksResponse)
+  rpc IntradayGreeks(IntradayGreeksRequest) returns (IntradayGreeksResponse)
   {
 	  	 option (google.api.http) = {
-			get: "/v1/intraday/greecks"
+			get: "/v1/intraday/greeks"
 		 };
   }
 }
 
-// The required input to request the IntradayGreecksService.
-message IntradayGreecksRequest
+// The required input to request the IntradayGreeksService.
+message IntradayGreeksRequest
 {
 	// [Mandatory] The instrument identifier: a ticker and exchange
 	systemathics.apis.type.shared.v1.Identifier identifier = 1;
@@ -58,17 +58,17 @@ message IntradayGreecksRequest
 	systemathics.apis.type.shared.v1.DateInterval date_interval = 3;
 }
 
-// The intraday greecks response contains an array of intraday greecks.
-message IntradayGreecksResponse
+// The intraday greeks response contains an array of intraday greeks.
+message IntradayGreeksResponse
 {
-	// The intraday greecks: an array of IntradayGreecks objects
-	repeated IntradayGreecks data = 1;
+	// The intraday greeks: an array of IntradayGreeks objects
+	repeated IntradayGreeks data = 1;
 }
 
 // Contains the intraday greeks data.
-message IntradayGreecks 
+message IntradayGreeks 
 {
-	// Time stamp of the intraday greecks
+	// Time stamp of the intraday greeks
 	google.protobuf.Timestamp time_stamp = 1;
 	
 	// Measures the sensitivity of an option's theoretical value to a change in the price of the underlying asset.
