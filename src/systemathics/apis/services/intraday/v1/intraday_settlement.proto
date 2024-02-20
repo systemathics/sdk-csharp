@@ -18,41 +18,38 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-// SMA is formed by computing the average price of a security over a specific number of points. 
-// <br>As its name implies, simple moving average is an average that moves. Old data is dropped and new data becomes available, causing the average to move along the time.
-// <br><i>N-points SMA data point</i> is computed by adding up the last N period's trade prices and then dividing by N as follows: $$ SMA = \frac{\Sigma Close_n}{N} $$
-// <br>Where:
-// <br>- <i>Close n</i> is the close price of the <i>period n</i>
-// <br>- <i>N</i> is the count of time periods
+// <i>The settlement price </i>is the official price at which a financial instrument is settled at the end of a trading day.
+//<br> The settlement refers to the process of transferring securities or funds to fulfill the terms of a trade.
+//<br> In futures and options markets, the settlement price is often determined by a specific mechanism outlined by the exchange and may not necessarily be the same as the closing price.
+
 syntax = "proto3";
 
 
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
-import "google/protobuf/wrappers.proto";
 
 import "systemathics/apis/type/shared/v1/identifier.proto";
 import "systemathics/apis/type/shared/v1/date_interval.proto";
 import "systemathics/apis/type/shared/v1/sampling.proto";
 
-package systemathics.apis.services.intraday_analytics.v1;
+package systemathics.apis.services.intraday.v1;
 
-// Called to request intraday simple moving average data. 
-service IntradaySmaService
+//  This service provides access to an intraday settlement market data, 
+service IntradaySettlementsService
 {
-  // Gets intraday simple moving average data
-  rpc IntradaySma(IntradaySmaRequest) returns (IntradaySmaResponse)
+  // Gets intraday historical Settlements
+  rpc IntradaySettlements(IntradaySettlementsRequest) returns (IntradaySettlementsResponse)
   {
-	  option (google.api.http) = {
-			get: "/v1/intraday/sma"
-	  };
+	     option (google.api.http) = {
+			get: "/v1/intraday/settlements"
+		 };
   }
 }
 
-// The required input to request the IntradaySmaService.
-message IntradaySmaRequest
+// The required input to request the IntradaySettlementsService
+message IntradaySettlementsRequest
 {
-	// [Mandatory] The instrument identifier: a ticker and exchange
+	// [Mandatory] The instrument identifier: a ticker and exchange 
 	systemathics.apis.type.shared.v1.Identifier identifier = 1;
 
 	// [Mandatory] The sampling interval
@@ -62,31 +59,31 @@ message IntradaySmaRequest
 	// If empty, then all the available data is retrieved.
 	systemathics.apis.type.shared.v1.DateInterval date_interval = 3;
 
-	// [Mandatory] The simple moving average window length (period : points number)
-	int32 length = 4;
-
 	// [Optional] The corporate action adjustment (dividends and splits).
 	// By default the value is set to false
-	bool adjustment = 5;
+	bool adjustment = 4;
 }
 
-// Represents a intraday simple moving average response.
-message IntradaySmaResponse
+// Represents a intraday Settlements response.
+message IntradaySettlementsResponse
 {
-	// The intraday simple moving averages: an array of IntradaySmaData objects
-	repeated IntradaySmaData data = 1;
+	// The intraday settlements: an array of IntradaySettlement objects
+	repeated IntradaySettlement data = 1;
 }
 
-// Contains the intraday simple moving average data: date and value.
-message IntradaySmaData 
+// Contains the intraday settlements data: date, settlement value and volume.
+message IntradaySettlement 
 {
-	// Time stamp of the simple moving average : open time of the sampling interval
+	// Time stamp of the intraday settlement : open time of the sampling interval
 	google.protobuf.Timestamp time_stamp = 1;
 	
-	// The data used to calculate the average of the day
+	// Settlement value of the sampling period
 	double value = 2;
+	
+	// Total traded volume of the sampling period
+	double volume = 3;
 
-	// The simple moving average value of the day for the last n data points (length)
-	google.protobuf.DoubleValue average = 3;
+	// The data quality scoring : from 0 (bad) to 100 (good)
+	double score = 4;
 }
  
