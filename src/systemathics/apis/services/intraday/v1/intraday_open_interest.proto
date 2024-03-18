@@ -18,11 +18,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-// <i>The Volume Weighted Average Price</i> is similar to a moving average, except volume is included to weight the average price over a one trading day period.
-// <br>It serves as a reference point for one trading day prices. Comparing current prices with the VWAP values enables to:
-// <br>- mesure trading efficiency by comparing individual trades to VWAP
-// <br>- highlight liquidity points as vwap reflects prices levels weighted by volume
-// <br>- determine the market trend, etc.
+// <i>The Open interest</i> is the total number of contracts (futures or options) that are currently held by market participants and have not been offset by an opposite transaction (i.e., by closing the position).
 syntax = "proto3";
 
 
@@ -35,21 +31,20 @@ import "systemathics/apis/type/shared/v1/sampling.proto";
 
 package systemathics.apis.services.intraday.v1;
 
-// This service provides access to an intraday VWAP (Volume-Weighted Average Price) market data,
-// allowing users to retrieve historical VWAP data for various financial instruments.
-service IntradayVwapsService
+// Called to request intraday OpenInterest data. 
+service IntradayOpenInterestsService
 {
-  // Gets intraday historical VWAPs
-  rpc IntradayVwaps(IntradayVwapsRequest) returns (IntradayVwapsResponse)
+  // Gets intraday historical OpenInterests
+  rpc IntradayOpenInterests(IntradayOpenInterestsRequest) returns (IntradayOpenInterestsResponse)
   {
 	     option (google.api.http) = {
-			get: "/v1/intraday/vwaps"
+			get: "/v1/intraday/openinterests"
 		 };
   }
 }
 
-// Represents a request object for intraday VWAP (Volume-Weighted Average Price) market data.
-message IntradayVwapsRequest
+// The required input to request the IntradayOpenInterestsService
+message IntradayOpenInterestsRequest
 {
 	// [Mandatory] The instrument identifier: a ticker and exchange 
 	systemathics.apis.type.shared.v1.Identifier identifier = 1;
@@ -60,32 +55,25 @@ message IntradayVwapsRequest
 	// [Optional] The time constraints used to define the look-back period.
 	// If empty, then all the available data is retrieved.
 	systemathics.apis.type.shared.v1.DateInterval date_interval = 3;
-
-	// [Optional] The corporate action adjustment (dividends and splits).
-	// By default the value is set to false
-	bool adjustment = 4;
 }
 
-// Represents the response object for an intraday VWAP (Volume-Weighted Average Price) market data request.
-message IntradayVwapsResponse
+// Represents a intraday OpenInterests response.
+message IntradayOpenInterestsResponse
 {
-	// A time series of intraday VWAP (Volume-Weighted Average Price) market data.
-	repeated IntradayVwap data = 1;
+	// The intraday openinterests: an array of IntradayOpenInterest objects
+	repeated IntradayOpenInterest data = 1;
 }
 
-// Represents an individual data item for intraday VWAP (Volume-Weighted Average Price) market data.
-message IntradayVwap 
+// Contains the intraday openinterests data: date, openinterest value.
+message IntradayOpenInterest 
 {
-	// Time stamp of the intraday vwap : open time of the sampling interval
+	// Time stamp of the intraday openinterest : open time of the sampling interval
 	google.protobuf.Timestamp time_stamp = 1;
 	
-	// Vwap of the sampling period
-	double price = 2;
-	
-	// Total traded volume of the sampling period
-	double volume = 3;
+	// OpenInterest value of the sampling period
+	double value = 2;
 
 	// The data quality scoring : from 0 (bad) to 100 (good)
-	double score = 4;
+	double score = 3;
 }
  
