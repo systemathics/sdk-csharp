@@ -33,6 +33,7 @@ import "systemathics/apis/services/daily/v1/daily_open_interest.proto";
 import "systemathics/apis/services/daily/v1/daily_implied_volatility.proto";
 import "systemathics/apis/services/daily/v1/daily_settlement.proto";
 import "systemathics/apis/services/daily/v1/daily_greeks.proto";
+import "systemathics/apis/services/daily/v1/daily_market_data.proto";
 
 import "systemathics/apis/services/corporate_actions/v1/dividends.proto";
 import "systemathics/apis/services/corporate_actions/v1/splits.proto";
@@ -96,4 +97,7 @@ message ReferenceResponse
 
 	// The split reference data
 	systemathics.apis.services.corporate_actions.v1.Split split  = 10;
+
+	// The daily market data
+	systemathics.apis.services.daily.v1.DailyMarketData market_data  = 11;
 }

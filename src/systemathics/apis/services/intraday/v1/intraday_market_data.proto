@@ -89,16 +89,16 @@ message IntradayMarketData
 	double volume = 6;
 
 	// The best bid price of the sampling period
-	double BidPrice = 7;
+	double bid_price = 7;
 	
 	// The best bid size of the sampling period
-	double BidSize = 8;
+	double bid_size = 8;
 	
 	// The best ask price of the sampling period
-	double AskPrice = 9;
+	double ask_price = 9;
 	
 	// The best ask size of the sampling period
-	double AskSize = 10;
+	double ask_size = 10;
 
 	// Measures the sensitivity of an option's theoretical value to a change in the price of the underlying asset.
 	//<br>It indicates the expected change in the option price for a one-point change in the underlying asset. 

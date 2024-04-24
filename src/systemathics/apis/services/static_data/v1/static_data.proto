@@ -641,7 +641,7 @@ message IndexEntry
 	// Mapping: The Classification of Financial Instruments (CFI), is a six-letter-code used in the financial services industry to classify and describe the structure and function of a financial instrument. (ISO 10962)
 	string classification =  32;
 	
-	// Specific values for the index: Category group (Energies, Metals, Agriculture, etc.)  where belongs the future contract.
+	// Specific values for the index: The index category.
 	string category =  33;
 	// Specific values for the index: The index weighting methodology (Equal weight, Market Cap, Dividend Yield, Price, etc).
 	string methodology =  34;
