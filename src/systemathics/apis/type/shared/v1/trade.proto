@@ -21,16 +21,18 @@
 // The market data trades
 syntax = "proto3";
 
+import "google/protobuf/wrappers.proto";
+
 package systemathics.apis.type.shared.v1;
 
 // Contains the trade details.
 message Trade
 {
 	// The price of the trade
-	double price = 1;
+	google.protobuf.DoubleValue price = 1;
 
 	// The size (volume) of the trade
-	int64 size = 2;
+	google.protobuf.Int64Value size = 2;
 
 	// The trading condition of the trade
 	string condition = 3;

@@ -1,0 +1,99 @@
+// Copyright (c) 2021 Systemathics
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+// Last reference data
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+
+import "systemathics/apis/services/static_data/v1/static_data.proto";
+
+import "systemathics/apis/services/daily/v1/daily_bars.proto";
+import "systemathics/apis/services/daily/v1/daily_prices.proto";
+import "systemathics/apis/services/daily/v1/daily_vwap.proto";
+import "systemathics/apis/services/daily/v1/daily_calendars.proto";
+import "systemathics/apis/services/daily/v1/daily_open_interest.proto";
+import "systemathics/apis/services/daily/v1/daily_implied_volatility.proto";
+import "systemathics/apis/services/daily/v1/daily_settlement.proto";
+import "systemathics/apis/services/daily/v1/daily_greeks.proto";
+
+import "systemathics/apis/services/corporate_actions/v1/dividends.proto";
+import "systemathics/apis/services/corporate_actions/v1/splits.proto";
+
+package systemathics.apis.services.reference_data.v1;
+
+// Called to request reference data.
+service ReferenceService
+{
+  // Gets reference data
+  rpc Reference(ReferenceRequest) returns (ReferenceResponse)
+  {
+	  	option (google.api.http) = {
+			get: "/v1/referencedata"
+		};
+  }
+}
+
+// The required input to request the ReferenceService.
+message ReferenceRequest
+{
+	// The asset class type
+	systemathics.apis.services.static_data.v1.AssetType asset_type = 1;
+
+	// The ticker code
+	string ticker = 2;
+
+	// The exchange code
+	string exchange = 3;
+}
+
+// Represents a reference data response.
+message ReferenceResponse
+{
+	// The bar reference data
+	systemathics.apis.services.daily.v1.DailyBar bar  = 1;
+
+	// The price reference data
+	systemathics.apis.services.daily.v1.DailyPrice price  = 2;
+
+	// The vwap reference data
+	systemathics.apis.services.daily.v1.DailyVwap vwap  = 3;
+
+	// The calendar reference data
+	systemathics.apis.services.daily.v1.DailyCalendar calendar  = 4;
+
+	// The settlement reference data
+	systemathics.apis.services.daily.v1.DailySettlement settlement  = 5;
+
+	// The open interest reference data
+	systemathics.apis.services.daily.v1.DailyOpenInterest open_interest  = 6;
+
+	// The implied volatility reference data
+	systemathics.apis.services.daily.v1.DailyImpliedVolatility implied_volatility  = 7;
+
+	// The greeks reference data
+	systemathics.apis.services.daily.v1.DailyGreeks greeks  = 8;
+
+	// The dividend reference data
+	systemathics.apis.services.corporate_actions.v1.Dividend dividend  = 9;
+
+	// The split reference data
+	systemathics.apis.services.corporate_actions.v1.Split split  = 10;
+}

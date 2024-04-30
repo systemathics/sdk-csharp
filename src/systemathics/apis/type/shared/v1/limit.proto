@@ -21,6 +21,8 @@
 // The market book limit data
 syntax = "proto3";
 
+import "google/protobuf/wrappers.proto";
+
 import "systemathics/apis/type/shared/v1/quote.proto";
 
 package systemathics.apis.type.shared.v1;
@@ -29,10 +31,10 @@ package systemathics.apis.type.shared.v1;
 message Limit
 {
 	// The price of the limit
-	double price = 1;
+	google.protobuf.DoubleValue price = 1;
 
 	// The size (volume) of the limit
-	int64 size = 2;
+	google.protobuf.Int64Value size = 2;
 
 	// The depth of the limit
 	uint32 depth = 3;

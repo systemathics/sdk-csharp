@@ -57,7 +57,7 @@ message StaticDataRequest
 	// [Optional] Define the first element index to be retrieved
     google.protobuf.Int32Value start = 2;
 
-    // [Optional] Select the first elements retrieved, by default count is set to 100
+    // [Optional] Select the first elements retrieved, by default count is set to 500, and the max count value is set to 500
     google.protobuf.Int32Value count = 3;
 
 	// [Optional] Bloomberg
@@ -132,824 +132,961 @@ message StaticDataRequest
 	// [Optional] Classification : CFI (Classification of Financial Instruments)
 	google.protobuf.StringValue classification = 27;
 
+	// [Optional] Maturity for bond, future.
+	StaticDataDateRange maturity = 28;
+
+	// [Optional] Capitalization for equity, etf and index
+	StaticDataDoubleRange capitalization = 29;
+
+	// [Optional] Expiry for option
+	StaticDataDateRange expiry = 30;
+		
+	// [Optional] Option type for option (Call/Put)
+	OptionType option_type = 31;
+
+	// [Optional] Exercise type for option (European/American/Bermudan)
+	ExerciseType exercise_type = 32;
+
+	// [Optional] Bond type (Gov/Corp/...)
+	BondType bond_type = 33;
+
+	// [Optional] Seniority for bond
+	google.protobuf.StringValue seniority = 34;
+
+	// [Optional] issuer
+	google.protobuf.StringValue issuer = 35;
+}
+
+// Used to specify a date range search
+message StaticDataDateRange
+{
+	// The upper bound date (excluded)
+	google.type.Date less_than = 1;
+	// The lower bound date (included)
+	google.type.Date greater_or_equal_than = 2;
+}
+
+// Used to specify either a specific date od a date range
+message StaticDataDoubleRange
+{
+	// The upper bound value (excluded)
+	google.protobuf.DoubleValue less_than = 1;
+	// The lower bound value (included)
+	google.protobuf.DoubleValue greater_or_equal_than = 2;
 }
 
 // Represents a reference data response grouped by asset type.
 message StaticDataResponse
 {
-	// The reference data for futures: the futures array
-	repeated FutureEntry futures  = 1;
+	// The reference data for futures: the future array
+	FutureResponse future  = 1;
 
-	// The reference data for equities: the equities array
-	repeated EquityEntry equities  = 2;
+	// The reference data for equities: the equity array
+	EquityResponse equity  = 2;
 
-	// The reference data for etfs: the etfs array
-	repeated EtfEntry etfs  = 3;
+	// The reference data for etfs: the etf array
+	EtfResponse etf  = 3;
 
-	// The reference data for indices: the indices array
-	repeated IndexEntry indices  = 4;
+	// The reference data for indices: the index array
+	IndexResponse index  = 4;
 
-	// The reference data for crypto currencies: the cryptos array
-	repeated CryptoEntry cryptos  = 5;
+	// The reference data for crypto currencies: the crypto array
+	CryptoResponse crypto = 5;
 
 	// The reference data for forex pairs: the forex array
-	repeated ForexEntry forex  = 6;
+	ForexResponse forex  = 6;
 
-	// The reference data for options: the options array
-	repeated OptionEntry options  = 7;
+	// The reference data for options: the option array
+	OptionResponse option  = 7;
 
+	// The reference data for bonds: the bond array
+	BondResponse bond  = 8;
+
+	// The reference data for CDSs: the credit default swaps array
+	CdsResponse cds  = 9;
+}
+
+// Contain data about bonds
+message BondResponse
+{
 	// The reference data for bonds: the bonds array
-	repeated BondEntry bonds  = 8;
+	repeated BondEntry assets  = 1;
 
-	// The reference data for cds: the credit default swaps array
-	repeated CdsEntry cds  = 9;
+	// The total count of bonds entry available
+	int64 total_count = 2;
 }
 
-// Contains the reference data for equities.
-message EquityEntry
+// Contain data about CDS
+message CdsResponse
 {
-	// Identifiers: asset identifier
-	systemathics.apis.type.shared.v1.Identifier identifier = 1;
-	// General information: the asset class
-	string type = 2;
-	// General information: status indicating whether the asset is active
-	bool active = 3;
-	// General information: the primary exchange code (mic)
-	string primary = 4;
-	// General information: the operating exchange code (mic)
-	string operating = 5;
-	// General information: the full name 
-	string name = 6;
-	// General information: the currency code (ISO 4217)
-	string currency = 7;
-	// General information: the country code (ISO 3166)
-	string country = 8;
-	// General information: the tick size rule table
-	repeated TickSize tick_size_rule = 9;
-	// General information: the major index array
-	repeated string index = 10;
-	// General information: the calendar identifier
-	string calendar = 11;
-	// General information: the description of the asset
-	string description = 12;
+	// The reference data for CDS: the CDS array
+	repeated CdsEntry assets  = 1;
 
-	// Trading hours: the open time (continuous trading)
-	google.protobuf.Duration open = 13;
-	// Trading hours: the close time (continuous trading)
-	google.protobuf.Duration close = 14;
-	// Trading hours: the time zone
-	string time_zone = 15;
-
-	// Specifications: the lot size (minimum quantity to trade)
-	int64 lot_size = 16;
-	// Specifications: the point value
-	double point_value = 17;
-
-	// Reference data : the average price
-	google.protobuf.DoubleValue price = 18;
-	// Reference data : the average daily volume 
-	google.protobuf.Int64Value volume = 19;
-	// Reference data : the time stamp of the refernce data
-	google.type.Date time = 20;
-
-	// Mapping : the count of sources used to cross validate and complete the asset's information
-	int32 sources = 21;
-	// Mapping: the mapping codes
-	map<string, string> mapping = 22;
-	// Mapping: the bloomberg code
-	string bloomberg = 23;
-	// Mapping: the reuters code
-	string reuters = 24;
-	// Mapping: the morningstar code
-	string morningstar = 25;
-	// Mapping: the markit (red code) code
-	string markit = 26;
-	// Mapping: the figi code (Financial Instrument Global Identifier, formerly Bloomberg Global Identifier)
-	string figi = 27;
-	// Mapping: the figic code (Financial Instrument Global Identifier Composite, formerly Bloomberg Global Identifier)
-	string figic = 28;
-	// Mapping: isin code (International Securities Identifying Number)
-    string isin = 29;
-	// Mapping: cusip code : Committee on Uniform Security Identification Procedures
-	string cusip = 30;
-	// Mapping: sedol code : Stock Exchange Daily Official List
-	string sedol = 31;
-	// The CFI (Classification of Financial Instruments) code
-	string classification = 32;
-
-	// Specific values for the equity: cik (Central Index Key number). The Cik is used as a unique identifier for financial filings with the Security and Exchange Commision of the USA
-	string cik = 33;
-    // Specific values for the equity: sectors definitions
-	map<string, string> sectors = 34;
-    // Specific values for the equity: market capitalization
-    google.protobuf.DoubleValue capitalization = 35;
-	// Specific values for the equity: the main address of the company
-	string address = 36;
-	// Specific values for the equity: the main phone of the company
-	string phone = 37;
-	// Specific values for the equity: the main email of the company
-	string email = 38;
-	// Specific values for the equity: the website link of the company
-	string url = 39;
-	// Specific values for the equity: the main shareholders of the company
-	map<string, double> holders = 40;
+	// The total count of CDS entry available
+	int64 total_count = 2;
 }
 
-// Contains the reference data for exchange traded fund (ETF).
-message EtfEntry
+// Contain data about Crypto
+message CryptoResponse
 {
-	// Identifiers: asset identifier
-	systemathics.apis.type.shared.v1.Identifier identifier = 1;
-	// General information: the asset class
-	string type = 2;
-	// General information: status indicating whether the asset is active
-	bool active = 3;
-	// General information: the primary exchange code (mic)
-	string primary = 4;
-	// General information: the operating exchange code (mic)
-	string operating = 5;
-	// General information: the full name 
-	string name = 6;
-	// General information: the currency code (ISO 4217)
-	string currency = 7;
-	// General information: the country code (ISO 3166)
-	string country = 8;
-	// General information: the tick size rule table
-	repeated TickSize tick_size_rule = 9;
-	// General information: the major index array
-	repeated string index = 10;
-	// General information: the calendar identifier
-	string calendar = 11;
-	// General information: the description of the asset
-	string description = 12;
+	// The reference data for cryptos: the cryptos array
+	repeated CryptoEntry assets  = 1;
 
-	// Trading hours: the open time (continuous trading)
-	google.protobuf.Duration open = 13;
-	// Trading hours: the close time (continuous trading)
-	google.protobuf.Duration close = 14;
-	// Trading hours: the time zone
-	string time_zone = 15;
-
-	// Specifications: the lot size (minimum quantity to trade)
-	int64 lot_size = 16;
-	// Specifications: the point value
-	double point_value = 17;
-
-	// Reference data : the average price
-	google.protobuf.DoubleValue price = 18;
-	// Reference data : the average daily volume 
-	google.protobuf.Int64Value volume = 19;
-	// Reference data : the time stamp of the refernce data
-	google.type.Date time = 20;
-
-	// Mapping : the count of sources used to cross validate and complete the asset's information
-	int32 sources = 21;
-	// Mapping: the mapping codes
-	map<string, string> mapping = 22;
-	// Mapping: the bloomberg code
-	string bloomberg = 23;
-	// Mapping: the reuters code
-	string reuters = 24;
-	// Mapping: the morningstar code
-	string morningstar = 25;
-	// Mapping: the markit (red code) code
-	string markit = 26;
-	// Mapping: the figi code (Financial Instrument Global Identifier, formerly Bloomberg Global Identifier)
-	string figi = 27;
-	// Mapping: the figic code (Financial Instrument Global Identifier Composite, formerly Bloomberg Global Identifier)
-	string figic = 28;
-	// Mapping: isin code (International Securities Identifying Number)
-    string isin = 29;
-	// Mapping: cusip code : Committee on Uniform Security Identification Procedures
-	string cusip = 30;
-	// Mapping: sedol code : Stock Exchange Daily Official List
-	string sedol = 31;
-	// The CFI (Classification of Financial Instruments) code
-	string classification = 32;
-
-	// Specific values for the etf: cik (Central Index Key number). The Cik is used as a unique identifier for financial filings with the Security and Exchange Commision of the USA
-	string cik = 33;
-    // Specific values for the etf: sectors definitions
-	map<string, string> sectors = 34;
-    // Specific values for the etf: market capitalization
-    google.protobuf.DoubleValue capitalization = 35;
-	// Specific values for the etf: the main address of the exchange traded fund
-	string address = 36;
-	// Specific values for the etf: the main phone of the exchange traded fund
-	string phone = 37;
-	// Specific values for the etf: the main email of the exchange traded fund
-	string email = 38;
-	// Specific values for the etf: the website link of the exchange traded fund
-	string url = 39;
-	// Specific values for the etf: the exchange traded fund issuer
-	string issuer = 40;
-	// Specific values for the etf: the exchange traded fund type
-	string fund_type = 41;
-	// Specific values for the etf: the exchange traded fund issue date
-	google.type.Date issue_date = 42;
+	// The total count of cryptos entry available
+	int64 total_count = 2;
 }
 
-// Contains the reference data for futures.
-message FutureEntry
+// Contain data about equities
+message EquityResponse
+{
+	// The reference data for equities: the equities array
+	repeated EquityEntry assets  = 1;
+
+	// The total count of equities entry available
+	int64 total_count = 2;
+}
+
+// Contain data about ETFs
+message EtfResponse
+{
+	// The reference data for ETFs: the ETFs array
+	repeated EtfEntry assets  = 1;
+
+	// The total count of ETFs entry available
+	int64 total_count = 2;
+}
+
+// Contain data about Forex
+message ForexResponse
+{
+	// The reference data for forex: the Forex array
+	repeated ForexEntry assets  = 1;
+
+	// The total count of forex entry available
+	int64 total_count = 2;
+}
+
+// Contain data about futures
+message FutureResponse
+{
+	// The reference data for futures: the futures array
+	repeated FutureEntry assets  = 1;
+
+	// The total count of futures entry available
+	int64 total_count = 2;
+}
+
+// Contain data about indexes
+message IndexResponse
+{
+	// The reference data for indexes: the index array
+	repeated IndexEntry assets  = 1;
+
+	// The total count of indexes entry available
+	int64 total_count = 2;
+}
+
+// Contain data about options
+message OptionResponse
+{
+	// The reference data for options: the option array
+	repeated OptionEntry assets  = 1;
+
+	// The total count of option entry available
+	int64 total_count = 2;
+}
+
+
+// Contains the reference data for equities.	
+message EquityEntry	
 {	
-	// Identifiers: asset identifier
-	systemathics.apis.type.shared.v1.Identifier identifier = 1;
-	// General information: the asset class
-	string type = 2;
-	// General information: status indicating whether the asset is active
-	bool active = 3;
-	// General information: the primary exchange code (mic)
-	string primary = 4;
-	// General information: the operating exchange code (mic)
-	string operating = 5;
-	// General information: the full name 
-	string name = 6;
-	// General information: the currency code (ISO 4217)
-	string currency = 7;
-	// General information: the country code (ISO 3166)
-	string country = 8;
-	// General information: the tick size rule table
-	repeated TickSize tick_size_rule = 9;
-	// General information: the major index array
-	repeated string index = 10;
-	// General information: the calendar identifier
-	string calendar = 11;
-	// General information: the description of the asset
-	string description = 12;
-
-	// Trading hours: the open time (continuous trading)
-	google.protobuf.Duration open = 13;
-	// Trading hours: the close time (continuous trading)
-	google.protobuf.Duration close = 14;
-	// Trading hours: the time zone
-	string time_zone = 15;
-
-	// Specifications: the lot size (minimum quantity to trade)
-	int64 lot_size = 16;
-	// Specifications: the point value
-	double point_value = 17;
-
-	// Reference data : the average price
-	google.protobuf.DoubleValue price = 18;
-	// Reference data : the average daily volume 
-	google.protobuf.Int64Value volume = 19;
-	// Reference data : the time stamp of the refernce data
-	google.type.Date time = 20;
-
-	// Mapping : the count of sources used to cross validate and complete the asset's information
-	int32 sources = 21;
-	// Mapping: the mapping codes
-	map<string, string> mapping = 22;
-	// Mapping: the bloomberg code
-	string bloomberg = 23;
-	// Mapping: the reuters code
-	string reuters = 24;
-	// Mapping: the morningstar code
-	string morningstar = 25;
-	// Mapping: the markit (red code) code
-	string markit = 26;
-	// Mapping: the figi code (Financial Instrument Global Identifier, formerly Bloomberg Global Identifier)
-	string figi = 27;
-	// Mapping: the figic code (Financial Instrument Global Identifier Composite, formerly Bloomberg Global Identifier)
-	string figic = 28;
-	// Mapping: isin code (International Securities Identifying Number)
-    string isin = 29;
-	// Mapping: cusip code : Committee on Uniform Security Identification Procedures
-	string cusip = 30;
-	// Mapping: sedol code : Stock Exchange Daily Official List
-	string sedol = 31;
-	// The CFI (Classification of Financial Instruments) code
-	string classification = 32;
-
-	// Specific values for the future: the future underlying asset code
-	string underlying = 33;
-	// Specific values for the future: the future contract code
-	string contract = 34;
-	// Specific values for the future: the future category
-	map<string, string> category = 35;
-	// Specific values for the future: the future chain codes
-	string chain = 36;
-	// Specific values for the future: the future maturity date
-	google.type.Date maturity = 37;
-	// Specific values for the future: the future month code
-	string month = 38;
-	// Specific values for the future: the future year
-	int32 year = 39;
-}
-
-// Contains the reference data for indices.
-message IndexEntry
-{
-	// Identifiers: asset identifier
-	systemathics.apis.type.shared.v1.Identifier identifier = 1;
-	// General information: the asset class
-	string type = 2;
-	// General information: status indicating whether the asset is active
-	bool active = 3;
-	// General information: the primary exchange code (mic)
-	string primary = 4;
-	// General information: the operating exchange code (mic)
-	string operating = 5;
-	// General information: the full name 
-	string name = 6;
-	// General information: the currency code (ISO 4217)
-	string currency = 7;
-	// General information: the country code (ISO 3166)
-	string country = 8;
-	// General information: the tick size rule table
-	repeated TickSize tick_size_rule = 9;
-	// General information: the major index array
-	repeated string index = 10;
-	// General information: the calendar identifier
-	string calendar = 11;
-	// General information: the description of the asset
-	string description = 12;
-
-	// Trading hours: the open time (continuous trading)
-	google.protobuf.Duration open = 13;
-	// Trading hours: the close time (continuous trading)
-	google.protobuf.Duration close = 14;
-	// Trading hours: the time zone
-	string time_zone = 15;
-
-	// Specifications: the lot size (minimum quantity to trade)
-	int64 lot_size = 16;
-	// Specifications: the point value
-	double point_value = 17;
-
-	// Reference data : the average price
-	google.protobuf.DoubleValue price = 18;
-	// Reference data : the average daily volume 
-	google.protobuf.Int64Value volume = 19;
-	// Reference data : the time stamp of the refernce data
-	google.type.Date time = 20;
-
-	// Mapping : the count of sources used to cross validate and complete the asset's information
-	int32 sources = 21;
-	// Mapping: the mapping codes
-	map<string, string> mapping = 22;
-	// Mapping: the bloomberg code
-	string bloomberg = 23;
-	// Mapping: the reuters code
-	string reuters = 24;
-	// Mapping: the morningstar code
-	string morningstar = 25;
-	// Mapping: the markit (red code) code
-	string markit = 26;
-	// Mapping: the figi code (Financial Instrument Global Identifier, formerly Bloomberg Global Identifier)
-	string figi = 27;
-	// Mapping: the figic code (Financial Instrument Global Identifier Composite, formerly Bloomberg Global Identifier)
-	string figic = 28;
-	// Mapping: isin code (International Securities Identifying Number)
-    string isin = 29;
-	// Mapping: cusip code : Committee on Uniform Security Identification Procedures
-	string cusip = 30;
-	// Mapping: sedol code : Stock Exchange Daily Official List
-	string sedol = 31;
-	// The CFI (Classification of Financial Instruments) code
-	string classification = 32;
-
-	// Specific values for the index: the index category
-	string category = 33;
-	// Specific values for the index: the index weighting methodology
-	string methodology = 34;
-	// Specific values for the index: the index issuer
-	string issuer = 35;
-	// Specific values for the index: the index issue date
-	google.type.Date issue_date = 36;
-	// Specific values for the index: the index rebalancing frequency
-	FrequencyType frequency = 37;
-	// Specific values for the index: the index components (equal weight)
-	map<string, double> components = 38;
-	// Specific values for the index: the index components number
-	int64 count = 39;
-}
-
-// Contains the reference data for crypto currencies.
-message CryptoEntry
-{
-	// Identifiers: asset identifier
-	systemathics.apis.type.shared.v1.Identifier identifier = 1;
-	// General information: the asset class
-	string type = 2;
-	// General information: status indicating whether the asset is active
-	bool active = 3;
-	// General information: the primary exchange code (mic)
-	string primary = 4;
-	// General information: the operating exchange code (mic)
-	string operating = 5;
-	// General information: the full name 
-	string name = 6;
-	// General information: the currency code (ISO 4217)
-	string base_currency = 7;
-	// General information: the country code (ISO 3166)
-	string country = 8;
-	// General information: the tick size rule table
-	repeated TickSize tick_size_rule = 9;
-	// General information: the major index array
-	repeated string index = 10;
-	// General information: the calendar identifier
-	string calendar = 11;
-	// General information: the description of the asset
-	string description = 12;
-
-	// Trading hours: the open time (continuous trading)
-	google.protobuf.Duration open = 13;
-	// Trading hours: the close time (continuous trading)
-	google.protobuf.Duration close = 14;
-	// Trading hours: the time zone
-	string time_zone = 15;
-
-	// Specifications: the lot size (minimum quantity to trade)
-	int64 lot_size = 16;
-	// Specifications: the point value
-	double point_value = 17;
-
-	// Reference data : the average price
-	google.protobuf.DoubleValue price = 18;
-	// Reference data : the average daily volume 
-	google.protobuf.Int64Value volume = 19;
-	// Reference data : the time stamp of the refernce data
-	google.type.Date time = 20;
-
-	// Mapping : the count of sources used to cross validate and complete the asset's information
-	int32 sources = 21;
-	// Mapping: the mapping codes
-	map<string, string> mapping = 22;
-	// Mapping: the bloomberg code
-	string bloomberg = 23;
-	// Mapping: the reuters code
-	string reuters = 24;
-	// Mapping: the morningstar code
-	string morningstar = 25;
-	// Mapping: the markit (red code) code
-	string markit = 26;
-	// Mapping: the figi code (Financial Instrument Global Identifier, formerly Bloomberg Global Identifier)
-	string figi = 27;
-	// Mapping: the figic code (Financial Instrument Global Identifier Composite, formerly Bloomberg Global Identifier)
-	string figic = 28;
-	// Mapping: isin code (International Securities Identifying Number)
-    string isin = 29;
-	// Mapping: cusip code : Committee on Uniform Security Identification Procedures
-	string cusip = 30;
-	// Mapping: sedol code : Stock Exchange Daily Official List
-	string sedol = 31;
-	// The CFI (Classification of Financial Instruments) code
-	string classification = 32;
-
-	// Specific values for the crypto: the quote currency code
-	string quote_currency = 33;
-	// Specific values for the crypto: the consensus mechanisms array (POW, POS, DPOS)
-	repeated string consensus = 34;
-	// Specific values for the crypto: the issue date of the crypto
-	google.type.Date issue_date = 35;
-	// Specific values for the crypto: the market capitalization
-	google.protobuf.DoubleValue capitalization = 36;
-		// Specific values for the crypto: the number of coins that are circulating in the market and in the general public's hands
-	int32 circulating_supply = 37;
-	// Specific values for the crypto: the maximum amount of coins that will ever exist in the lifetime of the cryptocurrency
-	int32 max_supply = 38;
-	// Specific values for the crypto: the total amount of coins in existence right now (minus any coins that have been verifiably burned)
-	int32 total_supply = 39;
-}
-
-// Contains the reference data for Forex pairs.
-message ForexEntry
-{
-	// Identifiers: asset identifier
-	systemathics.apis.type.shared.v1.Identifier identifier = 1;
-	// General information: the asset class
-	string type = 2;
-	// General information: status indicating whether the asset is active
-	bool active = 3;
-	// General information: the primary exchange code (mic)
-	string primary = 4;
-	// General information: the operating exchange code (mic)
-	string operating = 5;
-	// General information: the full name 
-	string name = 6;
-	// General information: the currency code (ISO 4217)
-	string base_currency = 7;
-	// General information: the country code (ISO 3166)
-	string country = 8;
-	// General information: the tick size rule table
-	repeated TickSize tick_size_rule = 9;
-	// General information: the major index array
-	repeated string index = 10;
-	// General information: the calendar identifier
-	string calendar = 11;
-	// General information: the description of the asset
-	string description = 12;
-
-	// Trading hours: the open time (continuous trading)
-	google.protobuf.Duration open = 13;
-	// Trading hours: the close time (continuous trading)
-	google.protobuf.Duration close = 14;
-	// Trading hours: the time zone
-	string time_zone = 15;
-
-	// Specifications: the lot size (minimum quantity to trade)
-	int64 lot_size = 16;
-	// Specifications: the point value
-	double point_value = 17;
-
-	// Reference data : the average price
-	google.protobuf.DoubleValue price = 18;
-	// Reference data : the average daily volume 
-	google.protobuf.Int64Value volume = 19;
-	// Reference data : the time stamp of the refernce data
-	google.type.Date time = 20;
-
-	// Mapping : the count of sources used to cross validate and complete the asset's information
-	int32 sources = 21;
-	// Mapping: the mapping codes
-	map<string, string> mapping = 22;
-	// Mapping: the bloomberg code
-	string bloomberg = 23;
-	// Mapping: the reuters code
-	string reuters = 24;
-	// Mapping: the morningstar code
-	string morningstar = 25;
-	// Mapping: the markit (red code) code
-	string markit = 26;
-	// Mapping: the figi code (Financial Instrument Global Identifier, formerly Bloomberg Global Identifier)
-	string figi = 27;
-	// Mapping: the figic code (Financial Instrument Global Identifier Composite, formerly Bloomberg Global Identifier)
-	string figic = 28;
-	// Mapping: isin code (International Securities Identifying Number)
-    string isin = 29;
-	// Mapping: cusip code : Committee on Uniform Security Identification Procedures
-	string cusip = 30;
-	// Mapping: sedol code : Stock Exchange Daily Official List
-	string sedol = 31;
-	// The CFI (Classification of Financial Instruments) code
-	string classification = 32;
-
-	// Specific values for the Forex: the quote currency code
-	string quote_currency = 33;
-}
-
-// Contains the reference data for options.
-message OptionEntry
+	// Identifiers: The instrument identifier. It consists of a ticker and an exchange code. (ISO 10383)
+	systemathics.apis.type.shared.v1.Identifier identifier =  1;
+	// General information: The instrument class.
+	string type =  2;
+	// General information: Indicates if the financial instrument is currently active.
+	bool active =  3;
+	// General information: The Market Identifier Code (MIC) of the assigned primary exchange on which this specific instrument is traded. (ISO 10383)
+	string primary =  4;
+	// General information: The entity operating an exchange/market/trade reporting facility in a specific market/country (ISO 10383).
+	string operating =  5;
+	// General information: Name of the company or brief description of the instrument. The name of an instrument may change in conjunction with corporate actions.
+	string name =  6;
+	// General information: Currency in which the instrument was issued. (ISO 4217)
+	string currency =  7;
+	// General information: Specifies the  country or territory code of where the instrument trades. (ISO 3166)
+	string country =  8;
+	// General information: The minimum amount by which the price of the instrument can change.  Data is represented as a table where there are different tick sizes for different price ranges.
+	repeated TickSize tick_size_rule =  9;
+	// General information: The different indices to which this instrument belongs The output is presented as a collection Ticker-Exchange identifying indices.
+	repeated string index =  10;
+	// General information: The Market Identifier Code (MIC) to use in order to retrieve the calendar for that instrument.
+	string calendar =  11;
+	// General information: A brief description of the instrument.
+	string description =  12;
+	
+	// Trading hours: Hours the exchange opens for continuous trading, reported in the time zone of the exchange.
+	google.protobuf.Duration open =  13;
+	// Trading hours: Hours the exchange closes for continuous  trading, reported in the time zone of the exchange.
+	google.protobuf.Duration close =  14;
+	// Trading hours: The time zone.
+	string time_zone =  15;
+	
+	// Specifications: Specifies the minimum number of shares that can be purchased, as regulated by an exchange.
+	int64 lot_size =  16;
+	// Specifications: The amount value of one point basis on a price.
+	double point_value =  17;
+	
+	// Reference data: Reference price for the instrument.
+	google.protobuf.DoubleValue price =  18;
+	// Reference data: Reference volume for the instrument. 
+	google.protobuf.Int64Value volume =  19;
+	// Reference data: Time of the reference price and volume.
+	google.type.Date time =  20;
+	
+	// Mapping: List of sources contributing to the instrument fields description.
+	int32 sources =  21;
+	// Mapping: The different codes used to identify the instrument represented in a single string. The output is presented as a collection of pairs of mapping name (ISIN, RIC, SEDOL, FIGI, etc) with its code.
+	map<string, string> mapping =  22;
+	// Mapping: The bloomberg ticker.
+	string bloomberg =  23;
+	// Mapping: The Reuters Instrument Code (RIC) is a ticker-like code used to identify financial instruments and indices. The RIC is made up primarily of the security's ticker symbol, optionally followed by a period and exchange code based on the name of the stock exchange using that ticker.
+	string reuters =  24;
+	// Mapping: The Morningstar ticker used to identify an instrument.
+	string morningstar =  25;
+	// Mapping: The Markit code, also known as RED Code.
+	string markit =  26;
+	// Mapping: The Financial Instrument Global Identifier (FIGI) is an established global standard of the Object Management Group (www.OMG.org, an international non-profit technology standards consortium founded in 1989) and an identification standard adopted by the American National Committee X9. The FIGI standard is issued and distributed by Bloomberg L.P. as a Registration Authority and Certified Provider under the auspice of OMG. The Financial Instrument Global Identifier (FIGI) is a twelve character, alphanumeric identifier. The first 2 characters are upper-case consonants (including "Y"), the third character is the upper-case "G", characters 4 -11 are any upper-case consonant (including "Y") or integer between 0 and 9, and the last character is a check-digit.
+	string figi =  27;
+	// Mapping: The Composite Financial Instrument Global Identifier (FIGI) enables users to link multiple FIGIs at the Trading Venue-level within the same country or market in order to obtain an aggregated view for that instrument.
+	string figic =  28;
+	// Mapping: The International Securities Identification Number (ISIN) is a twelve-character number assigned by the local national numbering agency. It consists of a two-letter country code, followed by the nine character alphanumerical national security identifier, and a check digit.
+	string isin =  29;
+	// Mapping: The Committee on Uniform Security Identification Procedures (CUSIP) number is aSecurity identification number for the U.S. and Canada.  It consists of nine alpha-numeric characters. The first six characters identify the issuer, the following two identify the issue, and the final character is a check digit.
+	string cusip =  30;
+	// Mapping: The Stock Exchange Daily Official List number (SEDOL) identifier. Numbers issued prior to March 8, 2004 consist of 7 digits.  SEDOLs issued after this date consist of 7 alphanumeric characters, where the first character is always a letter. 
+	string sedol =  31;
+	// Mapping: The Classification of Financial Instruments (CFI), is a six-letter-code used in the financial services industry to classify and describe the structure and function of a financial instrument. (ISO 10962)
+	string classification =  32;
+	
+	// Specific values for the equity: The Central Index Key (CIK) number is a unique number assigned to an individual, company, filing agent or foreign government by the United States Securities and Exchange Commission.  The numbers are up to ten digits in length and are permanent identifiers that may not be changed
+	string cik =  33;
+	// Specific values for the equity:  sectors definitions: The market sector assigned to the instrument in the commonly used market sector classification.  The output is presented as a collection of pairs of classification description (BICS, SIC, GICS, TRBC, etc) with its code.
+	map<string, string> sectors =  34;
+	// Specific values for the equity:  market capitalization: 
+	google.protobuf.DoubleValue capitalization = 35;
+	// Specific values for the equity: Company address associated with the company's domicile which is determined by the location of senior management.
+	string address =  36;
+	// Specific values for the equity: The issuer's phone number at corporate headquarters.
+	string phone =  37;
+	// Specific values for the equity: The main email of the company.
+	string email =  38;
+	// Specific values for the equity: The website link of the company.
+	string url =  39;
+	// Specific values for the equity: A list of the major shareholders of the company.  The output is presented as a collection of pairs composed of a holders' name with its percentage owned.
+	map<string, double> holders =  40;
+}	
+	
+// Contains the reference data for exchange traded fund (ETF).	
+message EtfEntry	
 {	
-	// Identifiers: asset identifier
-	systemathics.apis.type.shared.v1.Identifier identifier = 1;
-	// General information: the asset class
-	string type = 2;
-	// General information: status indicating whether the asset is active
-	bool active = 3;
-	// General information: the primary exchange code (mic)
-	string primary = 4;
-	// General information: the operating exchange code (mic)
-	string operating = 5;
-	// General information: the full name 
-	string name = 6;
-	// General information: the currency code (ISO 4217)
-	string currency = 7;
-	// General information: the country code (ISO 3166)
-	string country = 8;
-	// General information: the tick size rule table
-	repeated TickSize tick_size_rule = 9;
-	// General information: the major index array
-	repeated string index = 10;
-	// General information: the calendar identifier
-	string calendar = 11;
-	// General information: the description of the asset
-	string description = 12;
+	// Identifiers: The instrument identifier. It consists of a ticker and an exchange code. (ISO 10383)
+	systemathics.apis.type.shared.v1.Identifier identifier =  1;
+	// General information: The instrument class.
+	string type =  2;
+	// General information: Indicates if the financial instrument is currently active.
+	bool active =  3;
+	// General information: The Market Identifier Code (MIC) of the assigned primary exchange on which this specific instrument is traded. (ISO 10383)
+	string primary =  4;
+	// General information: The entity operating an exchange/market/trade reporting facility in a specific market/country (ISO 10383).
+	string operating =  5;
+	// General information: Name of the company or brief description of the instrument. The name of an instrument may change in conjunction with corporate actions.
+	string name =  6;
+	// General information: Currency in which the instrument was issued. (ISO 4217)
+	string currency =  7;
+	// General information: Specifies the  country or territory code of where the instrument trades. (ISO 3166)
+	string country =  8;
+	// General information: The minimum amount by which the price of the instrument can change.  Data is represented as a table where there are different tick sizes for different price ranges.
+	repeated TickSize tick_size_rule =  9;
+	// General information: The different indices to which this instrument belongs The output is presented as a collection Ticker-Exchange identifying indices.
+	repeated string index =  10;
+	// General information: The Market Identifier Code (MIC) to use in order to retrieve the calendar for that instrument.
+	string calendar =  11;
+	// General information: A brief description of the instrument.
+	string description =  12;
+	
+	// Trading hours: Hours the exchange opens for continuous trading, reported in the time zone of the exchange.
+	google.protobuf.Duration open =  13;
+	// Trading hours: Hours the exchange closes for continuous  trading, reported in the time zone of the exchange.
+	google.protobuf.Duration close =  14;
+	// Trading hours: The time zone.
+	string time_zone =  15;
+	
+	// Specifications: Specifies the minimum number of shares that can be purchased, as regulated by an exchange.
+	int64 lot_size =  16;
+	// Specifications: The amount value of one point basis on a price.
+	double point_value =  17;
+	
+	// Reference data: Reference price for the instrument.
+	google.protobuf.DoubleValue price =  18;
+	// Reference data: Reference volume for the instrument. 
+	google.protobuf.Int64Value volume =  19;
+	// Reference data: Time of the reference price and volume.
+	google.type.Date time =  20;
+	
+	// Mapping: List of sources contributing to the instrument fields description.
+	int32 sources =  21;
+	// Mapping: The different codes used to identify the instrument represented in a single string. The output is presented as a collection of pairs of mapping name (ISIN, RIC, SEDOL, FIGI, etc) with its code.
+	map<string, string> mapping =  22;
+	// Mapping: The bloomberg ticker.
+	string bloomberg =  23;
+	// Mapping: The Reuters Instrument Code (RIC) is a ticker-like code used to identify financial instruments and indices. The RIC is made up primarily of the security's ticker symbol, optionally followed by a period and exchange code based on the name of the stock exchange using that ticker.
+	string reuters =  24;
+	// Mapping: The Morningstar ticker used to identify an instrument.
+	string morningstar =  25;
+	// Mapping: The Markit code, also known as RED Code.
+	string markit =  26;
+	// Mapping: The Financial Instrument Global Identifier (FIGI) is an established global standard of the Object Management Group (www.OMG.org, an international non-profit technology standards consortium founded in 1989) and an identification standard adopted by the American National Committee X9. The FIGI standard is issued and distributed by Bloomberg L.P. as a Registration Authority and Certified Provider under the auspice of OMG. The Financial Instrument Global Identifier (FIGI) is a twelve character, alphanumeric identifier. The first 2 characters are upper-case consonants (including "Y"), the third character is the upper-case "G", characters 4 -11 are any upper-case consonant (including "Y") or integer between 0 and 9, and the last character is a check-digit.
+	string figi =  27;
+	// Mapping: The Composite Financial Instrument Global Identifier (FIGI) enables users to link multiple FIGIs at the Trading Venue-level within the same country or market in order to obtain an aggregated view for that instrument.
+	string figic =  28;
+	// Mapping: The International Securities Identification Number (ISIN) is a twelve-character number assigned by the local national numbering agency. It consists of a two-letter country code, followed by the nine character alphanumerical national security identifier, and a check digit.
+	string isin = 29;
+	// Mapping: The Committee on Uniform Security Identification Procedures (CUSIP) number is aSecurity identification number for the U.S. and Canada.  It consists of nine alpha-numeric characters. The first six characters identify the issuer, the following two identify the issue, and the final character is a check digit.
+	string cusip =  30;
+	// Mapping: The Stock Exchange Daily Official List number (SEDOL) identifier. Numbers issued prior to March 8, 2004 consist of 7 digits.  SEDOLs issued after this date consist of 7 alphanumeric characters, where the first character is always a letter. 
+	string sedol =  31;
+	// Mapping: The Classification of Financial Instruments (CFI), is a six-letter-code used in the financial services industry to classify and describe the structure and function of a financial instrument. (ISO 10962)
+	string classification =  32;
+	
+	// Specific values for the etf: The Central Index Key (CIK) number is a unique number assigned to an individual, company, filing agent or foreign government by the United States Securities and Exchange Commission.  The numbers are up to ten digits in length and are permanent identifiers that may not be changed
+	string cik =  33;
+	// Specific values for the etf:  sectors definitions: The market sector assigned to the instrument in the commonly used market sector classification.  The output is presented as a collection of pairs of classification description (BICS, SIC, GICS, TRBC, etc) with its code.
+	map<string, string> sectors =  34;
+	// Specific values for the etf:  market capitalization: 
+	google.protobuf.DoubleValue capitalization = 35;
+	// Specific values for the etf: Company address associated with the company's domicile which is determined by the location of senior management.
+	string address =  36;
+	// Specific values for the etf: The issuer's phone number at corporate headquarters.
+	string phone =  37;
+	// Specific values for the etf: The main email of the company.
+	string email =  38;
+	// Specific values for the etf: The website link of the company.
+	string url =  39;
+	// Specific values for the etf: Name of the issuing entity of the instrument.
+	string issuer =  40;
+	// Specific values for the etf: Description of the product designation provided by the fund company.
+	string fund_type =  41;
+	// Specific values for the etf: Date the instrument is issued.
+	google.type.Date issue_date =  42;
+}	
+	
+// Contains the reference data for futures.	
+message FutureEntry	
+{	
+	// Identifiers: The instrument identifier. It consists of a ticker and an exchange code. (ISO 10383)
+	systemathics.apis.type.shared.v1.Identifier identifier =  1;
+	// General information: The instrument class.
+	string type =  2;
+	// General information: Indicates if the financial instrument is currently active.
+	bool active =  3;
+	// General information: The Market Identifier Code (MIC) of the assigned primary exchange on which this specific instrument is traded. (ISO 10383)
+	string primary =  4;
+	// General information: The entity operating an exchange/market/trade reporting facility in a specific market/country (ISO 10383).
+	string operating =  5;
+	// General information: Name of the company or brief description of the instrument. The name of an instrument may change in conjunction with corporate actions.
+	string name =  6;
+	// General information: Currency in which the instrument was issued. (ISO 4217)
+	string currency =  7;
+	// General information: Specifies the  country or territory code of where the instrument trades. (ISO 3166)
+	string country =  8;
+	// General information: The minimum amount by which the price of the instrument can change.  Data is represented as a table where there are different tick sizes for different price ranges.
+	repeated TickSize tick_size_rule =  9;
+	// General information: The different indices to which this instrument belongs The output is presented as a collection Ticker-Exchange identifying indices.
+	repeated string index =  10;
+	// General information: The Market Identifier Code (MIC) to use in order to retrieve the calendar for that instrument.
+	string calendar =  11;
+	// General information: A brief description of the instrument.
+	string description =  12;
+	
+	// Trading hours: Hours the exchange opens for continuous trading, reported in the time zone of the exchange.
+	google.protobuf.Duration open =  13;
+	// Trading hours: Hours the exchange closes for continuous  trading, reported in the time zone of the exchange.
+	google.protobuf.Duration close =  14;
+	// Trading hours: The time zone.
+	string time_zone =  15;
+	
+	// Specifications: Specifies the minimum number of shares that can be purchased, as regulated by an exchange.
+	int64 lot_size =  16;
+	// Specifications: The amount value of one point basis on a price.
+	double point_value =  17;
+	
+	// Reference data: Reference price for the instrument.
+	google.protobuf.DoubleValue price =  18;
+	// Reference data: Reference volume for the instrument. 
+	google.protobuf.Int64Value volume =  19;
+	// Reference data: Time of the reference price and volume.
+	google.type.Date time =  20;
+	
+	// Mapping: List of sources contributing to the instrument fields description.
+	int32 sources =  21;
+	// Mapping: The different codes used to identify the instrument represented in a single string. The output is presented as a collection of pairs of mapping name (ISIN, RIC, SEDOL, FIGI, etc) with its code.
+	map<string, string> mapping =  22;
+	// Mapping: The bloomberg ticker.
+	string bloomberg =  23;
+	// Mapping: The Reuters Instrument Code (RIC) is a ticker-like code used to identify financial instruments and indices. The RIC is made up primarily of the security's ticker symbol, optionally followed by a period and exchange code based on the name of the stock exchange using that ticker.
+	string reuters =  24;
+	// Mapping: The Morningstar ticker used to identify an instrument.
+	string morningstar =  25;
+	// Mapping: The Markit code, also known as RED Code.
+	string markit =  26;
+	// Mapping: The Financial Instrument Global Identifier (FIGI) is an established global standard of the Object Management Group (www.OMG.org, an international non-profit technology standards consortium founded in 1989) and an identification standard adopted by the American National Committee X9. The FIGI standard is issued and distributed by Bloomberg L.P. as a Registration Authority and Certified Provider under the auspice of OMG. The Financial Instrument Global Identifier (FIGI) is a twelve character, alphanumeric identifier. The first 2 characters are upper-case consonants (including "Y"), the third character is the upper-case "G", characters 4 -11 are any upper-case consonant (including "Y") or integer between 0 and 9, and the last character is a check-digit.
+	string figi =  27;
+	// Mapping: The Composite Financial Instrument Global Identifier (FIGI) enables users to link multiple FIGIs at the Trading Venue-level within the same country or market in order to obtain an aggregated view for that instrument.
+	string figic =  28;
+	// Mapping: The International Securities Identification Number (ISIN) is a twelve-character number assigned by the local national numbering agency. It consists of a two-letter country code, followed by the nine character alphanumerical national security identifier, and a check digit.
+	string isin = 29;
+	// Mapping: The Committee on Uniform Security Identification Procedures (CUSIP) number is aSecurity identification number for the U.S. and Canada.  It consists of nine alpha-numeric characters. The first six characters identify the issuer, the following two identify the issue, and the final character is a check digit.
+	string cusip =  30;
+	// Mapping: The Stock Exchange Daily Official List number (SEDOL) identifier. Numbers issued prior to March 8, 2004 consist of 7 digits.  SEDOLs issued after this date consist of 7 alphanumeric characters, where the first character is always a letter. 
+	string sedol =  31;
+	// Mapping: The Classification of Financial Instruments (CFI), is a six-letter-code used in the financial services industry to classify and describe the structure and function of a financial instrument. (ISO 10962)
+	string classification =  32;
+	
+	// Specific values for the future: Ticker of the underling instrument.
+	string underlying =  33;
+	// Specific values for the future: Contract symbol code to identify the product. The format of a full ticker is generally composed of the contract symbol code, followed by the maturity month letter, and the last two digits of the maturity year.
+	string contract =  34;
+	// Specific values for the future: Category group (Energies, Metals, Agriculture, etc.)  where belongs the future contract.
+	map<string, string> category =  35;
+	// Specific values for the future: The contract months  for a specific futures contract.
+	string chain =  36;
+	// Specific values for the future: Date the principal of the instrument is due and payable.
+	google.type.Date maturity =  37;
+	// Specific values for the future: Month the principal of the instrument is due and payable, coded as a letter.
+	string month =  38;
+	// Specific values for the future: Year the principal of the instrument is due and payable.
+	int32 year =  39;
+}	
+	
+// Contains the reference data for indices.	
+message IndexEntry	
+{	
+	// Identifiers: The instrument identifier. It consists of a ticker and an exchange code. (ISO 10383)
+	systemathics.apis.type.shared.v1.Identifier identifier =  1;
+	// General information: The instrument class.
+	string type =  2;
+	// General information: Indicates if the financial instrument is currently active.
+	bool active =  3;
+	// General information: The Market Identifier Code (MIC) of the assigned primary exchange on which this specific instrument is traded. (ISO 10383)
+	string primary =  4;
+	// General information: The entity operating an exchange/market/trade reporting facility in a specific market/country (ISO 10383).
+	string operating =  5;
+	// General information: Name of the company or brief description of the instrument. The name of an instrument may change in conjunction with corporate actions.
+	string name =  6;
+	// General information: Currency in which the instrument was issued. (ISO 4217)
+	string currency =  7;
+	// General information: Specifies the  country or territory code of where the instrument trades. (ISO 3166)
+	string country =  8;
+	// General information: The minimum amount by which the price of the instrument can change.  Data is represented as a table where there are different tick sizes for different price ranges.
+	repeated TickSize tick_size_rule =  9;
+	// General information: The different indices to which this instrument belongs The output is presented as a collection Ticker-Exchange identifying indices.
+	repeated string index =  10;
+	// General information: The Market Identifier Code (MIC) to use in order to retrieve the calendar for that instrument.
+	string calendar =  11;
+	// General information: A brief description of the instrument.
+	string description =  12;
+	
+	// Trading hours: Hours the exchange opens for continuous trading, reported in the time zone of the exchange.
+	google.protobuf.Duration open =  13;
+	// Trading hours: Hours the exchange closes for continuous  trading, reported in the time zone of the exchange.
+	google.protobuf.Duration close =  14;
+	// Trading hours: The time zone.
+	string time_zone =  15;
+	
+	// Specifications: Specifies the minimum number of shares that can be purchased, as regulated by an exchange.
+	int64 lot_size =  16;
+	// Specifications: The amount value of one point basis on a price.
+	double point_value =  17;
+	
+	// Reference data: Reference price for the instrument.
+	google.protobuf.DoubleValue price =  18;
+	// Reference data: Reference volume for the instrument. 
+	google.protobuf.Int64Value volume =  19;
+	// Reference data: Time of the reference price and volume.
+	google.type.Date time =  20;
+	
+	// Mapping: List of sources contributing to the instrument fields description.
+	int32 sources =  21;
+	// Mapping: The different codes used to identify the instrument represented in a single string. The output is presented as a collection of pairs of mapping name (ISIN, RIC, SEDOL, FIGI, etc) with its code.
+	map<string, string> mapping =  22;
+	// Mapping: The bloomberg ticker.
+	string bloomberg =  23;
+	// Mapping: The Reuters Instrument Code (RIC) is a ticker-like code used to identify financial instruments and indices. The RIC is made up primarily of the security's ticker symbol, optionally followed by a period and exchange code based on the name of the stock exchange using that ticker.
+	string reuters =  24;
+	// Mapping: The Morningstar ticker used to identify an instrument.
+	string morningstar =  25;
+	// Mapping: The Markit code, also known as RED Code.
+	string markit =  26;
+	// Mapping: The Financial Instrument Global Identifier (FIGI) is an established global standard of the Object Management Group (www.OMG.org, an international non-profit technology standards consortium founded in 1989) and an identification standard adopted by the American National Committee X9. The FIGI standard is issued and distributed by Bloomberg L.P. as a Registration Authority and Certified Provider under the auspice of OMG. The Financial Instrument Global Identifier (FIGI) is a twelve character, alphanumeric identifier. The first 2 characters are upper-case consonants (including "Y"), the third character is the upper-case "G", characters 4 -11 are any upper-case consonant (including "Y") or integer between 0 and 9, and the last character is a check-digit.
+	string figi =  27;
+	// Mapping: The Composite Financial Instrument Global Identifier (FIGI) enables users to link multiple FIGIs at the Trading Venue-level within the same country or market in order to obtain an aggregated view for that instrument.
+	string figic =  28;
+	// Mapping: The International Securities Identification Number (ISIN) is a twelve-character number assigned by the local national numbering agency. It consists of a two-letter country code, followed by the nine character alphanumerical national security identifier, and a check digit.
+	string isin =  29;
+	// Mapping: The Committee on Uniform Security Identification Procedures (CUSIP) number is aSecurity identification number for the U.S. and Canada.  It consists of nine alpha-numeric characters. The first six characters identify the issuer, the following two identify the issue, and the final character is a check digit.
+	string cusip =  30;
+	// Mapping: The Stock Exchange Daily Official List number (SEDOL) identifier. Numbers issued prior to March 8, 2004 consist of 7 digits.  SEDOLs issued after this date consist of 7 alphanumeric characters, where the first character is always a letter. 
+	string sedol =  31;
+	// Mapping: The Classification of Financial Instruments (CFI), is a six-letter-code used in the financial services industry to classify and describe the structure and function of a financial instrument. (ISO 10962)
+	string classification =  32;
+	
+	// Specific values for the index: Category group (Energies, Metals, Agriculture, etc.)  where belongs the future contract.
+	string category =  33;
+	// Specific values for the index: The index weighting methodology (Equal weight, Market Cap, Dividend Yield, Price, etc).
+	string methodology =  34;
+	// Specific values for the index: Name of the issuing entity of the instrument.
+	string issuer =  35;
+	// Specific values for the index: Date the instrument is issued.
+	google.type.Date issue_date =  36;
+	// Specific values for the index: Frequency at which the instrument is rebalanced.
+	FrequencyType frequency =  37;
+	// Specific values for the index: List of components identified by their ticker and exchange.
+	map<string, double> components =  38;
+	// Specific values for the index: Number of components in the index.
+	int64 components_count =  39;
+}	
+	
+// Contains the reference data for crypto currencies.	
+message CryptoEntry	
+{	
+	// Identifiers: The instrument identifier. It consists of a ticker and an exchange code. (ISO 10383)
+	systemathics.apis.type.shared.v1.Identifier identifier =  1;
+	// General information: The instrument class.
+	string type =  2;
+	// General information: Indicates if the financial instrument is currently active.
+	bool active =  3;
+	// General information: The Market Identifier Code (MIC) of the assigned primary exchange on which this specific instrument is traded. (ISO 10383)
+	string primary =  4;
+	// General information: The entity operating an exchange/market/trade reporting facility in a specific market/country (ISO 10383).
+	string operating =  5;
+	// General information: Name of the company or brief description of the instrument. The name of an instrument may change in conjunction with corporate actions.
+	string name =  6;
+	// General information: Currency in which the instrument was issued (ISO 4217)
+	string base_currency =  7;
+	// General information: Specifies the  country or territory code of where the instrument trades. (ISO 3166)
+	string country =  8;
+	// General information: The minimum amount by which the price of the instrument can change.  Data is represented as a table where there are different tick sizes for different price ranges.
+	repeated TickSize tick_size_rule =  9;
+	// General information: The different indices to which this instrument belongs The output is presented as a collection Ticker-Exchange identifying indices.
+	repeated string index =  10;
+	// General information: The Market Identifier Code (MIC) to use in order to retrieve the calendar for that instrument.
+	string calendar =  11;
+	// General information: A brief description of the instrument.
+	string description =  12;
+	
+	// Trading hours: Hours the exchange opens for continuous trading, reported in the time zone of the exchange.
+	google.protobuf.Duration open =  13;
+	// Trading hours: Hours the exchange closes for continuous  trading, reported in the time zone of the exchange.
+	google.protobuf.Duration close =  14;
+	// Trading hours: The time zone.
+	string time_zone =  15;
+	
+	// Specifications: Specifies the minimum number of shares that can be purchased, as regulated by an exchange.
+	int64 lot_size =  16;
+	// Specifications: The amount value of one point basis on a price.
+	double point_value =  17;
+	
+	// Reference data: Reference price for the instrument.
+	google.protobuf.DoubleValue price =  18;
+	// Reference data: Reference volume for the instrument. 
+	google.protobuf.Int64Value volume =  19;
+	// Reference data: Time of the reference price and volume.
+	google.type.Date time =  20;
+	
+	// Mapping: List of sources contributing to the instrument fields description.
+	int32 sources =  21;
+	// Mapping: The different codes used to identify the instrument represented in a single string. The output is presented as a collection of pairs of mapping name (ISIN, RIC, SEDOL, FIGI, etc) with its code.
+	map<string, string> mapping =  22;
+	// Mapping: The bloomberg ticker.
+	string bloomberg =  23;
+	// Mapping: The Reuters Instrument Code (RIC) is a ticker-like code used to identify financial instruments and indices. The RIC is made up primarily of the security's ticker symbol, optionally followed by a period and exchange code based on the name of the stock exchange using that ticker.
+	string reuters =  24;
+	// Mapping: The Morningstar ticker used to identify an instrument.
+	string morningstar =  25;
+	// Mapping: The Markit code, also known as RED Code.
+	string markit =  26;
+	// Mapping: The Financial Instrument Global Identifier (FIGI) is an established global standard of the Object Management Group (www.OMG.org, an international non-profit technology standards consortium founded in 1989) and an identification standard adopted by the American National Committee X9. The FIGI standard is issued and distributed by Bloomberg L.P. as a Registration Authority and Certified Provider under the auspice of OMG. The Financial Instrument Global Identifier (FIGI) is a twelve character, alphanumeric identifier. The first 2 characters are upper-case consonants (including "Y"), the third character is the upper-case "G", characters 4 -11 are any upper-case consonant (including "Y") or integer between 0 and 9, and the last character is a check-digit.
+	string figi =  27;
+	// Mapping: The Composite Financial Instrument Global Identifier (FIGI) enables users to link multiple FIGIs at the Trading Venue-level within the same country or market in order to obtain an aggregated view for that instrument.
+	string figic =  28;
+	// Mapping: The International Securities Identification Number (ISIN) is a twelve-character number assigned by the local national numbering agency. It consists of a two-letter country code, followed by the nine character alphanumerical national security identifier, and a check digit.
+	string isin =  29;
+	// Mapping: The Committee on Uniform Security Identification Procedures (CUSIP) number is aSecurity identification number for the U.S. and Canada.  It consists of nine alpha-numeric characters. The first six characters identify the issuer, the following two identify the issue, and the final character is a check digit.
+	string cusip =  30;
+	// Mapping: The Stock Exchange Daily Official List number (SEDOL) identifier. Numbers issued prior to March 8, 2004 consist of 7 digits.  SEDOLs issued after this date consist of 7 alphanumeric characters, where the first character is always a letter. 
+	string sedol =  31;
+	// Mapping: The Classification of Financial Instruments (CFI), is a six-letter-code used in the financial services industry to classify and describe the structure and function of a financial instrument. (ISO 10962)
+	string classification =  32;
+	
+	// Specific values for the crypto: Currency in which the instrument is priced (ISO 4217)
+	string quote_currency =  33;
+	// Specific values for the crypto: The program used in blockchain systems to achieve distributed agreement about the ledger's state.
+	repeated string consensus =  34;
+	// Specific values for the crypto: Date the instrument is issued.
+	google.type.Date issue_date =  35;
+	// Specific values for the crypto: The total value of a publicly traded company's outstanding common shares owned by stockholders.   Market capitalization is equal to the market price per common share multiplied by the number of common shares outstanding.
+	google.protobuf.DoubleValue capitalization =  36;
+	//The number of coins that are circulating in the market and in the general public's hands
+	int32 circulating_supply =  37;
+	// Specific values for the crypto: The maximum amount of coins that will ever exist in the lifetime of the cryptocurrency
+	int32 max_supply =  38;
+	// Specific values for the crypto: The total amount of coins in existence right now (minus any coins that have been verifiably burned)
+	int32 total_supply =  39;
+}	
+	
+// Contains the reference data for Forex pairs.	
+message ForexEntry	
+{	
+	// Identifiers: The instrument identifier. It consists of a ticker and an exchange code. (ISO 10383)
+	systemathics.apis.type.shared.v1.Identifier identifier =  1;
+	// General information: The instrument class.
+	string type =  2;
+	// General information: Indicates if the financial instrument is currently active.
+	bool active =  3;
+	// General information: The Market Identifier Code (MIC) of the assigned primary exchange on which this specific instrument is traded. (ISO 10383)
+	string primary =  4;
+	// General information: The entity operating an exchange/market/trade reporting facility in a specific market/country (ISO 10383).
+	string operating =  5;
+	// General information: Name of the company or brief description of the instrument. The name of an instrument may change in conjunction with corporate actions.
+	string name =  6;
+	// General information: Currency in which the instrument was issued (ISO 4217)
+	string base_currency =  7;
+	// General information: Specifies the  country or territory code of where the instrument trades. (ISO 3166)
+	string country =  8;
+	// General information: The minimum amount by which the price of the instrument can change.  Data is represented as a table where there are different tick sizes for different price ranges.
+	repeated TickSize tick_size_rule =  9;
+	// General information: The different indices to which this instrument belongs The output is presented as a collection Ticker-Exchange identifying indices.
+	repeated string index =  10;
+	// General information: The Market Identifier Code (MIC) to use in order to retrieve the calendar for that instrument.
+	string calendar =  11;
+	// General information: A brief description of the instrument.
+	string description =  12;
+	
+	// Trading hours: Hours the exchange opens for continuous trading, reported in the time zone of the exchange.
+	google.protobuf.Duration open =  13;
+	// Trading hours: Hours the exchange closes for continuous  trading, reported in the time zone of the exchange.
+	google.protobuf.Duration close =  14;
+	// Trading hours: The time zone.
+	string time_zone =  15;
+	
+	// Specifications: Specifies the minimum number of shares that can be purchased, as regulated by an exchange.
+	int64 lot_size =  16;
+	// Specifications: The amount value of one point basis on a price.
+	double point_value =  17;
+	
+	// Reference data: Reference price for the instrument.
+	google.protobuf.DoubleValue price =  18;
+	// Reference data: Reference volume for the instrument. 
+	google.protobuf.Int64Value volume =  19;
+	// Reference data: Time of the reference price and volume.
+	google.type.Date time =  20;
+	
+	// Mapping: List of sources contributing to the instrument fields description.
+	int32 sources =  21;
+	// Mapping: The different codes used to identify the instrument represented in a single string. The output is presented as a collection of pairs of mapping name (ISIN, RIC, SEDOL, FIGI, etc) with its code.
+	map<string, string> mapping =  22;
+	// Mapping: The bloomberg ticker.
+	string bloomberg =  23;
+	// Mapping: The Reuters Instrument Code (RIC) is a ticker-like code used to identify financial instruments and indices. The RIC is made up primarily of the security's ticker symbol, optionally followed by a period and exchange code based on the name of the stock exchange using that ticker.
+	string reuters =  24;
+	// Mapping: The Morningstar ticker used to identify an instrument.
+	string morningstar =  25;
+	// Mapping: The Markit code, also known as RED Code.
+	string markit =  26;
+	// Mapping: The Financial Instrument Global Identifier (FIGI) is an established global standard of the Object Management Group (www.OMG.org, an international non-profit technology standards consortium founded in 1989) and an identification standard adopted by the American National Committee X9. The FIGI standard is issued and distributed by Bloomberg L.P. as a Registration Authority and Certified Provider under the auspice of OMG. The Financial Instrument Global Identifier (FIGI) is a twelve character, alphanumeric identifier. The first 2 characters are upper-case consonants (including "Y"), the third character is the upper-case "G", characters 4 -11 are any upper-case consonant (including "Y") or integer between 0 and 9, and the last character is a check-digit.
+	string figi =  27;
+	// Mapping: The Composite Financial Instrument Global Identifier (FIGI) enables users to link multiple FIGIs at the Trading Venue-level within the same country or market in order to obtain an aggregated view for that instrument.
+	string figic =  28;
+	// Mapping: The International Securities Identification Number (ISIN) is a twelve-character number assigned by the local national numbering agency. It consists of a two-letter country code, followed by the nine character alphanumerical national security identifier, and a check digit.
+	string isin =  29;
+	// Mapping: The Committee on Uniform Security Identification Procedures (CUSIP) number is aSecurity identification number for the U.S. and Canada.  It consists of nine alpha-numeric characters. The first six characters identify the issuer, the following two identify the issue, and the final character is a check digit.
+	string cusip =  30;
+	// Mapping: The Stock Exchange Daily Official List number (SEDOL) identifier. Numbers issued prior to March 8, 2004 consist of 7 digits.  SEDOLs issued after this date consist of 7 alphanumeric characters, where the first character is always a letter. 
+	string sedol =  31;
+	// Mapping: The Classification of Financial Instruments (CFI), is a six-letter-code used in the financial services industry to classify and describe the structure and function of a financial instrument. (ISO 10962)
+	string classification =  32;
+	
+	// Specific values for the Forex: Currency in which the instrument is priced (ISO 4217)
+	string quote_currency =  33;
+}	
+	
+// Contains the reference data for options.	
+message OptionEntry	
+{	
+	// Identifiers: The instrument identifier. It consists of a ticker and an exchange code. (ISO 10383)
+	systemathics.apis.type.shared.v1.Identifier identifier =  1;
+	// General information: The instrument class.
+	string type =  2;
+	// General information: Indicates if the financial instrument is currently active.
+	bool active =  3;
+	// General information: The Market Identifier Code (MIC) of the assigned primary exchange on which this specific instrument is traded. (ISO 10383)
+	string primary =  4;
+	// General information: The entity operating an exchange/market/trade reporting facility in a specific market/country (ISO 10383).
+	string operating =  5;
+	// General information: Name of the company or brief description of the instrument. The name of an instrument may change in conjunction with corporate actions.
+	string name =  6;
+	// General information: Currency in which the instrument was issued. (ISO 4217)
+	string currency =  7;
+	// General information: Specifies the  country or territory code of where the instrument trades. (ISO 3166)
+	string country =  8;
+	// General information: The minimum amount by which the price of the instrument can change.  Data is represented as a table where there are different tick sizes for different price ranges.
+	repeated TickSize tick_size_rule =  9;
+	// General information: The different indices to which this instrument belongs The output is presented as a collection Ticker-Exchange identifying indices.
+	repeated string index =  10;
+	// General information: The Market Identifier Code (MIC) to use in order to retrieve the calendar for that instrument.
+	string calendar =  11;
+	// General information: A brief description of the instrument.
+	string description =  12;
+	
+	// Trading hours: Hours the exchange opens for continuous trading, reported in the time zone of the exchange.
+	google.protobuf.Duration open =  13;
+	// Trading hours: Hours the exchange closes for continuous  trading, reported in the time zone of the exchange.
+	google.protobuf.Duration close =  14;
+	// Trading hours: The time zone.
+	string time_zone =  15;
+	
+	// Specifications: Specifies the minimum number of shares that can be purchased, as regulated by an exchange.
+	int64 lot_size =  16;
+	// Specifications: The amount value of one point basis on a price.
+	double point_value =  17;
+	
+	// Reference data: Reference price for the instrument.
+	google.protobuf.DoubleValue price =  18;
+	// Reference data: Reference volume for the instrument. 
+	google.protobuf.Int64Value volume =  19;
+	// Reference data: Time of the reference price and volume.
+	google.type.Date time =  20;
+	
+	// Mapping: List of sources contributing to the instrument fields description.
+	int32 sources =  21;
+	// Mapping: The different codes used to identify the instrument represented in a single string. The output is presented as a collection of pairs of mapping name (ISIN, RIC, SEDOL, FIGI, etc) with its code.
+	map<string, string> mapping =  22;
+	// Mapping: The bloomberg ticker.
+	string bloomberg =  23;
+	// Mapping: The Reuters Instrument Code (RIC) is a ticker-like code used to identify financial instruments and indices. The RIC is made up primarily of the security's ticker symbol, optionally followed by a period and exchange code based on the name of the stock exchange using that ticker.
+	string reuters =  24;
+	// Mapping: The Morningstar ticker used to identify an instrument.
+	string morningstar =  25;
+	// Mapping: The Markit code, also known as RED Code.
+	string markit =  26;
+	// Mapping: The Financial Instrument Global Identifier (FIGI) is an established global standard of the Object Management Group (www.OMG.org, an international non-profit technology standards consortium founded in 1989) and an identification standard adopted by the American National Committee X9. The FIGI standard is issued and distributed by Bloomberg L.P. as a Registration Authority and Certified Provider under the auspice of OMG. The Financial Instrument Global Identifier (FIGI) is a twelve character, alphanumeric identifier. The first 2 characters are upper-case consonants (including "Y"), the third character is the upper-case "G", characters 4 -11 are any upper-case consonant (including "Y") or integer between 0 and 9, and the last character is a check-digit.
+	string figi =  27;
+	// Mapping: The Composite Financial Instrument Global Identifier (FIGI) enables users to link multiple FIGIs at the Trading Venue-level within the same country or market in order to obtain an aggregated view for that instrument.
+	string figic =  28;
+	// Mapping: The International Securities Identification Number (ISIN) is a twelve-character number assigned by the local national numbering agency. It consists of a two-letter country code, followed by the nine character alphanumerical national security identifier, and a check digit.
+	string isin =  29;
+	// Mapping: The Committee on Uniform Security Identification Procedures (CUSIP) number is aSecurity identification number for the U.S. and Canada.  It consists of nine alpha-numeric characters. The first six characters identify the issuer, the following two identify the issue, and the final character is a check digit.
+	string cusip =  30;
+	// Mapping: The Stock Exchange Daily Official List number (SEDOL) identifier. Numbers issued prior to March 8, 2004 consist of 7 digits.  SEDOLs issued after this date consist of 7 alphanumeric characters, where the first character is always a letter. 
+	string sedol =  31;
+	// Mapping: The Classification of Financial Instruments (CFI), is a six-letter-code used in the financial services industry to classify and describe the structure and function of a financial instrument. (ISO 10962)
+	string classification =  32;
+	
+	// Specific values for the option: Ticker of the underling instrument.
+	string underlying =  33;
+	// Specific values for the option: Price at which the option holder may buy or sell the underlying security, as defined in the terms of the option contract. 
+	double strike =  34;
+	// Specific values for the option: The last day (in the case of American-style) or the only day (in the case of European-style) on which an option may be exercised.
+	google.type.Date expiry =  35;
+	// Specific values for the option: Indicates whether the security is a put or call. 
+	OptionType option_type =  36;
+	// Specific values for the option: The way the option can be exercised:  American, European or Bermudan.
+	ExerciseType exercise_type =  37;
+}	
+	
+// Contains the reference data for bonds.	
+message BondEntry	
+{	
+	// Identifiers: The instrument identifier. It consists of a ticker and an exchange code. (ISO 10383)
+	systemathics.apis.type.shared.v1.Identifier identifier =  1;
+	// General information: The instrument class.
+	string type =  2;
+	// General information: Indicates if the financial instrument is currently active.
+	bool active =  3;
+	// General information: The Market Identifier Code (MIC) of the assigned primary exchange on which this specific instrument is traded. (ISO 10383)
+	string primary =  4;
+	// General information: The entity operating an exchange/market/trade reporting facility in a specific market/country (ISO 10383).
+	string operating =  5;
+	// General information: Name of the company or brief description of the instrument. The name of an instrument may change in conjunction with corporate actions.
+	string name =  6;
+	// General information: Currency in which the instrument was issued. (ISO 4217)
+	string currency =  7;
+	// General information: Specifies the  country or territory code of where the instrument trades. (ISO 3166)
+	string country =  8;
+	// General information: The minimum amount by which the price of the instrument can change.  Data is represented as a table where there are different tick sizes for different price ranges.
+	repeated TickSize tick_size_rule =  9;
+	// General information: The different indices to which this instrument belongs The output is presented as a collection Ticker-Exchange identifying indices.
+	repeated string index =  10;
+	// General information: The Market Identifier Code (MIC) to use in order to retrieve the calendar for that instrument.
+	string calendar =  11;
+	// General information: A brief description of the instrument.
+	string description =  12;
+	
+	// Trading hours: Hours the exchange opens for continuous trading, reported in the time zone of the exchange.
+	google.protobuf.Duration open =  13;
+	// Trading hours: Hours the exchange closes for continuous  trading, reported in the time zone of the exchange.
+	google.protobuf.Duration close =  14;
+	// Trading hours: The time zone.
+	string time_zone =  15;
+	
+	// Specifications: Specifies the minimum number of shares that can be purchased, as regulated by an exchange.
+	int64 lot_size =  16;
+	// Specifications: The amount value of one point basis on a price.
+	double point_value =  17;
+	
+	// Reference data: Reference price for the instrument.
+	google.protobuf.DoubleValue price =  18;
+	// Reference data: Reference volume for the instrument. 
+	google.protobuf.Int64Value volume =  19;
+	// Reference data: Time of the reference price and volume.
+	google.type.Date time =  20;
+	
+	// Mapping: List of sources contributing to the instrument fields description.
+	int32 sources =  21;
+	// Mapping: The different codes used to identify the instrument represented in a single string. The output is presented as a collection of pairs of mapping name (ISIN, RIC, SEDOL, FIGI, etc) with its code.
+	map<string, string> mapping =  22;
+	// Mapping: The bloomberg ticker.
+	string bloomberg =  23;
+	// Mapping: The Reuters Instrument Code (RIC) is a ticker-like code used to identify financial instruments and indices. The RIC is made up primarily of the security's ticker symbol, optionally followed by a period and exchange code based on the name of the stock exchange using that ticker.
+	string reuters =  24;
+	// Mapping: The Morningstar ticker used to identify an instrument.
+	string morningstar =  25;
+	// Mapping: The Markit code, also known as RED Code.
+	string markit =  26;
+	// Mapping: The Financial Instrument Global Identifier (FIGI) is an established global standard of the Object Management Group (www.OMG.org, an international non-profit technology standards consortium founded in 1989) and an identification standard adopted by the American National Committee X9. The FIGI standard is issued and distributed by Bloomberg L.P. as a Registration Authority and Certified Provider under the auspice of OMG. The Financial Instrument Global Identifier (FIGI) is a twelve character, alphanumeric identifier. The first 2 characters are upper-case consonants (including "Y"), the third character is the upper-case "G", characters 4 -11 are any upper-case consonant (including "Y") or integer between 0 and 9, and the last character is a check-digit.
+	string figi =  27;
+	// Mapping: The Composite Financial Instrument Global Identifier (FIGI) enables users to link multiple FIGIs at the Trading Venue-level within the same country or market in order to obtain an aggregated view for that instrument.
+	string figic =  28;
+	// Mapping: The International Securities Identification Number (ISIN) is a twelve-character number assigned by the local national numbering agency. It consists of a two-letter country code, followed by the nine character alphanumerical national security identifier, and a check digit.
+	string isin =  29;
+	// Mapping: The Committee on Uniform Security Identification Procedures (CUSIP) number is aSecurity identification number for the U.S. and Canada.  It consists of nine alpha-numeric characters. The first six characters identify the issuer, the following two identify the issue, and the final character is a check digit.
+	string cusip =  30;
+	// Mapping: The Stock Exchange Daily Official List number (SEDOL) identifier. Numbers issued prior to March 8, 2004 consist of 7 digits.  SEDOLs issued after this date consist of 7 alphanumeric characters, where the first character is always a letter. 
+	string sedol =  31;
+	// Mapping: The Classification of Financial Instruments (CFI), is a six-letter-code used in the financial services industry to classify and describe the structure and function of a financial instrument. (ISO 10962)
+	string classification =  32;
+	
+	// Specific values for the bond: Name of the issuing entity of the instrument.
+	string issuer =  33;
+	// Specific values for the bond: Date the principal of the instrument is due and payable.
+	google.type.Date maturity =  34;
+	// Specific values for the bond: The bond type :  Government, Corporate, Treasury, Munis, etc.
+	BondType bond_type =  35;
+	// Specific values for the bond: Frequency at which the instrument is rebalanced.
+	FrequencyType frequency =  36;
+	// Specific values for the bond: Type of interest to be paid to investors. 
+	CouponType coupon_type =  37;
+	// Specific values for the bond: Current interest rate of the instrument. 
+	double coupon_rate =  38;
+	// Specific values for the bond: Date the instrument is issued.
+	google.type.Date issue_date =  39;
+	// Specific values for the bond: Returns the minimum tradable amount or investment, as originally specified in the issuer's offering documentation.
+	double denomination =  40;
+	// Specific values for the bond: Price of the instrument at issue.
+	double issue_price =  41;
+	// Specific values for the bond: Current amount of the issue outstanding. 
+	double total =  42;
+	// Specific values for the bond: The face amount. 
+	double face_amount =  43;
+	// Specific values for the bond: The seniority or guarantee. 
+	string seniority =  44;
+}	
+	
+// Contains the reference data for Credit default swap (CDS).	
+message CdsEntry	
+{	
+	// Identifiers: The instrument identifier. It consists of a ticker and an exchange code. (ISO 10383)
+	systemathics.apis.type.shared.v1.Identifier identifier =  1;
+	// General information: The instrument class.
+	string type =  2;
+	// General information: Indicates if the financial instrument is currently active.
+	bool active =  3;
+	// General information: The Market Identifier Code (MIC) of the assigned primary exchange on which this specific instrument is traded. (ISO 10383)
+	string primary =  4;
+	// General information: The entity operating an exchange/market/trade reporting facility in a specific market/country (ISO 10383).
+	string operating =  5;
+	// General information: Name of the company or brief description of the instrument. The name of an instrument may change in conjunction with corporate actions.
+	string name =  6;
+	// General information: Currency in which the instrument was issued. (ISO 4217)
+	string currency =  7;
+	// General information: Specifies the  country or territory code of where the instrument trades. (ISO 3166)
+	string country =  8;
+	// General information: The minimum amount by which the price of the instrument can change.  Data is represented as a table where there are different tick sizes for different price ranges.
+	repeated TickSize tick_size_rule =  9;
+	// General information: The different indices to which this instrument belongs The output is presented as a collection Ticker-Exchange identifying indices.
+	repeated string index =  10;
+	// General information: The Market Identifier Code (MIC) to use in order to retrieve the calendar for that instrument.
+	string calendar =  11;
+	// General information: A brief description of the instrument.
+	string description =  12;
+	
+	// Trading hours: Hours the exchange opens for continuous trading, reported in the time zone of the exchange.
+	google.protobuf.Duration open =  13;
+	// Trading hours: Hours the exchange closes for continuous  trading, reported in the time zone of the exchange.
+	google.protobuf.Duration close =  14;
+	// Trading hours: The time zone.
+	string time_zone =  15;
+	
+	// Specifications: Specifies the minimum number of shares that can be purchased, as regulated by an exchange.
+	int64 lot_size =  16;
+	// Specifications: The amount value of one point basis on a price.
+	double point_value =  17;
+	
+	// Reference data: Reference price for the instrument.
+	google.protobuf.DoubleValue price =  18;
+	// Reference data: Reference volume for the instrument. 
+	google.protobuf.Int64Value volume =  19;
+	// Reference data: Time of the reference price and volume.
+	google.type.Date time =  20;
+	
+	// Mapping: List of sources contributing to the instrument fields description.
+	int32 sources =  21;
+	// Mapping: The different codes used to identify the instrument represented in a single string. The output is presented as a collection of pairs of mapping name (ISIN, RIC, SEDOL, FIGI, etc) with its code.
+	map<string, string> mapping =  22;
+	// Mapping: The bloomberg ticker.
+	string bloomberg =  23;
+	// Mapping: The Reuters Instrument Code (RIC) is a ticker-like code used to identify financial instruments and indices. The RIC is made up primarily of the security's ticker symbol, optionally followed by a period and exchange code based on the name of the stock exchange using that ticker.
+	string reuters =  24;
+	// Mapping: The Morningstar ticker used to identify an instrument.
+	string morningstar =  25;
+	// Mapping: The Markit code, also known as RED Code.
+	string markit =  26;
+	// Mapping: The Financial Instrument Global Identifier (FIGI) is an established global standard of the Object Management Group (www.OMG.org, an international non-profit technology standards consortium founded in 1989) and an identification standard adopted by the American National Committee X9. The FIGI standard is issued and distributed by Bloomberg L.P. as a Registration Authority and Certified Provider under the auspice of OMG. The Financial Instrument Global Identifier (FIGI) is a twelve character, alphanumeric identifier. The first 2 characters are upper-case consonants (including "Y"), the third character is the upper-case "G", characters 4 -11 are any upper-case consonant (including "Y") or integer between 0 and 9, and the last character is a check-digit.
+	string figi =  27;
+	// Mapping: The Composite Financial Instrument Global Identifier (FIGI) enables users to link multiple FIGIs at the Trading Venue-level within the same country or market in order to obtain an aggregated view for that instrument.
+	string figic =  28;
+	// Mapping: The International Securities Identification Number (ISIN) is a twelve-character number assigned by the local national numbering agency. It consists of a two-letter country code, followed by the nine character alphanumerical national security identifier, and a check digit.
+	string isin =  29;
+	// Mapping: The Committee on Uniform Security Identification Procedures (CUSIP) number is aSecurity identification number for the U.S. and Canada.  It consists of nine alpha-numeric characters. The first six characters identify the issuer, the following two identify the issue, and the final character is a check digit.
+	string cusip =  30;
+	// Mapping: The Stock Exchange Daily Official List number (SEDOL) identifier. Numbers issued prior to March 8, 2004 consist of 7 digits.  SEDOLs issued after this date consist of 7 alphanumeric characters, where the first character is always a letter. 
+	string sedol =  31;
+	// Mapping: The Classification of Financial Instruments (CFI), is a six-letter-code used in the financial services industry to classify and describe the structure and function of a financial instrument. (ISO 10962)
+	string classification =  32;
+	
+	// Specific values for the cds: Ticker of the underling instrument.
+	string underlying =  33;
+	// Specific values for the cds: Date the principal of the instrument is due and payable.
+	google.type.Date maturity =  34;
+	// Specific values for the cds: Frequency at which the instrument is rebalanced.
+	FrequencyType frequency =  35;
+	// Specific values for the cds: Amount of time to maturity for the instrument displayed in years.
+	string tenor =  36;
+	// Specific values for the cds: The recovery rate which is the percentage of notional repaid in event of default.
+	double recovery =  37;
+}	
 
-	// Trading hours: the open time (continuous trading)
-	google.protobuf.Duration open = 13;
-	// Trading hours: the close time (continuous trading)
-	google.protobuf.Duration close = 14;
-	// Trading hours: the time zone
-	string time_zone = 15;
-
-	// Specifications: the lot size (minimum quantity to trade)
-	int64 lot_size = 16;
-	// Specifications: the point value
-	double point_value = 17;
-
-	// Reference data : the average price
-	google.protobuf.DoubleValue price = 18;
-	// Reference data : the average daily volume 
-	google.protobuf.Int64Value volume = 19;
-	// Reference data : the time stamp of the refernce data
-	google.type.Date time = 20;
-
-	// Mapping : the count of sources used to cross validate and complete the asset's information
-	int32 sources = 21;
-	// Mapping: the mapping codes
-	map<string, string> mapping = 22;
-	// Mapping: the bloomberg code
-	string bloomberg = 23;
-	// Mapping: the reuters code
-	string reuters = 24;
-	// Mapping: the morningstar code
-	string morningstar = 25;
-	// Mapping: the markit (red code) code
-	string markit = 26;
-	// Mapping: the figi code (Financial Instrument Global Identifier, formerly Bloomberg Global Identifier)
-	string figi = 27;
-	// Mapping: the figic code (Financial Instrument Global Identifier Composite, formerly Bloomberg Global Identifier)
-	string figic = 28;
-	// Mapping: isin code (International Securities Identifying Number)
-    string isin = 29;
-	// Mapping: cusip code : Committee on Uniform Security Identification Procedures
-	string cusip = 30;
-	// Mapping: sedol code : Stock Exchange Daily Official List
-	string sedol = 31;
-	// The CFI (Classification of Financial Instruments) code
-	string classification = 32;
-
-	// Specific values for the option: the option underlying asset code
-	string underlying = 33;
-	// Specific values for the option: the option strike. The exercise price, which is the price at which the underlying transaction will occur upon exercise.
-	double strike = 34;
-	// Specific values for the option: the option expiry date. The expiration date, or expiry, which is the last date the option can be exercised.
-	google.type.Date expiry = 35;
-	// Specific values for the option: the option type: Call or Put.
-	OptionType option_type = 36;
-	// Specific values for the option: the option exercise type. Determines when, how, and under what circumstances, the option holder may exercise it.
-	ExerciseType exercise = 37;
-}
-
-// Contains the reference data for bonds.
-message BondEntry
-{
-	// Identifiers: asset identifier
-	systemathics.apis.type.shared.v1.Identifier identifier = 1;
-	// General information: the asset class
-	string type = 2;
-	// General information: status indicating whether the asset is active
-	bool active = 3;
-	// General information: the primary exchange code (mic)
-	string primary = 4;
-	// General information: the operating exchange code (mic)
-	string operating = 5;
-	// General information: the full name 
-	string name = 6;
-	// General information: the currency code (ISO 4217)
-	string currency = 7;
-	// General information: the country code (ISO 3166)
-	string country = 8;
-	// General information: the tick size rule table
-	repeated TickSize tick_size_rule = 9;
-	// General information: the major index array
-	repeated string index = 10;
-	// General information: the calendar identifier
-	string calendar = 11;
-	// General information: the description of the asset
-	string description = 12;
-
-	// Trading hours: the open time (continuous trading)
-	google.protobuf.Duration open = 13;
-	// Trading hours: the close time (continuous trading)
-	google.protobuf.Duration close = 14;
-	// Trading hours: the time zone
-	string time_zone = 15;
-
-	// Specifications: the lot size (minimum quantity to trade)
-	int64 lot_size = 16;
-	// Specifications: the point value
-	double point_value = 17;
-
-	// Reference data : the average price
-	google.protobuf.DoubleValue price = 18;
-	// Reference data : the average daily volume 
-	google.protobuf.Int64Value volume = 19;
-	// Reference data : the time stamp of the refernce data
-	google.type.Date time = 20;
-
-	// Mapping : the count of sources used to cross validate and complete the asset's information
-	int32 sources = 21;
-	// Mapping: the mapping codes
-	map<string, string> mapping = 22;
-	// Mapping: the bloomberg code
-	string bloomberg = 23;
-	// Mapping: the reuters code
-	string reuters = 24;
-	// Mapping: the morningstar code
-	string morningstar = 25;
-	// Mapping: the markit (red code) code
-	string markit = 26;
-	// Mapping: the figi code (Financial Instrument Global Identifier, formerly Bloomberg Global Identifier)
-	string figi = 27;
-	// Mapping: the figic code (Financial Instrument Global Identifier Composite, formerly Bloomberg Global Identifier)
-	string figic = 28;
-	// Mapping: isin code (International Securities Identifying Number)
-    string isin = 29;
-	// Mapping: cusip code : Committee on Uniform Security Identification Procedures
-	string cusip = 30;
-	// Mapping: sedol code : Stock Exchange Daily Official List
-	string sedol = 31;
-	// The CFI (Classification of Financial Instruments) code
-	string classification = 32;
-
-	// Specific values for the bond: the issuer
-	string issuer = 33;
-	// Specific values for the bond: the bond maturity date
-	google.type.Date maturity = 34;
-	// Specific values for the bond: the bond's type
-	BondType bond_type = 35;
-	// Specific values for the bond: the bond's frequency. Number of times per year interest is paid
-	FrequencyType frequency = 36;
-	// Specific values for the bond: the bond's coupon type. Type of interest to be paid to the investors
-	CouponType coupon_type = 37;
-	// Specific values for the bond: the bond's coupon rate. Current interest rate of the bond
-	double coupon_rate = 38;
-	// Specific values for the bond: the issue date
-	google.type.Date issue_date = 39;
-	// Specific values for the bond: the bond's denomination
-	double denomination = 40;
-	// Specific values for the bond: the bond's issue price
-	double issue_price = 41;
-	// Specific values for the bond: the bond's total
-	double total = 42;
-}
-
-// Contains the reference data for Credit default swap (CDS).
-message CdsEntry
-{
-	// Identifiers: asset identifier
-	systemathics.apis.type.shared.v1.Identifier identifier = 1;
-	// General information: the asset class
-	string type = 2;
-	// General information: status indicating whether the asset is active
-	bool active = 3;
-	// General information: the primary exchange code (mic)
-	string primary = 4;
-	// General information: the operating exchange code (mic)
-	string operating = 5;
-	// General information: the full name 
-	string name = 6;
-	// General information: the currency code (ISO 4217)
-	string currency = 7;
-	// General information: the country code (ISO 3166)
-	string country = 8;
-	// General information: the tick size rule table
-	repeated TickSize tick_size_rule = 9;
-	// General information: the major index array
-	repeated string index = 10;
-	// General information: the calendar identifier
-	string calendar = 11;
-	// General information: the description of the asset
-	string description = 12;
-
-	// Trading hours: the open time (continuous trading)
-	google.protobuf.Duration open = 13;
-	// Trading hours: the close time (continuous trading)
-	google.protobuf.Duration close = 14;
-	// Trading hours: the time zone
-	string time_zone = 15;
-
-	// Specifications: the lot size (minimum quantity to trade)
-	int64 lot_size = 16;
-	// Specifications: the point value
-	double point_value = 17;
-
-	// Reference data : the average price
-	google.protobuf.DoubleValue price = 18;
-	// Reference data : the average daily volume 
-	google.protobuf.Int64Value volume = 19;
-	// Reference data : the time stamp of the refernce data
-	google.type.Date time = 20;
-
-	// Mapping : the count of sources used to cross validate and complete the asset's information
-	int32 sources = 21;
-	// Mapping: the mapping codes
-	map<string, string> mapping = 22;
-	// Mapping: the bloomberg code
-	string bloomberg = 23;
-	// Mapping: the reuters code
-	string reuters = 24;
-	// Mapping: the morningstar code
-	string morningstar = 25;
-	// Mapping: the markit (red code) code
-	string markit = 26;
-	// Mapping: the figi code (Financial Instrument Global Identifier, formerly Bloomberg Global Identifier)
-	string figi = 27;
-	// Mapping: the figic code (Financial Instrument Global Identifier Composite, formerly Bloomberg Global Identifier)
-	string figic = 28;
-	// Mapping: isin code (International Securities Identifying Number)
-    string isin = 29;
-	// Mapping: cusip code : Committee on Uniform Security Identification Procedures
-	string cusip = 30;
-	// Mapping: sedol code : Stock Exchange Daily Official List
-	string sedol = 31;
-	// The CFI (Classification of Financial Instruments) code
-	string classification = 32;
-
-	// Specific values for the cds: the cds underlying asset code
-	string underlying = 33;
-	// Specific values for the cds: the cds maturity date
-	google.type.Date maturity = 34;
-	// Specific values for the cds: the cds's frequency.
-	FrequencyType frequency = 35;
-	// Specific values for the cds: the tenor
-	string tenor = 36;
-	// Specific values for the cds: the recovery.
-	double recovery = 37;
-}
 
 
 // Contains the tick size rule item : price and tick.
@@ -1055,7 +1192,7 @@ enum ExerciseType
     EXERCISE_TYPE_EUROPEAN = 2;
 
 	// The Bermudan-style options contracts may only be exercised on specified dates.
-    EXERCISE_TYPE_BERMUDEAN = 3;
+    EXERCISE_TYPE_BERMUDAN = 3;
 }
 
 // Contains the bond types.

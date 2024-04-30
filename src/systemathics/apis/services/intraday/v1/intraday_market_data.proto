@@ -1,0 +1,140 @@
+// Copyright (c) 2021 Systemathics
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+// This service provides access to an intraday marketdata market data service,
+// enabling users to retrieve historical market data for various financial instruments.
+// MarketData represents a comprehensive aggregation of all pertinent market information, 
+// encompassing various data points such as bar data, best limit data, Greeks, and more.
+syntax = "proto3";
+
+
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+import "systemathics/apis/type/shared/v1/identifier.proto";
+import "systemathics/apis/type/shared/v1/date_interval.proto";
+import "systemathics/apis/type/shared/v1/sampling.proto";
+
+package systemathics.apis.services.intraday.v1;
+
+// Called to request intraday marketdata data. 
+service IntradayMarketDataService
+{
+  // Gets intraday historical data
+  rpc IntradayMarketData(IntradayMarketDataRequest) returns (IntradayMarketDataResponse)
+  {
+	  	 option (google.api.http) = {
+			get: "/v1/intraday/marketdata"
+		 };
+  }
+}
+
+// The required input to request the IntradayMarketDataService.
+message IntradayMarketDataRequest
+{
+	// [Mandatory] The instrument identifier: a ticker and exchange
+	systemathics.apis.type.shared.v1.Identifier identifier = 1;
+
+	// [Mandatory] The sampling interval
+	systemathics.apis.type.shared.v1.Sampling sampling = 2;
+
+	// [Optional] The time constraints used to define the look-back period.
+	// If empty, then all the available data is retrieved.
+	systemathics.apis.type.shared.v1.DateInterval date_interval = 3;
+}
+
+// The intraday marketdata response contains an array of intraday marketdata.
+message IntradayMarketDataResponse
+{
+	// The intraday marketdata: an array of IntradayMarketData objects
+	repeated IntradayMarketData data = 1;
+}
+
+// Contains the intraday market data information.
+message IntradayMarketData 
+{
+	// Time stamp of the intraday market data
+	google.protobuf.Timestamp time_stamp = 1;
+	
+	// Open price of the sampling period
+	double open = 2;
+	
+	// Highest price of the sampling period
+	double high = 3;
+	
+	// Lowest price of the sampling period
+	double low = 4;
+	
+	// Close price of the sampling period
+	double close = 5;
+	
+	// Total traded volume of the sampling period
+	double volume = 6;
+
+	// The best bid price of the sampling period
+	double BidPrice = 7;
+	
+	// The best bid size of the sampling period
+	double BidSize = 8;
+	
+	// The best ask price of the sampling period
+	double AskPrice = 9;
+	
+	// The best ask size of the sampling period
+	double AskSize = 10;
+
+	// Measures the sensitivity of an option's theoretical value to a change in the price of the underlying asset.
+	//<br>It indicates the expected change in the option price for a one-point change in the underlying asset. 
+	//<br>For example, if an option has a delta of 0.7, it suggests that the option's price will increase by $0.70 for every $1 increase in the underlying asset.
+	double delta = 11;
+	
+	// Measeure sthe rate of change in the delta for each one-point increase in the underlying asset.
+	//<br>It measures how much the delta of an option will change as the price of the underlying asset changes. 
+	//<br>Gamma is particularly important for assessing how delta might change as the underlying asset's price fluctuates.
+	double gamma = 12;
+
+	// A measure of the time decay on an option, the amount that an option willl lose each day due to the passage of time.
+	//<br>It represents the change in the option price for a one-day decrease in the time to expiration. 
+	//<br>Theta is often referred to as time decay. As the expiration date approaches, the time value of an option tends to decrease, and theta quantifies that decay.
+	double theta = 13;
+	
+	// Measures the sensitivity of the price of an option to changes in implied volatility. 
+	//<br>Implied volatility reflects the market's expectations for future price fluctuations. 
+	//<br>Vega indicates how much the option price is expected to change for a one-percentage-point change in implied volatility.
+	double vega = 14;
+
+	// The rate at which the price of a derivative changes relative to a change in the risk-free rate of interest. 
+	//<br>It represents the change in the option price for a one-percentage-point change in interest rates. 
+	//<br>Rho is more relevant for options with longer time to expiration.
+	double rho = 15;
+
+	// ImpliedVolatility value of the sampling period
+	double implied_volatility = 16;
+
+	// OpenInterest value of the sampling period
+	double open_interest = 17;
+
+	// Underlying value of the sampling period
+	double underlying = 18;
+
+	// The data quality scoring : from 0 (bad) to 100 (good)
+	double score = 19;
+}
+ 
