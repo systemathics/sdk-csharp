@@ -32,6 +32,7 @@ import "google/protobuf/wrappers.proto";
 import "google/protobuf/duration.proto";
 import "google/type/date.proto";
 
+import "systemathics/apis/type/shared/v1/asset.proto";
 import "systemathics/apis/type/shared/v1/identifier.proto";
 
 package systemathics.apis.services.static_data.v1;
@@ -52,7 +53,7 @@ service StaticDataService
 message StaticDataRequest
 {
 	// [Optional] Asset Type
-	AssetType asset_type = 1;
+	systemathics.apis.type.shared.v1.AssetType asset_type = 1;
 
 	// [Optional] Define the first element index to be retrieved
     google.protobuf.Int32Value start = 2;
@@ -1098,42 +1099,7 @@ message TickSize
 	double tick = 2;
 }
 
-// Contains the asset type for the reference data request.
-enum AssetType
-{
-	// Not specified ?
-	ASSET_TYPE_UNSPECIFIED = 0;
-	
-	// Search on all asset types
-    ASSET_TYPE_ALL = 1;
-	
-    // Search only on equities
-    ASSET_TYPE_EQUITY = 2;
 
-	// Search only on futures
-	ASSET_TYPE_FUTURE = 3;
-
-	// Search only on Exchange Traded Fund
-	ASSET_TYPE_ETF = 4;
-
-	// Search only on Index
-	ASSET_TYPE_INDEX = 5;
-
-	// Search only on Crypto currencies
-	ASSET_TYPE_CRYPTO = 6;
-
-	// Search only on Forex pairs
-	ASSET_TYPE_FOREX = 7;
-
-	// Search only on options
-	ASSET_TYPE_OPTION = 8;
-
-	// Search only on bonds
-	ASSET_TYPE_BOND = 9;
-
-	// Search only on cds
-	ASSET_TYPE_CDS = 10;
-}
 
 // Contains the frequency types.
 enum FrequencyType

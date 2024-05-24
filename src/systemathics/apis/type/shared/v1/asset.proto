@@ -18,30 +18,46 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-// Instrument identifier is built from:
-// <br>- An exchange code: MIC
-// <br>- A ticker: instrument name given by the exchange
-// <br>- An optional provider name if several tick data providers are used
+
+// The asset type
 syntax = "proto3";
 
-import "google/protobuf/wrappers.proto";
-
-import "systemathics/apis/type/shared/v1/asset.proto";
 
 package systemathics.apis.type.shared.v1;
 
-// Contains the instrument identifier.
-message Identifier
+// Contains all asset types for the static data request.
+enum AssetType
 {
-	// Exchange market identifier code (MIC defined in ISO-20022)
-	string exchange = 1;
+	// Not specified ?
+	ASSET_TYPE_UNSPECIFIED = 0;
 	
-	// Ticker name, associated with market idenfier code defines a unique asset
-	string ticker = 2;	
+	// Search on all asset types
+    ASSET_TYPE_ALL = 1;
 	
-	// Optional provider tick data name if several tick data providers are used
-	google.protobuf.StringValue provider = 3;
+    // Search only on equities
+    ASSET_TYPE_EQUITY = 2;
 
-	// Asset of the identifier
-	systemathics.apis.type.shared.v1.AssetType asset_type = 4;
+	// Search only on futures
+	ASSET_TYPE_FUTURE = 3;
+
+	// Search only on Exchange Traded Fund
+	ASSET_TYPE_ETF = 4;
+
+	// Search only on Index
+	ASSET_TYPE_INDEX = 5;
+
+	// Search only on Crypto currencies
+	ASSET_TYPE_CRYPTO = 6;
+
+	// Search only on Forex pairs
+	ASSET_TYPE_FOREX = 7;
+
+	// Search only on options
+	ASSET_TYPE_OPTION = 8;
+
+	// Search only on bonds
+	ASSET_TYPE_BOND = 9;
+
+	// Search only on cds
+	ASSET_TYPE_CDS = 10;
 }

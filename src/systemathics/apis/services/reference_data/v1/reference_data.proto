@@ -23,7 +23,7 @@ syntax = "proto3";
 
 import "google/api/annotations.proto";
 
-import "systemathics/apis/services/static_data/v1/static_data.proto";
+import "systemathics/apis/type/shared/v1/asset.proto";
 
 import "systemathics/apis/services/daily/v1/daily_bars.proto";
 import "systemathics/apis/services/daily/v1/daily_prices.proto";
@@ -56,7 +56,7 @@ service ReferenceService
 message ReferenceRequest
 {
 	// The asset class type
-	systemathics.apis.services.static_data.v1.AssetType asset_type = 1;
+	systemathics.apis.type.shared.v1.AssetType asset_type = 1;
 
 	// The ticker code
 	string ticker = 2;
