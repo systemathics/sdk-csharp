@@ -46,9 +46,6 @@ enum AssetType
 	// Search only on Index
 	ASSET_TYPE_INDEX = 5;
 
-	// Search only on Crypto currencies
-	ASSET_TYPE_CRYPTO = 6;
-
 	// Search only on Forex pairs
 	ASSET_TYPE_FOREX = 7;
 

@@ -68,9 +68,18 @@ message DailyOpenInterest
 	google.type.Date date = 1;
 	
 	// Open Interest of the day
-	double value = 2;
+	double open_interest = 2;
 	
 	// The data quality scoring : from 0 (bad) to 100 (good)
 	double score = 3;
+
+		// The call Open Interest (number of open call contracts) at the beginning of the trading session.
+	double call_open_interest = 4;
+
+	// The put Open Interest (number of open put contracts) at the beginning of the trading session.
+	double put_open_interest = 5;
+
+	// The Open Interest (number of open put and call contracts) at the beginning of the trading session.
+	double total_open_interest = 6;
 }
  

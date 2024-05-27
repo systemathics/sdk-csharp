@@ -68,9 +68,73 @@ message DailyImpliedVolatility
 	google.type.Date date = 1;
 	
 	// The implied volatility of the day
-	double value = 2;
-	
+	double implied_volatility = 2;
+
 	// The data quality scoring : from 0 (bad) to 100 (good)
 	double score = 3;
+	
+	// The implied volatility for a 30-day call option
+	double implied_volatility_30_call = 4;
+
+	// The implied volatility for a 30-day put option
+	double implied_volatility_30_put = 5;
+
+	// The mean implied volatility for a 30-day period.
+	double implied_volatility_30_mean = 6;
+
+	// The implied volatility for a 60-day call option
+	double implied_volatility_60_call = 7;
+
+	// The implied volatility for a 60-day put option
+	double implied_volatility_60_put = 8;
+
+	// The mean implied volatility for a 60-day period.
+	double implied_volatility_60_mean = 9;
+
+	// The implied volatility for a 90-day call option
+	double implied_volatility_90_call = 10;
+
+	// The implied volatility for a 90-day put option
+	double implied_volatility_90_put = 11;
+
+	// The mean implied volatility for a 90-day period.
+	double implied_volatility_90_mean = 12;
+
+	// The implied volatility for a 120-day call option
+	double implied_volatility_120_call = 13;
+
+	// The implied volatility for a 120-day put option
+	double implied_volatility_120_put = 14;
+
+	// The mean implied volatility for a 120-day period.
+	double implied_volatility_120_mean = 15;
+
+	// The implied volatility for a 150-day call option
+	double implied_volatility_150_call = 16;
+
+	// The implied volatility for a 150-day put option
+	double implied_volatility_150_put = 17;
+
+	// The mean implied volatility for a 150-day period.
+	double implied_volatility_150_mean = 18;
+
+	// The implied volatility for a 180-day call option
+	double implied_volatility_180_call = 19;
+
+	// The implied volatility for a 180-day put option
+	double implied_volatility_180_put = 20;
+
+	// The mean implied volatility for a 180-day period.
+	double implied_volatility_180_mean = 21;
+
+	// The implied volatility for a 360-day call option
+	double implied_volatility_360_call = 22;
+
+	// The implied volatility for a 360-day put option
+	double implied_volatility_360_put = 23;
+
+	// The mean implied volatility for a 360-day period.
+	double implied_volatility_360_mean = 24;
+
 }
  
