@@ -75,16 +75,16 @@ message IntradayBestLimit
 	google.protobuf.Timestamp time_stamp = 1;
 	
 	// The best bid price of the sampling period
-	double BidPrice = 2;
+	double bid_price = 2;
 	
 	// The best bid size of the sampling period
-	double BidSize = 3;
+	double bid_size = 3;
 	
 	// The best ask price of the sampling period
-	double AskPrice = 4;
+	double ask_price = 4;
 	
 	// The best ask size of the sampling period
-	double AskSize = 5;
+	double ask_size = 5;
 	
 	// The data quality scoring : from 0 (bad) to 100 (good)
 	double score = 6;
