@@ -1,0 +1,280 @@
+// Copyright (c) 2021 Systemathics
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+// Customizable screener to retrieve reference data : this is a prototype, to be completed
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+import "google/protobuf/wrappers.proto";
+import "google/type/date.proto";
+import "google/type/timeofday.proto";
+
+package systemathics.apis.services.calendar.v1;
+
+// Called to request screener data.
+service CalendarService
+{
+  // Gets currencies with holidays information 
+  rpc HolidayCurrencies(HolidayCurrenciesRequest) returns (HolidayCurrenciesResponse)
+  {
+	  	option (google.api.http) = {
+			get: "/v1/calendar/holidays/currencies"
+		};
+  }
+
+   // Gets currencies with holidays information 
+  rpc HolidayCenter(HolidayCenterRequest) returns (HolidayCenterResponse)
+  {
+	  	option (google.api.http) = {
+			get: "/v1/calendar/holidays/center"
+		};
+  }
+
+  // Gets currencies with holidays information 
+  rpc Holidays(HolidaysRequest) returns (HolidaysResponse)
+  {
+	  	option (google.api.http) = {
+			get: "/v1/calendar/holidays"
+		};
+  }
+
+  // Gets mic code with trading hours information
+  rpc TradingHoursMic(TradingHoursMicRequest) returns (TradingHoursMicResponse)
+  {
+	  	option (google.api.http) = {
+			get: "/v1/calendar/trading_hours/mics"
+		};
+  }
+
+    // Gets mic code with trading hours information
+  rpc TradingHours(TradingHoursRequest) returns (TradingHoursResponse)
+  {
+	  	option (google.api.http) = {
+			get: "/v1/calendar/trading_hours"
+		};
+  }
+}
+
+message TradingHoursItem
+{
+	google.type.Date date = 1;
+	string market = 2;
+	MarketType type = 3;
+	string holiday_code = 4;
+	repeated TradingHoursActivity Hours = 5;
+}
+
+message TradingHoursActivity
+{
+	string activity = 1;
+
+	repeated string functions = 2;
+
+	Irregular irregular = 3;
+
+	bool new_hours = 4;
+
+	google.type.TimeOfDay local_open_time = 5;
+
+	google.type.TimeOfDay local_close_time = 6;
+
+	google.protobuf.Int32Value variable_seconds_before_open = 7;
+
+	google.protobuf.Int32Value variable_seconds_after_open = 8;
+
+	google.protobuf.Int32Value variable_seconds_before_close = 9;
+
+	google.protobuf.Int32Value variable_seconds_after_close = 10;
+
+	google.type.TimeOfDay utc_open_time = 11;
+
+	google.type.TimeOfDay utc_close_time = 12;
+}
+
+enum Irregular
+{
+	IRREGULAR_UNSPECIFIED = 0;
+
+	IRREGULAR_YES = 1;
+
+	IRREGULAR_NO = 2;
+
+	IRREGULAR_WEEK_END = 3;
+
+	IRREGULAR_HOLIDAY = 4;
+}
+
+
+
+// All the holiday type provided
+enum MarketType
+{
+	// Not specified ?
+	MARKET_TYPE_UNSPECIFIED = 0;
+
+	// Bank
+	MARKET_TYPE_CASH_EQUITY = 1;
+
+	// Futures Trading
+	MARKET_TYPE_FUTURES_CONTRACT = 2;
+
+	// Options on Futures
+	MARKET_TYPE_OPTIONS_ON_FUTURES = 3;
+
+	// Options on Securities
+	MARKET_TYPE_OPTIONS_ON_SECURITIES = 4;
+
+	// Other Options
+	MARKET_TYPE_OTHER_OPTIONS = 5;
+
+	// Other
+	MARKET_TYPE_OTHER = 6;
+}
+
+message TradingHoursResponse
+{
+	repeated TradingHoursItem  items = 1;
+}
+
+
+// The required input to request Trading Hours .
+message TradingHoursRequest
+{
+	// Mic code
+	string mic = 1;
+}
+
+
+// The required input to request Trading hours mic code.
+message TradingHoursMicRequest
+{
+}
+
+// Represents all the MIC code with trading hours information
+message TradingHoursMicResponse
+{
+	// MIC Codes with trading hours information
+	repeated string  mics = 1;
+}
+
+
+// The required input to request Holiday Currencies .
+message HolidayCurrenciesRequest
+{
+}
+
+// The required input to request Holidays Center .
+message HolidayCenterRequest
+{
+	// Center code
+	string currency = 1;
+}
+
+
+// The required input to request Holidays.
+message HolidaysRequest
+{
+	// Center code
+	string center_code = 1;
+}
+
+// All the holiday type provided
+enum HolidayType
+{
+	// Not specified ?
+	HOLIDAY_TYPE_UNSPECIFIED = 0;
+
+	// Bank
+	HOLIDAY_TYPE_BANK = 1;
+
+	// Futures Trading
+	HOLIDAY_TYPE_FUTURES_TRADING = 2;
+
+	// Other
+	HOLIDAY_TYPE_OTHER = 3;
+
+	// Stock Exchange Settlement
+	HOLIDAY_TYPE_STOCK_EXCHANGE_SETTLEMENT = 4;
+
+	// Stock Exchange Trading
+	HOLIDAY_TYPE_STOCK_EXCHANGE_TRADING = 5;
+}
+
+// Holiday center respone
+message HolidayCenterResponse
+{
+	// Items with Holiday center information
+	repeated HolidayCenterItem items = 1;
+}
+
+// Holiday center 
+message HolidayCenterItem
+{
+	// Center Code
+	string code = 1;
+
+	// Center Name
+	string name = 2;
+
+	// Country
+	string country = 3;
+
+	// Currency
+	string currency = 4;
+
+	// Holiday type
+	HolidayType holiday_type = 5;
+
+	// ISO Country
+	string iso_country = 6;
+
+	// Definition
+	string definition = 7;
+}
+
+
+
+// Represents a list of currencies.
+message HolidayCurrenciesResponse
+{
+	// All the currencies
+	repeated string currencies = 1;
+}
+
+// Represent a holiday (Closed Day)
+message HolidayItem
+{
+	// Closed day
+	google.type.Date date = 1;
+	
+	// Name of the closed day
+	string reason = 2;
+}
+
+// Represents Holidays for a given center
+message HolidaysResponse
+{
+	// Center information about the given center
+	HolidayCenterItem center_info = 1;
+
+	// Holidays. All closed days.
+	repeated HolidayItem closed_days = 2;
+}
+
