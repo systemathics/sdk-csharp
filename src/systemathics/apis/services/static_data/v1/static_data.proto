@@ -837,7 +837,7 @@ message BondEntry
     google.protobuf.StringValue  figi = 10;
 
     // Security Description. Bloomberg field: SECURITY_DES
-    google.protobuf.StringValue  securit_description = 11;
+    google.protobuf.StringValue  security_description = 11;
     
     // Security ID with Yellow Key: Parseky'able. Bloomberg field: PARSEKYABLE_DES_SOURCE
     google.protobuf.StringValue   parsekyable = 12;
