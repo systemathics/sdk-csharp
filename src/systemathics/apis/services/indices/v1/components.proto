@@ -42,7 +42,7 @@ service ComponentsService
 // The required input to request the ComponentsService
 message ComponentsRequest
 {
-	// [Mandatory] The instrument identifier: a ticker and exchange 
+	// [Mandatory] The instrument identifier: a bloomberg ticker and an asset type 
 	systemathics.apis.type.shared.v1.Identifier identifier = 1;
 }
 
@@ -56,7 +56,7 @@ message ComponentsResponse
 // Contains the weight data for one component: identifier and weight value.
 message Component 
 {	
-	// The instrument identifier: a ticker and exchange 
+	// The instrument identifier: a bloomberg ticker and an asset type 
 	systemathics.apis.type.shared.v1.Identifier identifier = 1;
 
 	// The weight value

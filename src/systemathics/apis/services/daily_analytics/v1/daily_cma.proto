@@ -49,7 +49,7 @@ service DailyCmaService
 // The required input to request the DailyCmaService.
 message DailyCmaRequest
 {
-	// [Mandatory] The instrument identifier: a ticker and exchange
+	// [Mandatory] The instrument identifier: a bloomberg ticker and an asset type
 	systemathics.apis.type.shared.v1.Identifier identifier = 1;
 
 	// [Optional] The date interval used to define the look-back period.

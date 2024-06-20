@@ -42,7 +42,7 @@ service SustainabilityService
 // The required inputs to request the SustainabilityService.
 message SustainabilityRequest 
 {
-	// [Mandatory] The instrument identifier: a ticker and exchange
+	// [Mandatory] The instrument identifier: a bloomberg ticker and an asset type
 	systemathics.apis.type.shared.v1.Identifier identifier = 1;		
 }
 

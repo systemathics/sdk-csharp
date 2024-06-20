@@ -51,7 +51,7 @@ service IntradayVwapsService
 // Represents a request object for intraday VWAP (Volume-Weighted Average Price) market data.
 message IntradayVwapsRequest
 {
-	// [Mandatory] The instrument identifier: a ticker and exchange 
+	// [Mandatory] The instrument identifier: a bloomberg ticker and an asset type 
 	systemathics.apis.type.shared.v1.Identifier identifier = 1;
 
 	// [Mandatory] The sampling interval

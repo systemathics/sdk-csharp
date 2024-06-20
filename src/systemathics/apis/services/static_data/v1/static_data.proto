@@ -154,6 +154,12 @@ message StaticDataRequest
 
     // [Optional] issuer
     google.protobuf.StringValue issuer = 35;
+
+    // [Optional] bond coupon type
+    google.protobuf.StringValue coupon_type = 36;
+
+    // [Optional] country
+    google.protobuf.StringValue country = 37;
 }
 
 // Used to specify a date range search
@@ -286,7 +292,7 @@ message OptionResponse
 // Contains the reference data for equities.
 message EquityEntry
 {
-    // Identifiers: The instrument identifier. It consists of a ticker and an exchange code. (ISO 10383)
+    // Identifiers: The instrument identifier: a bloomberg ticker and an asset type 
     systemathics.apis.type.shared.v1.Identifier identifier =  1;
     // General information: The instrument class.
     string type =  2;
@@ -376,7 +382,7 @@ message EquityEntry
 // Contains the reference data for exchange traded fund (ETF).
 message EtfEntry
 {
-    // Identifiers: The instrument identifier. It consists of a ticker and an exchange code. (ISO 10383)
+    // Identifiers: The instrument identifier: a bloomberg ticker and an asset type 
     systemathics.apis.type.shared.v1.Identifier identifier =  1;
     // General information: The instrument class.
     string type =  2;
@@ -470,7 +476,7 @@ message EtfEntry
 // Contains the reference data for futures.
 message FutureEntry
 {
-    // Identifiers: The instrument identifier. It consists of a ticker and an exchange code. (ISO 10383)
+    // Identifiers: The instrument identifier: a bloomberg ticker and an asset type 
     systemathics.apis.type.shared.v1.Identifier identifier =  1;
     // General information: The instrument class.
     string type =  2;
@@ -558,7 +564,7 @@ message FutureEntry
 // Contains the reference data for indices.
 message IndexEntry
 {
-    // Identifiers: The instrument identifier. It consists of a ticker and an exchange code. (ISO 10383)
+    // Identifiers: The instrument identifier: a bloomberg ticker and an asset type 
     systemathics.apis.type.shared.v1.Identifier identifier =  1;
     // General information: The instrument class.
     string type =  2;
@@ -646,7 +652,7 @@ message IndexEntry
 // Contains the reference data for Forex pairs.
 message ForexEntry
 {
-    // Identifiers: The instrument identifier. It consists of a ticker and an exchange code. (ISO 10383)
+    // Identifiers: The instrument identifier: a bloomberg ticker and an asset type 
     systemathics.apis.type.shared.v1.Identifier identifier =  1;
     // General information: The instrument class.
     string type =  2;
@@ -722,7 +728,7 @@ message ForexEntry
 // Contains the reference data for options.
 message OptionEntry
 {
-    // Identifiers: The instrument identifier. It consists of a ticker and an exchange code. (ISO 10383)
+    // Identifiers: The instrument identifier: a bloomberg ticker and an asset type 
     systemathics.apis.type.shared.v1.Identifier identifier =  1;
     // General information: The instrument class.
     string type =  2;
@@ -806,7 +812,7 @@ message OptionEntry
 // Contains the reference data for bonds.
 message BondEntry
 {
-    // Identifiers: The instrument identifier. It consists of a ticker and an exchange code. (ISO 10383)
+    // Identifiers: The instrument identifier: a bloomberg ticker and an asset type 
     systemathics.apis.type.shared.v1.Identifier identifier =  1;
     
     // Security Type. Bloomberg field: SECURITY_TYP
@@ -959,12 +965,15 @@ message BondEntry
     // Issue Price. Bloomberg field: ISSUE_PX
     google.protobuf.DoubleValue issue_price = 51;
 
+    // Flat Spread. Bloomberg field: FLT_SPREAD
+    google.protobuf.DoubleValue flat_spread = 52;
+
 }
     
 // Contains the reference data for Credit default swap (CDS).
 message CdsEntry
 {
-    // Identifiers: The instrument identifier. It consists of a ticker and an exchange code. (ISO 10383)
+    // Identifiers: The instrument identifier: a bloomberg ticker and an asset type 
     systemathics.apis.type.shared.v1.Identifier identifier =  1;
     // General information: The instrument class.
     string type =  2;
