@@ -965,8 +965,8 @@ message BondEntry
     // Issue Price. Bloomberg field: ISSUE_PX
     google.protobuf.DoubleValue issue_price = 51;
 
-    // Flat Spread. Bloomberg field: FLT_SPREAD
-    google.protobuf.DoubleValue flat_spread = 52;
+    // Floater Spread. Bloomberg field: FLT_SPREAD
+    google.protobuf.DoubleValue floater_spread = 52;
 
 }
     
