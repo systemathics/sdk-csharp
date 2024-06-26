@@ -32,7 +32,7 @@ package systemathics.apis.services.calendar.v1;
 service CalendarService
 {
   // Gets currencies with holidays information 
-  rpc HolidayCurrencies(HolidayCurrenciesRequest) returns (HolidayCurrenciesResponse)
+  rpc HolidayCurrencies(EmptyRequest) returns (HolidayCurrenciesResponse)
   {
 	  	option (google.api.http) = {
 			get: "/v1/calendar/holidays/currencies"
@@ -56,7 +56,7 @@ service CalendarService
   }
 
   // Gets mic code with trading hours information
-  rpc TradingHoursMic(TradingHoursMicRequest) returns (TradingHoursMicResponse)
+  rpc TradingHoursMic(EmptyRequest) returns (TradingHoursMicResponse)
   {
 	  	option (google.api.http) = {
 			get: "/v1/calendar/trading_hours/mics"
@@ -70,54 +70,134 @@ service CalendarService
 			get: "/v1/calendar/trading_hours"
 		};
   }
+
+
+    // Gets mic code with trading hours information
+  rpc HolidayCodeToMics(EmptyRequest) returns (HolidayCodeToMicsResponse)
+  {
+	  	option (google.api.http) = {
+			get: "/v1/calendar/holiday_code_2_mics"
+		};
+  }
+
+    // Gets mic code with trading hours information
+  rpc MicToHolidayCodes(EmptyRequest) returns (MicToHolidayCodesResponse)
+  {
+	  	option (google.api.http) = {
+			get: "/v1/calendar/mic_2_holiday_codes"
+		};
+  }
 }
 
+// The Holiday code to array of MIC response
+message HolidayCodeToMicsResponse
+{
+	// Items with Holiday code to MIC information
+	repeated HolidayCodeToMicsItem items = 1;
+}
+
+// Mapping between a holiday code and several MICs
+message HolidayCodeToMicsItem
+{
+	// The holiday code
+	string holiday_code = 1;
+
+	// The MICs
+	repeated string mics = 2;
+}
+
+// The MIC to array of holiday code response
+message MicToHolidayCodesResponse
+{
+	// Items with MIC to Holiday codes information
+	repeated MicToHolidayCodesItem items = 1;
+}
+
+// Mapping between a MIC and several holiday codes
+message MicToHolidayCodesItem
+{
+	// The MIC
+	string mic = 1;
+
+	// The holiday codes
+	repeated string holiday_codes = 2;
+}
+
+// Trading hours item conataining all trading activity for a day
 message TradingHoursItem
 {
+	// Date
 	google.type.Date date = 1;
+
+	// Market Name
 	string market = 2;
+
+	// Market Type
 	MarketType type = 3;
+
+	// Holiday Code
 	string holiday_code = 4;
-	repeated TradingHoursActivity Hours = 5;
+
+	// Trading hours description
+	repeated TradingHoursActivity hours = 5;
 }
 
+// Trading hours descritpion
 message TradingHoursActivity
 {
+	// Activity name
 	string activity = 1;
 
+	// Allowed action during activity
 	repeated string functions = 2;
 
+	// Irregular activity type
 	Irregular irregular = 3;
 
+	// Does this activity has new hours compared to previous days
 	bool new_hours = 4;
 
+	// Open time in local time zone
 	google.type.TimeOfDay local_open_time = 5;
 
+	// Close time in local time zone
 	google.type.TimeOfDay local_close_time = 6;
 
+	// If open is variable. The variable number of seconds before open before.
 	google.protobuf.Int32Value variable_seconds_before_open = 7;
 
+	// If open is variable. The variable number of seconds after open.
 	google.protobuf.Int32Value variable_seconds_after_open = 8;
 
+	// If close is variable. The variable number of seconds before close.
 	google.protobuf.Int32Value variable_seconds_before_close = 9;
 
+	// If close is variable. The variable number of seconds after close.
 	google.protobuf.Int32Value variable_seconds_after_close = 10;
 
+	// Open time in UTC time zone. Useful for conversion in other timezone.
 	google.type.TimeOfDay utc_open_time = 11;
 
+	// Close time in UTC time zone. Useful for conversion in other timezone.
 	google.type.TimeOfDay utc_close_time = 12;
 }
 
+// Type of irregurlar activty
 enum Irregular
 {
+	// Unspecified
 	IRREGULAR_UNSPECIFIED = 0;
 
+	// Activity is irregular
 	IRREGULAR_YES = 1;
 
+	// Activity is regular
 	IRREGULAR_NO = 2;
 
+	// Activity is during a week-end
 	IRREGULAR_WEEK_END = 3;
 
+	// Activity is during a holiday
 	IRREGULAR_HOLIDAY = 4;
 }
 
@@ -162,10 +242,6 @@ message TradingHoursRequest
 }
 
 
-// The required input to request Trading hours mic code.
-message TradingHoursMicRequest
-{
-}
 
 // Represents all the MIC code with trading hours information
 message TradingHoursMicResponse
@@ -175,8 +251,8 @@ message TradingHoursMicResponse
 }
 
 
-// The required input to request Holiday Currencies .
-message HolidayCurrenciesRequest
+// Empty request .
+message EmptyRequest
 {
 }
 
@@ -247,6 +323,9 @@ message HolidayCenterItem
 
 	// Definition
 	string definition = 7;
+
+	// Array of associated MIC 
+	repeated string mics = 8;
 }
 
 
