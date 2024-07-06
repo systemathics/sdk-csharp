@@ -49,8 +49,8 @@ message ScreenerRequest
     // [Optional] Select the first elements retrieved, by default count is set to 100
     google.protobuf.Int32Value count = 2;
 
-	// [Optional] Base Currency for underlying and options
-	google.protobuf.StringValue base_currency = 3;
+	// [Optional] Currency for underlying and options
+	google.protobuf.StringValue currency = 3;
 
 	// [Optional] Exchange for underlying
 	google.protobuf.StringValue exchange = 4;

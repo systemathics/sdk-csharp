@@ -60,9 +60,6 @@ message ReferenceRequest
 
 	// The ticker code
 	string ticker = 2;
-
-	// The exchange code
-	string exchange = 3;
 }
 
 // Represents a reference data response.
