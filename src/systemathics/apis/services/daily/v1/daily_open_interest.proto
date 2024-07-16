@@ -81,5 +81,8 @@ message DailyOpenInterest
 
 	// The Open Interest (number of open put and call contracts) at the beginning of the trading session.
 	double total_open_interest = 6;
+
+	// The total number of outstanding options contracts that have not been exercised or expired yet, as of the next trading day.
+	double t1_open_interest = 7; 
 }
  

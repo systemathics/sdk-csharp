@@ -127,8 +127,8 @@ message DailyMarketData
 	// OpenInterest value of the sampling period
 	double open_interest = 17;
 
-	// Underlying value of the sampling period
-	string underlying = 18;
+	// Underlying price of the sampling period
+	double underlying = 18;
 
 	// The implied volatility for a 30-day call option
 	double implied_volatility_30_call = 19;
@@ -213,5 +213,20 @@ message DailyMarketData
 
 	// The data quality scoring : from 0 (bad) to 100 (good)
 	double score = 46;
+
+	// The implied volatility bid.
+	double implied_volatility_bid = 47;
+
+	// The implied volatility ask.
+	double implied_volatility_ask = 48;
+
+	// The implied volatility mean.
+	double implied_volatility_mean = 49;
+
+	// The option symbol
+	string option_symbol = 50;
+
+	// The total number of outstanding options contracts that have not been exercised or expired yet, as of the next trading day.
+	double t1_open_interest = 51;
 }
  

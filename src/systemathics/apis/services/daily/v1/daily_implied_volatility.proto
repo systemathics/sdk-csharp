@@ -136,5 +136,14 @@ message DailyImpliedVolatility
 	// The mean implied volatility for a 360-day period.
 	double implied_volatility_360_mean = 24;
 
+	// The implied volatility bid.
+	double implied_volatility_bid = 25;
+
+	// The implied volatility ask.
+	double implied_volatility_ask = 26;
+
+	// The implied volatility mean.
+	double implied_volatility_mean = 27;
+
 }
  
