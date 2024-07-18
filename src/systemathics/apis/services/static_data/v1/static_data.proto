@@ -944,6 +944,9 @@ message BondEntry
     // Floater Spread. Bloomberg field: FLT_SPREAD
     google.protobuf.DoubleValue floater_spread = 52;
 
+    // Discovery Source Ticker. Not a Bloomberg field.
+    google.protobuf.StringValue discovery_source_ticker = 53;
+
 }
     
 // Contains the reference data for Credit default swap (CDS).
