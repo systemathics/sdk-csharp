@@ -71,7 +71,7 @@ message IntradayBestLimitsResponse
 // Contains the intraday bar's data: date, bid, ask and score.
 message IntradayBestLimit 
 {
-	// Time stamp of the intraday bar : open time of the sampling interval
+	// UTC time stamp of the intraday bar : open time of the sampling interval
 	google.protobuf.Timestamp time_stamp = 1;
 	
 	// The best bid price of the sampling period

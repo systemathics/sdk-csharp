@@ -25,6 +25,8 @@ import "google/api/annotations.proto";
 import "google/protobuf/wrappers.proto";
 
 import "systemathics/apis/services/static_data/v1/static_data.proto";
+import "systemathics/apis/type/shared/v1/option_type.proto";
+
 
 package systemathics.apis.services.screener_data.v1;
 
@@ -62,7 +64,7 @@ message ScreenerRequest
 	systemathics.apis.services.static_data.v1.StaticDataDateRange expiry = 6;
 
 	// [Optional] Option type for option (Call/Put)
-	systemathics.apis.services.static_data.v1.OptionType option_type = 7;
+	systemathics.apis.type.shared.v1.OptionType option_type = 7;
 
 	// [Optional] Exercise type for option (European/American/Bermudan)
 	systemathics.apis.services.static_data.v1.ExerciseType exercise_type = 8;

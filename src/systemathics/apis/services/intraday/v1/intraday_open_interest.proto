@@ -67,7 +67,7 @@ message IntradayOpenInterestsResponse
 // Contains the intraday openinterests data: date, openinterest value.
 message IntradayOpenInterest 
 {
-	// Time stamp of the intraday openinterest : open time of the sampling interval
+	// UTC time stamp of the intraday openinterest : open time of the sampling interval
 	google.protobuf.Timestamp time_stamp = 1;
 	
 	// OpenInterest value of the sampling period

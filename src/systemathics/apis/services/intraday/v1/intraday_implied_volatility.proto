@@ -68,7 +68,7 @@ message IntradayImpliedVolatilitiesResponse
 // Contains the intraday impliedvolatilities data: date, implied volatility value.
 message IntradayImpliedVolatility 
 {
-	// Time stamp of the intraday settlement : open time of the sampling interval
+	// UTC time stamp of the intraday settlement : open time of the sampling interval
 	google.protobuf.Timestamp time_stamp = 1;
 	
 	// ImpliedVolatility value of the sampling period

@@ -74,7 +74,7 @@ message IntradaySettlementsResponse
 // Contains the intraday settlements data: date, settlement value and volume.
 message IntradaySettlement 
 {
-	// Time stamp of the intraday settlement : open time of the sampling interval
+	// UTC time stamp of the intraday settlement : open time of the sampling interval
 	google.protobuf.Timestamp time_stamp = 1;
 	
 	// Settlement value of the sampling period

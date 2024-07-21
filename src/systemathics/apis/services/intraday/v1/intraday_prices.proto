@@ -71,7 +71,7 @@ message IntradayPricesResponse
 // Contains the intraday prices data: date, price, volume and score.
 message IntradayPrice 
 {
-	// Time stamp of the intraday price : open time of the sampling interval
+	// UTC time stamp of the intraday price : open time of the sampling interval
 	google.protobuf.Timestamp time_stamp = 1;
 	
 	// Last price of the sampling period

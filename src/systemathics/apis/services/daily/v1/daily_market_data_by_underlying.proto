@@ -18,85 +18,118 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-// The <i>Greeks</i> are a set of risk measures or sensitivities used in options trading to assess the various factors that can influence the price of an option.
-
+// This service provides access to an daily marketdata market data service,
+// enabling users to retrieve historical market data for various financial instruments.
+// MarketData represents a comprehensive aggregation of all pertinent market information, 
+// encompassing various data points such as bar data, best limit data, Greeks, and more.
 syntax = "proto3";
 
 
 import "google/api/annotations.proto";
-import "google/protobuf/timestamp.proto";
+import "google/type/date.proto";
 
 import "systemathics/apis/type/shared/v1/identifier.proto";
-import "systemathics/apis/type/shared/v1/date_interval.proto";
-import "systemathics/apis/type/shared/v1/sampling.proto";
+import "systemathics/apis/type/shared/v1/option_type.proto";
 
-package systemathics.apis.services.intraday.v1;
+package systemathics.apis.services.daily.v1;
 
-// Called to request intraday greeks data. 
-service IntradayGreeksService
+// Called to request daily MarketData data. 
+service DailyMarketDataByUnderlyingService
 {
-  // Gets intraday historical greeks data.
-  rpc IntradayGreeks(IntradayGreeksRequest) returns (IntradayGreeksResponse)
+  rpc DailyMarketDataByUnderlying(DailyMarketDataByUnderlyingRequest) returns (DailyMarketDataByUnderlyingResponse)
   {
-	  	 option (google.api.http) = {
-			get: "/v1/intraday/greeks"
-		 };
+	  option (google.api.http) = {
+			get: "/v1/daily/marketdata_by_underlying"
+	  };
   }
 }
 
-// The required input to request the IntradayGreeksService.
-message IntradayGreeksRequest
+
+message DailyMarketDataByUnderlyingRequest
 {
-	// [Mandatory] The instrument identifier: a bloomberg ticker and an asset type
-	systemathics.apis.type.shared.v1.Identifier identifier = 1;
+	// [Mandatory] The underlying instrument identifier: a bloomberg ticker and an asset type 
+	systemathics.apis.type.shared.v1.Identifier underlying_identifier = 1;
 
-	// [Mandatory] The sampling interval
-	systemathics.apis.type.shared.v1.Sampling sampling = 2;
-
-	// [Optional] The time constraints used to define the look-back period.
-	// If empty, then all the available data is retrieved.
-	systemathics.apis.type.shared.v1.DateInterval date_interval = 3;
+	// [Mandatory] The date used.
+	google.type.Date date = 2;
 }
 
-// The intraday greeks response contains an array of intraday greeks.
-message IntradayGreeksResponse
+// Represents a daily marketdata by underlying response.
+message DailyMarketDataByUnderlyingResponse
 {
-	// The intraday greeks: an array of IntradayGreeks objects
-	repeated IntradayGreeks data = 1;
+	// The daily marketdata : an array of DailyMarketDataByUnderlying objects
+	repeated DailyMarketDataByUnderlying data = 1;
 }
 
-// Contains the intraday greeks data.
-message IntradayGreeks 
+
+// Contains the daily marketdatas information by underlying.
+message DailyMarketDataByUnderlying
 {
-	// UTC time stamp of the intraday greeks
-	google.protobuf.Timestamp time_stamp = 1;
+	// Date of the marketdata
+	google.type.Date date = 1;
+
+	// Underlying symbol
+	string underlying_symbol = 2;
 	
+	// Underlying price
+	double underlying_price = 3;
+	
+	// Option symbol (OPRA)
+	string option_symbol = 4;
+	
+	// Option type
+	systemathics.apis.type.shared.v1.OptionType option_type = 5;
+	
+	// Option strike
+	double option_strike = 6;
+	
+	// Option expiration date.
+	google.type.Date option_expiration_date = 7;
+
+	// The last price.
+	double last_price = 8;
+
+	// The bid price.
+	double bid_price = 9;
+	
+	// The ask price.
+	double ask_price = 10;
+	
+	// The volume of options traded.
+	double volume = 11;
+
+	// Open interest value.
+	double open_interest = 12;
+
+	// The total number of outstanding options contracts that have not been exercised or expired yet, as of the next trading day.
+	double t1_open_interest = 13;
+
 	// Measures the sensitivity of an option's theoretical value to a change in the price of the underlying asset.
 	//<br>It indicates the expected change in the option price for a one-point change in the underlying asset. 
 	//<br>For example, if an option has a delta of 0.7, it suggests that the option's price will increase by $0.70 for every $1 increase in the underlying asset.
-	double delta = 2;
+	double delta = 14;
 	
 	// Measeure sthe rate of change in the delta for each one-point increase in the underlying asset.
 	//<br>It measures how much the delta of an option will change as the price of the underlying asset changes. 
 	//<br>Gamma is particularly important for assessing how delta might change as the underlying asset's price fluctuates.
-	double gamma = 3;
+	double gamma = 15;
 
 	// A measure of the time decay on an option, the amount that an option willl lose each day due to the passage of time.
 	//<br>It represents the change in the option price for a one-day decrease in the time to expiration. 
 	//<br>Theta is often referred to as time decay. As the expiration date approaches, the time value of an option tends to decrease, and theta quantifies that decay.
-	double theta = 4;
+	double theta = 16;
 	
 	// Measures the sensitivity of the price of an option to changes in implied volatility. 
 	//<br>Implied volatility reflects the market's expectations for future price fluctuations. 
 	//<br>Vega indicates how much the option price is expected to change for a one-percentage-point change in implied volatility.
-	double vega = 5;
+	double vega = 17;
 
-	// The rate at which the price of a derivative changes relative to a change in the risk-free rate of interest. 
-	//<br>It represents the change in the option price for a one-percentage-point change in interest rates. 
-	//<br>Rho is more relevant for options with longer time to expiration.
-	double rho = 6;
+	// The implied volatility bid.
+	double implied_volatility_bid = 18;
 
-	// The data quality scoring : from 0 (bad) to 100 (good)
-	double score = 7;
+	// The implied volatility ask.
+	double implied_volatility_ask = 19;
+
+	// The implied volatility mean.
+	double implied_volatility_mean = 20;
 }
- 

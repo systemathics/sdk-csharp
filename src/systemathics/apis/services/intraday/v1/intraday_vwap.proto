@@ -76,7 +76,7 @@ message IntradayVwapsResponse
 // Represents an individual data item for intraday VWAP (Volume-Weighted Average Price) market data.
 message IntradayVwap 
 {
-	// Time stamp of the intraday vwap : open time of the sampling interval
+	// UTC time stamp of the intraday vwap : open time of the sampling interval
 	google.protobuf.Timestamp time_stamp = 1;
 	
 	// Vwap of the sampling period

@@ -76,7 +76,7 @@ message IntradayBarsResponse
 // Contains the intraday bar's data: date, open, high, low, close, volume, count, vwap and score.
 message IntradayBar 
 {
-	// Time stamp of the intraday bar : open time of the sampling interval
+	// UTC time stamp of the intraday bar : open time of the sampling interval
 	google.protobuf.Timestamp time_stamp = 1;
 	
 	// Open price of the sampling period
