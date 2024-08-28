@@ -92,14 +92,17 @@ message SetDailyScalarInfo
 // Contains all mode to add daily scalar data.
 enum SetDailyScalarDataMode 
 {
-	// Not specified ?
+	// Not specified
 	SET_DAILY_SCALAR_DATA_MODE_UNSPECIFIED = 0;
 	
-	// Write or overwrite mode
+	// Write mode, will fail if files already exists.
     SET_DAILY_SCALAR_DATA_MODE_WRITE = 1;
 
 	// Append mode
 	SET_DAILY_SCALAR_DATA_MODE_APPEND = 2;
+
+	// Overwrite mode. Will erase existing file. Will fail if existing file don't exists.
+	SET_DAILY_SCALAR_DATA_MODE_OVERWRITE = 3;
 }
 
 // Represent the data to be added to the data scalar timeseries.
