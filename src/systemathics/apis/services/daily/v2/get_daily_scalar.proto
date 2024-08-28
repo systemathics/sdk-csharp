@@ -1,0 +1,216 @@
+// Copyright (c) 2021 Systemathics
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+// Daily prices illustrates daily price movements for an instrument over a look back period.
+syntax = "proto3";
+
+
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "google/type/date.proto";
+import "google/protobuf/struct.proto";
+
+import "systemathics/apis/type/shared/v1/asset.proto";
+import "systemathics/apis/type/shared/v1/identifier.proto";
+import "systemathics/apis/type/shared/v1/date_interval.proto";
+
+package systemathics.apis.services.daily.v2;
+
+// Called to request daily prices data. 
+service DailyTimesSeriesService
+{
+  // Gets daily historical data timeseries by identifier
+  rpc DailyScalar(DailyScalarRequest) returns (DailyScalarResponse)
+  {
+	  option (google.api.http) = {
+			get: "/v2/daily_scalar/"
+	  };
+  }
+
+  // Gets daily historical data timeseries by identifier using streaming
+  rpc DailyScalarStream(DailyScalarRequest) returns (stream DailyScalarResponse)
+  {
+	  option (google.api.http) = {
+			get: "/v2/daily_scalar_stream/"
+	  };
+  }
+
+  // Gets daily historical data by date
+  //rpc DailyByDate(DailyDateRequest) returns (stream GetDailyByDateResponse)
+  //{
+	//  option (google.api.http) = {
+	//		get: "/v2/daily_date/"
+	//  };
+  //}
+
+  // Gets all available fields by asset and provider.
+  rpc DailyScalarFields(google.protobuf.Empty) returns (DailyScalarFieldsResponse)
+  {
+	  option (google.api.http) = {
+			get: "/v2/daily_scalar_fields/"
+	  };
+  }
+
+  // Gets all available provider by asset
+  rpc DailyScalarProvider(google.protobuf.Empty) returns (DailyScalarProviderResponse)
+  {
+	  option (google.api.http) = {
+			get: "/v2/daily_scalar_provider/"
+	  };
+  }
+}
+
+// The required input to request the GetDailyByIdentifier endpoint
+message DailyScalarRequest
+{
+	// [Mandatory] The instrument identifier: a bloomberg ticker and an asset type 
+	systemathics.apis.type.shared.v1.Identifier identifier = 1;
+
+	// [Optional] The date interval used to define the look-back period.
+	// If empty, then all the available data is retrieved.
+	systemathics.apis.type.shared.v1.DateInterval date_interval = 2;
+
+	// Fields requested for daily data
+	repeated string fields = 3;
+
+	// [Optional] The corporate action adjustment (dividends).
+	// By default the value is set to false : the split is applied in all cases
+	optional bool adjustment = 4;
+}
+
+// The required input to request the GetDailyByDate endpoint
+//message GetDailyByDateRequest
+//{
+//	// [Mandatory] The instrument identifiers: a bloomberg ticker and an asset type
+//	repeated systemathics.apis.type.shared.v1.Identifier identifiers = 1;
+//
+//	// [Mandatory] The date used to request data.
+//	google.type.Date date = 2;
+//
+//	// [Optional] The corporate action adjustment (dividends).
+//	// By default the value is set to false : the split is applied in all cases
+//	optional bool adjustment = 3;
+//}
+
+
+// Represents a daily scalar response.
+message DailyScalarResponse
+{
+	// The dates array. The lenght of the array is the same as the data.
+    repeated google.type.Date dates = 1;
+
+	// The daily data. Keys are the fields present in the request.
+	map<string, DailyScalarValueResponse> fields = 2;
+}
+
+// Represents a daily scalar value response.
+message DailyScalarValueResponse
+{
+	// The daily data. Lenght of the array is the same as the dates array.
+	repeated double data = 1;
+}
+
+//// Represents a daily response.
+//message GetDailyByDateResponse
+//{
+//	oneof payload 
+//	{
+//		// The fields with their order that can be found in `data` values
+//		GetDailyByDateFields fields = 1;
+//		
+//		// The mapping data
+//		GetDailyByDateData data = 2;
+//	}
+//}
+//
+//message GetDailyByDateFields
+//{
+//	// The fields with their order that can be found in `data` values
+//	repeated string fields = 1;
+//}
+//
+//message GetDailyByDateData
+//{
+//	// The instrument identifier: a bloomberg ticker and an asset type 
+//	systemathics.apis.type.shared.v1.Identifier identifier = 1;
+//
+//	// The daily data. The mapping is provided by the first element of the stream.
+//	repeated double data = 2;
+//}
+
+// Represents a daily scalar fields response containing an array of item.
+message DailyScalarFieldsResponse
+{
+	// The collection containing items values.
+	repeated DailyScalarFieldsItemResponse data = 1;
+}
+
+// Represents a daily scalar fields item response.
+message DailyScalarFieldsItemResponse
+{
+	// [Mandatory] The asset type 
+	systemathics.apis.type.shared.v1.AssetType asset_type = 1;
+
+	// [Optional] The provider
+	string provider = 2;
+
+	// The fields available for a given asset and a provider.
+	repeated string fields = 3;
+}
+
+// Represents the daily scalar stream response.
+message DailyScalarStreamResponse
+{
+	oneof payload 
+	{
+		// The daily fields. Issued in the first frame.
+		DailyScalarFieldsResponse info = 1;
+		
+		// The mapping data. Issued in the following frames.
+		DailyScalarItem data = 2;
+	}
+}
+
+// The required input to request the DailyScalarStream endpoint
+message DailyScalarItem
+{
+	// The data date.
+    google.type.Date date = 1;
+
+	// The data. Lenght of the array is the same as the fields.
+	repeated double data = 2;
+}
+
+// Represents a response containing an array of items.
+message DailyScalarProviderResponse
+{
+	// The collection containing items values.
+	repeated DailyScalarProviderItemResponse data = 1;
+}
+
+// Represents a links between an asset and a provider.
+message DailyScalarProviderItemResponse
+{
+	// The asset type 
+	systemathics.apis.type.shared.v1.AssetType asset_type = 1;
+
+	// The provider
+	string provider = 2;
+}
