@@ -45,7 +45,7 @@ service DailyScalarService
   }
 
   // Gets daily historical data timeseries by identifier using streaming
-  rpc DailyScalarStream(DailyScalarRequest) returns (stream DailyScalarResponse)
+  rpc DailyScalarStream(DailyScalarRequest) returns (stream DailyScalarStreamResponse)
   {
 	  option (google.api.http) = {
 			get: "/v2/daily_scalar_stream/"
@@ -69,7 +69,7 @@ service DailyScalarService
   }
 
   // Gets all available provider by asset
-  rpc DailyScalarProvider(google.protobuf.Empty) returns (DailyScalarProviderResponse)
+  rpc DailyScalarAssetProvider(google.protobuf.Empty) returns (DailyScalarAssetProviderResponse)
   {
 	  option (google.api.http) = {
 			get: "/v2/daily_scalar_provider/"
@@ -83,16 +83,16 @@ message DailyScalarRequest
 	// [Mandatory] The instrument identifier: a bloomberg ticker and an asset type 
 	systemathics.apis.type.shared.v1.Identifier identifier = 1;
 
+	// [Mandatory] Fields/measures requested for daily data
+	repeated string fields = 2;
+
 	// [Optional] The date interval used to define the look-back period.
 	// If empty, then all the available data is retrieved.
-	systemathics.apis.type.shared.v1.DateInterval date_interval = 2;
-
-	// Fields requested for daily data
-	repeated string fields = 3;
+	systemathics.apis.type.shared.v1.DateInterval date_interval = 3;
 
 	// [Optional] The corporate action adjustment (dividends).
 	// By default the value is set to false : the split is applied in all cases
-	optional bool adjustment = 4;
+	bool adjustment = 4;
 }
 
 // The required input to request the GetDailyByDate endpoint
@@ -116,8 +116,8 @@ message DailyScalarResponse
 	// The dates array. The lenght of the array is the same as the data.
     repeated google.type.Date dates = 1;
 
-	// The daily data. Keys are the fields present in the request.
-	map<string, DailyScalarValueResponse> fields = 2;
+	// The daily data. Keys are the fields/measures present in the request.
+	map<string, DailyScalarValueResponse> fields_data = 2;
 }
 
 // Represents a daily scalar value response.
@@ -155,25 +155,7 @@ message DailyScalarValueResponse
 //	repeated double data = 2;
 //}
 
-// Represents a daily scalar fields response containing an array of item.
-message DailyScalarFieldsResponse
-{
-	// The collection containing items values.
-	repeated DailyScalarFieldsItemResponse data = 1;
-}
 
-// Represents a daily scalar fields item response.
-message DailyScalarFieldsItemResponse
-{
-	// [Mandatory] The asset type 
-	systemathics.apis.type.shared.v1.AssetType asset_type = 1;
-
-	// [Optional] The provider
-	string provider = 2;
-
-	// The fields available for a given asset and a provider.
-	repeated string fields = 3;
-}
 
 // Represents the daily scalar stream response.
 message DailyScalarStreamResponse
@@ -181,15 +163,23 @@ message DailyScalarStreamResponse
 	oneof payload 
 	{
 		// The daily fields. Issued in the first frame.
-		DailyScalarFieldsResponse info = 1;
+		DailyScalarStreamFields info = 1;
 		
 		// The mapping data. Issued in the following frames.
-		DailyScalarItem data = 2;
+		DailyScalarStreamItem data = 2;
 	}
 }
 
-// The required input to request the DailyScalarStream endpoint
-message DailyScalarItem
+// Represents all fields available in a daily scalar stream response.
+message DailyScalarStreamFields
+{
+	// The collection containing fields/measures values.
+	repeated string fields = 1;
+}
+
+
+// Represents the data part of a daily scalar stream response.
+message DailyScalarStreamItem
 {
 	// The data date.
     google.type.Date date = 1;
@@ -199,18 +189,37 @@ message DailyScalarItem
 }
 
 // Represents a response containing an array of items.
-message DailyScalarProviderResponse
+message DailyScalarAssetProviderResponse
 {
 	// The collection containing items values.
-	repeated DailyScalarProviderItemResponse data = 1;
+	repeated DailyScalarAssetProviderItemResponse data = 1;
 }
 
 // Represents a links between an asset and a provider.
-message DailyScalarProviderItemResponse
+message DailyScalarAssetProviderItemResponse
 {
 	// The asset type 
 	systemathics.apis.type.shared.v1.AssetType asset_type = 1;
 
 	// The provider
 	string provider = 2;
+}
+
+message DailyScalarFieldsResponse
+{
+	// The collection containing items values.
+	repeated DailyScalarFieldsItemResponse data = 1;
+}
+
+// Represents a links between an asset and a provider.
+message DailyScalarFieldsItemResponse
+{
+	// The asset type 
+	systemathics.apis.type.shared.v1.AssetType asset_type = 1;
+
+	// The provider
+	string provider = 2;
+
+	// The fields/measures
+	repeated string fields = 3;
 }
