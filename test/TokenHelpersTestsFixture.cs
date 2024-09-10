@@ -13,8 +13,10 @@ namespace Systemathics.Apis.Tests
     using Systemathics.Apis.Helpers;
 
     using NUnit.Framework;
+    using NUnit.Framework.Constraints;
 
     #endregion
+
 
     /// <summary>
     /// The token helpers tests fixture.
@@ -36,7 +38,7 @@ namespace Systemathics.Apis.Tests
 
                 string token = null;
                 Assert.DoesNotThrow(() => token = TokenHelpers.GetToken());
-                StringAssert.StartsWith("Bearer", token);
+                Assert.That(token, Does.StartWith("Bearer "));
             }
             finally
             {
