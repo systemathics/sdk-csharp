@@ -49,6 +49,14 @@ service StaticDataService
             get: "/v1/staticdata"
         };
   }
+
+    // Gets reference data
+  rpc StaticDataByIdentifiers(StaticDataByIdentifiersRequest) returns (StaticDataResponse)
+  {
+          option (google.api.http) = {
+            get: "/v1/staticdata_by_identifiers"
+        };
+  }
 }
 
 // The required input to request the StaticDataService.
@@ -162,6 +170,15 @@ message StaticDataRequest
     // [Optional] Strike for options
     google.protobuf.DoubleValue strike = 40;
 }
+
+
+// The required input to request the StaticDataService.
+message StaticDataByIdentifiersRequest
+{
+    // Asset Type
+    repeated systemathics.apis.type.shared.v1.Identifier identifiers = 1;
+}
+
 
 // Used to specify a date range search
 message StaticDataDateRange

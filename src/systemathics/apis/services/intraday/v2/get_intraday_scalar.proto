@@ -1,0 +1,205 @@
+// Copyright (c) 2021 Systemathics
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+// Intraday prices illustrates intraday price movements for an instrument over a look back period.
+syntax = "proto3";
+
+
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "google/type/datetime.proto";
+import "google/protobuf/struct.proto";
+
+import "systemathics/apis/type/shared/v1/asset.proto";
+import "systemathics/apis/type/shared/v1/identifier.proto";
+import "systemathics/apis/type/shared/v1/date_interval.proto";
+import "systemathics/apis/type/shared/v1/sampling.proto";
+
+package systemathics.apis.services.intraday.v2;
+
+// Called to request intraday prices data. 
+service IntradayScalarService
+{
+  // Gets intraday historical data timeseries by identifier using streaming
+  rpc IntradayScalarStream(IntradayScalarRequest) returns (stream IntradayScalarStreamResponse)
+  {
+	  option (google.api.http) = {
+			get: "/v2/intraday_scalar_stream/"
+	  };
+  }
+
+  // Gets intraday historical data by date
+  //rpc IntradayByDate(IntradayDateRequest) returns (stream GetIntradayByDateResponse)
+  //{
+	//  option (google.api.http) = {
+	//		get: "/v2/intraday_date/"
+	//  };
+  //}
+
+  // Gets all available fields by asset and provider.
+  rpc IntradayScalarFields(google.protobuf.Empty) returns (IntradayScalarFieldsResponse)
+  {
+	  option (google.api.http) = {
+			get: "/v2/intraday_scalar_fields/"
+	  };
+  }
+
+  // Gets all available provider by asset
+  rpc IntradayScalarAssetProvider(google.protobuf.Empty) returns (IntradayScalarAssetProviderResponse)
+  {
+	  option (google.api.http) = {
+			get: "/v2/intraday_scalar_provider/"
+	  };
+  }
+}
+
+// The required input to request the GetIntradayByIdentifier endpoint
+message IntradayScalarRequest
+{
+	// [Mandatory] The instrument identifier: a bloomberg ticker and an asset type 
+	systemathics.apis.type.shared.v1.Identifier identifier = 1;
+
+	// [Mandatory] Fields/measures requested for intraday data
+	repeated string fields = 2;
+
+		// [Mandatory] The sampling interval
+	systemathics.apis.type.shared.v1.Sampling sampling = 3;
+
+	// [Optional] The date interval used to define the look-back period.
+	// If empty, then all the available data is retrieved.
+	systemathics.apis.type.shared.v1.DateInterval date_interval = 4;
+
+	// [Optional] The corporate action adjustment (dividends).
+	// By default the value is set to false : the split is applied in all cases
+	bool adjustment = 5;
+}
+
+// The required input to request the GetIntradayByDate endpoint
+//message GetIntradayByDateRequest
+//{
+//	// [Mandatory] The instrument identifiers: a bloomberg ticker and an asset type
+//	repeated systemathics.apis.type.shared.v1.Identifier identifiers = 1;
+//
+//	// [Mandatory] The date used to request data.
+//	google.type.Date date = 2;
+//
+//	// [Optional] The corporate action adjustment (dividends).
+//	// By default the value is set to false : the split is applied in all cases
+//	optional bool adjustment = 3;
+//}
+
+
+//// Represents a intraday response.
+//message GetIntradayByDateResponse
+//{
+//	oneof payload 
+//	{
+//		// The fields with their order that can be found in `data` values
+//		GetIntradayByDateFields fields = 1;
+//		
+//		// The mapping data
+//		GetIntradayByDateData data = 2;
+//	}
+//}
+//
+//message GetIntradayByDateFields
+//{
+//	// The fields with their order that can be found in `data` values
+//	repeated string fields = 1;
+//}
+//
+//message GetIntradayByDateData
+//{
+//	// The instrument identifier: a bloomberg ticker and an asset type 
+//	systemathics.apis.type.shared.v1.Identifier identifier = 1;
+//
+//	// The intraday data. The mapping is provided by the first element of the stream.
+//	repeated double data = 2;
+//}
+
+
+
+// Represents the intraday scalar stream response.
+message IntradayScalarStreamResponse
+{
+	oneof payload 
+	{
+		// The intraday fields. Issued in the first frame.
+		IntradayScalarStreamFields info = 1;
+		
+		// The mapping data. Issued in the following frames.
+		IntradayScalarStreamItem data = 2;
+	}
+}
+
+// Represents all fields available in a intraday scalar stream response.
+message IntradayScalarStreamFields
+{
+	// The collection containing fields/measures values.
+	repeated string fields = 1;
+}
+
+
+// Represents the data part of a intraday scalar stream response.
+message IntradayScalarStreamItem
+{
+	// The data date.
+    google.type.DateTime datetime = 1;
+
+	// The data. Lenght of the array is the same as the fields.
+	repeated double data = 2;
+}
+
+// Represents a response containing an array of items.
+message IntradayScalarAssetProviderResponse
+{
+	// The collection containing items values.
+	repeated IntradayScalarAssetProviderItemResponse data = 1;
+}
+
+// Represents a links between an asset and a provider.
+message IntradayScalarAssetProviderItemResponse
+{
+	// The asset type 
+	systemathics.apis.type.shared.v1.AssetType asset_type = 1;
+
+	// The provider
+	string provider = 2;
+}
+
+message IntradayScalarFieldsResponse
+{
+	// The collection containing items values.
+	// The collection containing items values.
+	repeated IntradayScalarFieldsItemResponse data = 1;
+}
+
+// Represents a links between an asset and a provider.
+message IntradayScalarFieldsItemResponse
+{
+	// The asset type 
+	systemathics.apis.type.shared.v1.AssetType asset_type = 1;
+
+	// The provider
+	string provider = 2;
+
+	// The fields/measures
+	repeated string fields = 3;
+}

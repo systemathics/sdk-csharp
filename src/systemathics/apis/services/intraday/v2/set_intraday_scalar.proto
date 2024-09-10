@@ -18,83 +18,90 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-// Daily prices illustrates daily price movements for an instrument over a look back period.
+// Intraday prices illustrates intraday price movements for an instrument over a look back period.
 syntax = "proto3";
 
 
 import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
-import "google/type/date.proto";
+import "google/type/datetime.proto";
 import "google/protobuf/struct.proto";
 
 import "systemathics/apis/type/shared/v1/asset.proto";
 import "systemathics/apis/type/shared/v1/identifier.proto";
 import "systemathics/apis/type/shared/v1/date_interval.proto";
+import "systemathics/apis/type/shared/v1/sampling.proto";
 import "systemathics/apis/type/shared/v2/set_data_mode.proto";
 
-package systemathics.apis.services.daily.v2;
+package systemathics.apis.services.intraday.v2;
 
-// Called to set daily prices data and clear. 
-service SetDailyScalarService
+// Called to set intraday prices data and clear. 
+service SetIntradayScalarService
 {
-  // Sets daily scalar timeseries.
-  rpc SetDailyScalar(stream SetDailyScalarRequest) returns (google.protobuf.Empty)
+  // Sets intraday scalar timeseries.
+  rpc SetIntradayScalar(stream SetIntradayScalarRequest) returns (google.protobuf.Empty)
   {
 	  option (google.api.http) = {
-			post: "/v2/daily"
+			post: "/v2/intraday"
 	  };
   }
 
-  // Delete daily scalar timeseries.
-  rpc ClearDailyScalar(ClearDailyScalarRequest) returns (google.protobuf.Empty)
+  // Delete intraday scalar timeseries.
+  rpc ClearIntradayScalar(ClearIntradayScalarRequest) returns (google.protobuf.Empty)
   {
 	  option (google.api.http) = {
-			delete: "/v2/daily"
+			delete: "/v2/intraday"
 	  };
   }
 }
 
 
-// The required input to request the SetDailyScalar endpoint
-message SetDailyScalarRequest
+// The required input to request the SetIntradayScalar endpoint
+message SetIntradayScalarRequest
 {
 	oneof payload 
 	{
-		// The daily info
-		SetDailyScalarInfo info = 1;
+		// The intraday info
+		SetIntradayScalarInfo info = 1;
 		
 		// The mapping data
-		SetDailyScalarData data = 2;
+		SetIntradayScalarData data = 2;
 	}
 }
-// The required input to request ClearDailyScalar.
-message ClearDailyScalarRequest 
+// The required input to request ClearIntradayScalar.
+message ClearIntradayScalarRequest 
 {
 	// [Mandatory] The instrument identifiers: a bloomberg ticker and an asset type
 	systemathics.apis.type.shared.v1.Identifier identifier = 1;
+
+	// [Mandatory] The sampling interval
+	systemathics.apis.type.shared.v1.Sampling sampling = 2;
 
 	// [Mandatory] The fields to be deleted.
-	repeated string fields = 2;
+	repeated string fields = 3;
 }
 
-// The required input to request the GetDailyByDate endpoint
-message SetDailyScalarInfo
+// The required input to request the GetIntradayByDate endpoint
+message SetIntradayScalarInfo
 {
 	// [Mandatory] The instrument identifiers: a bloomberg ticker and an asset type
 	systemathics.apis.type.shared.v1.Identifier identifier = 1;
 
+	// [Mandatory] The sampling interval
+	systemathics.apis.type.shared.v1.Sampling sampling = 2;
+
 	// [Mandatory] The data names.
-	repeated string fields = 2;
+	repeated string fields = 3;
 
 	// Set the writing mode (write/overwrite or append)
-	systemathics.apis.type.shared.v2.SetDataMode mode = 3;
+	systemathics.apis.type.shared.v2.SetDataMode mode = 4;
 }
 
 // Represent the data to be added to the data scalar timeseries.
-message SetDailyScalarData
+message SetIntradayScalarData
 {
 	// [Mandatory] The date used to request data.
-	google.type.Date date = 1;
+	google.type.DateTime datetime = 1;
 
 	// [Mandatory] The date used to request data.
 	repeated double data = 2;

@@ -18,57 +18,57 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-// Daily prices illustrates daily price movements for an instrument over a look back period.
+// Tick prices illustrates tick price movements for an instrument over a look back period.
 syntax = "proto3";
 
 
 import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
-import "google/type/date.proto";
+import "google/type/datetime.proto";
 import "google/protobuf/struct.proto";
 
 import "systemathics/apis/type/shared/v1/asset.proto";
 import "systemathics/apis/type/shared/v1/identifier.proto";
-import "systemathics/apis/type/shared/v1/date_interval.proto";
+import "systemathics/apis/type/shared/v1/constraints.proto";
 import "systemathics/apis/type/shared/v2/set_data_mode.proto";
 
-package systemathics.apis.services.daily.v2;
+package systemathics.apis.services.tick.v2;
 
-// Called to set daily prices data and clear. 
-service SetDailyScalarService
+// Called to set tick prices data and clear. 
+service SetTickScalarService
 {
-  // Sets daily scalar timeseries.
-  rpc SetDailyScalar(stream SetDailyScalarRequest) returns (google.protobuf.Empty)
+  // Sets tick scalar timeseries.
+  rpc SetTickScalar(stream SetTickScalarRequest) returns (google.protobuf.Empty)
   {
 	  option (google.api.http) = {
-			post: "/v2/daily"
+			post: "/v2/tick"
 	  };
   }
 
-  // Delete daily scalar timeseries.
-  rpc ClearDailyScalar(ClearDailyScalarRequest) returns (google.protobuf.Empty)
+  // Delete tick scalar timeseries.
+  rpc ClearTickScalar(ClearTickScalarRequest) returns (google.protobuf.Empty)
   {
 	  option (google.api.http) = {
-			delete: "/v2/daily"
+			delete: "/v2/tick"
 	  };
   }
 }
 
 
-// The required input to request the SetDailyScalar endpoint
-message SetDailyScalarRequest
+// The required input to request the SetTickScalar endpoint
+message SetTickScalarRequest
 {
 	oneof payload 
 	{
-		// The daily info
-		SetDailyScalarInfo info = 1;
+		// The tick info
+		SetTickScalarInfo info = 1;
 		
 		// The mapping data
-		SetDailyScalarData data = 2;
+		SetTickScalarData data = 2;
 	}
 }
-// The required input to request ClearDailyScalar.
-message ClearDailyScalarRequest 
+// The required input to request ClearTickScalar.
+message ClearTickScalarRequest 
 {
 	// [Mandatory] The instrument identifiers: a bloomberg ticker and an asset type
 	systemathics.apis.type.shared.v1.Identifier identifier = 1;
@@ -77,8 +77,8 @@ message ClearDailyScalarRequest
 	repeated string fields = 2;
 }
 
-// The required input to request the GetDailyByDate endpoint
-message SetDailyScalarInfo
+// The required input to request the GetTickByDate endpoint
+message SetTickScalarInfo
 {
 	// [Mandatory] The instrument identifiers: a bloomberg ticker and an asset type
 	systemathics.apis.type.shared.v1.Identifier identifier = 1;
@@ -91,10 +91,10 @@ message SetDailyScalarInfo
 }
 
 // Represent the data to be added to the data scalar timeseries.
-message SetDailyScalarData
+message SetTickScalarData
 {
 	// [Mandatory] The date used to request data.
-	google.type.Date date = 1;
+	google.type.DateTime datetime = 1;
 
 	// [Mandatory] The date used to request data.
 	repeated double data = 2;

@@ -1,0 +1,204 @@
+// Copyright (c) 2021 Systemathics
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+// Tick prices illustrates tick price movements for an instrument over a look back period.
+syntax = "proto3";
+
+
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "google/type/datetime.proto";
+import "google/protobuf/struct.proto";
+
+import "systemathics/apis/type/shared/v1/asset.proto";
+import "systemathics/apis/type/shared/v1/identifier.proto";
+import "systemathics/apis/type/shared/v1/constraints.proto";
+import "systemathics/apis/type/shared/v1/sampling.proto";
+
+package systemathics.apis.services.tick.v2;
+
+// Called to request tick prices data. 
+service TickScalarService
+{
+
+  // Gets tick historical data timeseries by identifier using streaming
+  rpc TickScalarStream(TickScalarRequest) returns (stream TickScalarStreamResponse)
+  {
+	  option (google.api.http) = {
+			get: "/v2/tick_scalar/"
+	  };
+  }
+
+  // Gets tick historical data by date
+  //rpc TickByDate(TickDateRequest) returns (stream GetTickByDateResponse)
+  //{
+	//  option (google.api.http) = {
+	//		get: "/v2/tick_date/"
+	//  };
+  //}
+
+  // Gets all available fields by asset and provider.
+  rpc TickScalarFields(google.protobuf.Empty) returns (TickScalarFieldsResponse)
+  {
+	  option (google.api.http) = {
+			get: "/v2/tick_scalar_fields/"
+	  };
+  }
+
+  // Gets all available provider by asset
+  rpc TickScalarAssetProvider(google.protobuf.Empty) returns (TickScalarAssetProviderResponse)
+  {
+	  option (google.api.http) = {
+			get: "/v2/tick_scalar_provider/"
+	  };
+  }
+}
+
+// The required input to request the GetTickByIdentifier endpoint
+message TickScalarRequest
+{
+	// [Mandatory] The instrument identifier: a bloomberg ticker and an asset type 
+	systemathics.apis.type.shared.v1.Identifier identifier = 1;
+
+	// [Mandatory] Fields/measures requested for tick data
+	repeated string fields = 2;
+
+		// [Mandatory] The sampling interval
+	systemathics.apis.type.shared.v1.Sampling sampling = 3;
+
+	// [Optional] The constraints used to define the look-back period.
+	// If empty, then all the available data is retrieved.
+	systemathics.apis.type.shared.v1.Constraints constraints = 4;
+
+}
+
+// The required input to request the GetTickByDate endpoint
+//message GetTickByDateRequest
+//{
+//	// [Mandatory] The instrument identifiers: a bloomberg ticker and an asset type
+//	repeated systemathics.apis.type.shared.v1.Identifier identifiers = 1;
+//
+//	// [Mandatory] The date used to request data.
+//	google.type.Date date = 2;
+//
+//	// [Optional] The corporate action adjustment (dividends).
+//	// By default the value is set to false : the split is applied in all cases
+//	optional bool adjustment = 3;
+//}
+
+
+
+//// Represents a tick response.
+//message GetTickByDateResponse
+//{
+//	oneof payload 
+//	{
+//		// The fields with their order that can be found in `data` values
+//		GetTickByDateFields fields = 1;
+//		
+//		// The mapping data
+//		GetTickByDateData data = 2;
+//	}
+//}
+//
+//message GetTickByDateFields
+//{
+//	// The fields with their order that can be found in `data` values
+//	repeated string fields = 1;
+//}
+//
+//message GetTickByDateData
+//{
+//	// The instrument identifier: a bloomberg ticker and an asset type 
+//	systemathics.apis.type.shared.v1.Identifier identifier = 1;
+//
+//	// The tick data. The mapping is provided by the first element of the stream.
+//	repeated double data = 2;
+//}
+
+
+
+// Represents the tick scalar stream response.
+message TickScalarStreamResponse
+{
+	oneof payload 
+	{
+		// The tick fields. Issued in the first frame.
+		TickScalarStreamFields info = 1;
+		
+		// The mapping data. Issued in the following frames.
+		TickScalarStreamItem data = 2;
+	}
+}
+
+// Represents all fields available in a tick scalar stream response.
+message TickScalarStreamFields
+{
+	// The collection containing fields/measures values.
+	repeated string fields = 1;
+}
+
+
+// Represents the data part of a tick scalar stream response.
+message TickScalarStreamItem
+{
+	// The data date.
+    google.type.DateTime datetime = 1;
+
+	// The data. Lenght of the array is the same as the fields.
+	repeated double data = 2;
+}
+
+// Represents a response containing an array of items.
+message TickScalarAssetProviderResponse
+{
+	// The collection containing items values.
+	repeated TickScalarAssetProviderItemResponse data = 1;
+}
+
+// Represents a links between an asset and a provider.
+message TickScalarAssetProviderItemResponse
+{
+	// The asset type 
+	systemathics.apis.type.shared.v1.AssetType asset_type = 1;
+
+	// The provider
+	string provider = 2;
+}
+
+message TickScalarFieldsResponse
+{
+	// The collection containing items values.
+	// The collection containing items values.
+	repeated TickScalarFieldsItemResponse data = 1;
+}
+
+// Represents a links between an asset and a provider.
+message TickScalarFieldsItemResponse
+{
+	// The asset type 
+	systemathics.apis.type.shared.v1.AssetType asset_type = 1;
+
+	// The provider
+	string provider = 2;
+
+	// The fields/measures
+	repeated string fields = 3;
+}
