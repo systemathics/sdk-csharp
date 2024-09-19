@@ -31,30 +31,36 @@ enum AssetType
 	// Not specified ?
 	ASSET_TYPE_UNSPECIFIED = 0;
 	
-	// Search on all asset types
+	// All asset types. Used only for search.
     ASSET_TYPE_ALL = 1;
 	
-    // Search only on equities
+    // Equities
     ASSET_TYPE_EQUITY = 2;
 
-	// Search only on futures
+	// Futures
 	ASSET_TYPE_FUTURE = 3;
 
-	// Search only on Exchange Traded Fund
+	// Exchange Traded Fund
 	ASSET_TYPE_ETF = 4;
 
-	// Search only on Index
+	// Index
 	ASSET_TYPE_INDEX = 5;
 
-	// Search only on Forex pairs
+	// Forex pairs
 	ASSET_TYPE_FOREX = 7;
 
-	// Search only on options
+	// Options
 	ASSET_TYPE_OPTION = 8;
 
-	// Search only on bonds
+	// Bonds
 	ASSET_TYPE_BOND = 9;
 
-	// Search only on cds
+	// Cds
 	ASSET_TYPE_CDS = 10;
+
+	// Cds index 
+	ASSET_TYPE_CDS_INDEX = 11;
+	
+	// Cds index tranche
+	ASSET_TYPE_CDS_INDEX_TRANCHE = 12;
 }
