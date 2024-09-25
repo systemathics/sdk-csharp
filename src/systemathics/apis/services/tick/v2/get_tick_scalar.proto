@@ -30,7 +30,6 @@ import "google/protobuf/struct.proto";
 import "systemathics/apis/type/shared/v1/asset.proto";
 import "systemathics/apis/type/shared/v1/identifier.proto";
 import "systemathics/apis/type/shared/v1/constraints.proto";
-import "systemathics/apis/type/shared/v1/sampling.proto";
 
 package systemathics.apis.services.tick.v2;
 
@@ -80,12 +79,10 @@ message TickScalarRequest
 	// [Mandatory] Fields/measures requested for tick data
 	repeated string fields = 2;
 
-		// [Mandatory] The sampling interval
-	systemathics.apis.type.shared.v1.Sampling sampling = 3;
 
 	// [Optional] The constraints used to define the look-back period.
 	// If empty, then all the available data is retrieved.
-	systemathics.apis.type.shared.v1.Constraints constraints = 4;
+	systemathics.apis.type.shared.v1.Constraints constraints = 3;
 
 }
 
