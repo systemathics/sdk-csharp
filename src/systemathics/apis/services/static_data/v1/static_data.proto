@@ -169,6 +169,27 @@ message StaticDataRequest
 
     // [Optional] Strike for options
     google.protobuf.DoubleValue strike = 40;
+
+    // [Optional] Cds Company Name
+    google.protobuf.StringValue cds_company_name = 41;
+
+    // [Optional] Cds Tenor
+    google.protobuf.DoubleValue cds_tenor = 42;
+
+    // [Optional] Cds Index Id
+    google.protobuf.StringValue cds_index_id = 43;
+
+    // [Optional] Cds Bloomberg Id
+    google.protobuf.StringValue cds_bloomberg_id = 44;
+
+    // [Optional] Cds Rolling Series
+    google.protobuf.Int32Value cds_rolling_series = 45;
+
+    // [Optional] Cds Version
+    google.protobuf.Int32Value cds_version = 46;
+
+    // [Optional] Cds Reference Entity Data (RED) Pair Code
+    google.protobuf.StringValue cds_red_code = 47;
 }
 
 
@@ -224,6 +245,12 @@ message StaticDataResponse
 
     // The reference data for CDSs: the credit default swaps array
     CdsResponse cds  = 9;
+
+    // The reference data for CDS Index: the credit default swaps index array
+    CdsIndexResponse cds_index  = 10;
+
+    // The reference data for CDS Index Tranche: the credit default swaps index tranche array
+    CdsIndexTrancheResponse cds_index_tranche  = 11;
 }
 
 // Contain data about bonds
@@ -243,6 +270,27 @@ message CdsResponse
     repeated CdsEntry assets  = 1;
 
     // The total count of CDS entry available
+    int64 total_count = 2;
+}
+
+
+// Contain data about CDS Index
+message CdsIndexResponse
+{
+    // The reference data for CDS Index: the CDS Index array
+    repeated CdsIndexEntry assets  = 1;
+
+    // The total count of CDS index entry available
+    int64 total_count = 2;
+}
+
+// Contain data about CDS Index Tranche
+message CdsIndexTrancheResponse
+{
+    // The reference data for CDS index tranche: the CDS index tranche array
+    repeated CdsIndexTrancheEntry assets  = 1;
+
+    // The total count of CDS Idnex tranche entry available
     int64 total_count = 2;
 }
 
@@ -966,6 +1014,75 @@ message BondEntry
     google.protobuf.StringValue discovery_source_ticker = 53;
 
 }
+
+// Contains the reference data for Credit default swap Index (CDS Index).
+message CdsIndexEntry
+{
+    // Identifiers: The instrument identifier: a bloomberg ticker and an asset type 
+    systemathics.apis.type.shared.v1.Identifier identifier =  1;
+    // General information: Name of the company or brief description of the instrument. Bloomberg field : NAME
+    string name =  2;
+    // General information: Indicates if the financial instrument is currently active. Bloomberg field : EXCH_MARKET_STATUS
+    bool active =  3;    
+    // General information: Currency in which the instrument was issued. (ISO 4217). Bloomberg field : CRNCY
+    string currency =  4;
+    // General information: A brief description of the instrument. Bloomberg field : SECURITY_DES
+    string description = 5;
+    // Cds compagny name. Bloomberg field : CDS_COMPANY_NAME
+    string cds_company_name =  6;
+    // Day Count. Bloomberg field : DAY_CNT_DES
+    DayCount day_count = 7;
+    // Tenor. Bloomberg field : TENOR
+    double tenor =  8;
+    // Maturity. Bloomberg field : MATURITY
+    google.type.Date maturity = 9;
+    // Reference Entity sector. Bloomberg field : REFERENCE_ENTITY_SECTOR
+    string reference_entity_sector = 10;
+    // Feid Eid 4. Bloomberg field : FEED_EID4
+    string feed_eid_4 = 11;
+    // Cds Index Id. Bloomberg field : CDS_INDEX_ID
+    string cds_index_id = 12;
+    // Rolling Series. Bloomberg field : ROLLING_SERIES
+    int32 rolling_series = 13;
+    // Cds Version. Bloomberg field : VERSION
+    int32 version = 14;
+    // Cds First accrual date. Bloomberg field : CDS_FIRST_ACCRUAL_START_DATE
+    google.type.Date first_accrual_date = 15;
+    // Cds reference entity data (RED) pair code. Bloomberg field : CDS_RED_PAIR_CODE
+    string cds_red_pair_code = 16;
+}
+
+// Contains the reference data for Credit default swap Index (CDS Index).
+message CdsIndexTrancheEntry
+{
+    // Identifiers: The instrument identifier: a bloomberg ticker and an asset type 
+    systemathics.apis.type.shared.v1.Identifier identifier =  1;
+    // General information: Name of the company or brief description of the instrument. Bloomberg field : NAME
+    string name =  2;
+    // General information: Currency in which the instrument was issued. (ISO 4217). Bloomberg field : CRNCY
+    string currency =  3;
+    // General information: A brief description of the instrument. Bloomberg field : SECURITY_DES
+    string description = 4;
+    // Cds compagny name. Bloomberg field : CDS_COMPANY_NAME
+    string cds_company_name =  5;
+    // Day Count. Bloomberg field : DAY_CNT_DES
+    DayCount day_count = 6;
+    // Tenor. Bloomberg field : TENOR
+    double tenor =  7;
+    // Maturity. Bloomberg field : MATURITY
+    google.type.Date maturity = 8;
+    // Security Type. Bloomberg field : SECURITY_TYP2
+    string security_type = 9;
+    // Feid Eid 4. Bloomberg field : FEED_EID4
+    string feed_eid_4 = 10;
+    // Cds Index Id. Bloomberg field : CDS_INDEX_ID
+    string cds_index_id = 11;
+    // Tranche attach point. Bloomberg field : SW_ATTACH_POINT
+    double attach_point = 12;
+    // Tranche detache point. Bloomberg field : SW_DETACH_POINT
+    double detach_point = 13;
+}
+
     
 // Contains the reference data for Credit default swap (CDS).
 message CdsEntry
