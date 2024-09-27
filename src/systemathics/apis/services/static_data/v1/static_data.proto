@@ -170,26 +170,23 @@ message StaticDataRequest
     // [Optional] Strike for options
     google.protobuf.DoubleValue strike = 40;
 
-    // [Optional] Cds Company Name
+    // [Optional] Cds Index or Cds Index Tranche Company Name
     google.protobuf.StringValue cds_company_name = 41;
 
-    // [Optional] Cds Tenor
-    google.protobuf.DoubleValue cds_tenor = 42;
+    // [Optional] Cds Index or Cds Index Tranche Tenor
+    google.protobuf.DoubleValue tenor = 42;
 
-    // [Optional] Cds Index Id
+    // [Optional] Cds Index Id for Cds Index Tranche
     google.protobuf.StringValue cds_index_id = 43;
 
-    // [Optional] Cds Bloomberg Id
-    google.protobuf.StringValue cds_bloomberg_id = 44;
+    // [Optional] Cds Index Rolling Series
+    google.protobuf.Int32Value rolling_series = 44;
 
-    // [Optional] Cds Rolling Series
-    google.protobuf.Int32Value cds_rolling_series = 45;
-
-    // [Optional] Cds Version
-    google.protobuf.Int32Value cds_version = 46;
+    // [Optional] Cds Index Version
+    google.protobuf.Int32Value version = 45;
 
     // [Optional] Cds Reference Entity Data (RED) Pair Code
-    google.protobuf.StringValue cds_red_code = 47;
+    google.protobuf.StringValue cds_red_pair_code = 46;
 }
 
 
@@ -1040,16 +1037,14 @@ message CdsIndexEntry
     string reference_entity_sector = 10;
     // Feid Eid 4. Bloomberg field : FEED_EID4
     string feed_eid_4 = 11;
-    // Cds Index Id. Bloomberg field : CDS_INDEX_ID
-    string cds_index_id = 12;
     // Rolling Series. Bloomberg field : ROLLING_SERIES
-    int32 rolling_series = 13;
+    int32 rolling_series = 12;
     // Cds Version. Bloomberg field : VERSION
-    int32 version = 14;
+    int32 version = 13;
     // Cds First accrual date. Bloomberg field : CDS_FIRST_ACCRUAL_START_DATE
-    google.type.Date first_accrual_date = 15;
+    google.type.Date first_accrual_date = 14;
     // Cds reference entity data (RED) pair code. Bloomberg field : CDS_RED_PAIR_CODE
-    string cds_red_pair_code = 16;
+    string cds_red_pair_code = 15;
 }
 
 // Contains the reference data for Credit default swap Index (CDS Index).
