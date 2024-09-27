@@ -135,13 +135,13 @@ message StaticDataRequest
     google.protobuf.StringValue classification = 27;
 
     // [Optional] Maturity for bond, future.
-    StaticDataDateRange maturity = 28;
+    StaticDataDate maturity = 28;
 
     // [Optional] Capitalization for equity, etf and index
-    StaticDataDoubleRange capitalization = 29;
+    StaticDataDouble capitalization = 29;
 
     // [Optional] Expiry for option
-    StaticDataDateRange expiry = 30;
+    StaticDataDate expiry = 30;
         
     // [Optional] Option type for option (Call/Put)
     systemathics.apis.type.shared.v1.OptionType option_type = 31;
@@ -162,28 +162,28 @@ message StaticDataRequest
     google.protobuf.StringValue country = 37;
 
     // [Optional] Month for futures
-    google.protobuf.Int32Value month = 38;
+    StaticDataInt month = 38;
 
     // [Optional] Year for futures
-    google.protobuf.Int32Value year = 39;
+    StaticDataInt year = 39;
 
     // [Optional] Strike for options
-    google.protobuf.DoubleValue strike = 40;
+    StaticDataDouble strike = 40;
 
     // [Optional] Cds Index or Cds Index Tranche Company Name
     google.protobuf.StringValue cds_company_name = 41;
 
     // [Optional] Cds Index or Cds Index Tranche Tenor
-    google.protobuf.DoubleValue tenor = 42;
+    StaticDataDouble tenor = 42;
 
     // [Optional] Cds Index Id for Cds Index Tranche
     google.protobuf.StringValue cds_index_id = 43;
 
     // [Optional] Cds Index Rolling Series
-    google.protobuf.Int32Value rolling_series = 44;
+    StaticDataInt rolling_series = 44;
 
     // [Optional] Cds Index Version
-    google.protobuf.Int32Value version = 45;
+    StaticDataInt version = 45;
 
     // [Optional] Cds Reference Entity Data (RED) Pair Code
     google.protobuf.StringValue cds_red_pair_code = 46;
@@ -198,6 +198,15 @@ message StaticDataByIdentifiersRequest
 }
 
 
+message StaticDataDate
+{
+    oneof oneof
+    {
+        google.type.Date exact = 1;
+        StaticDataDateRange range = 2;
+    }
+}
+
 // Used to specify a date range search
 message StaticDataDateRange
 {
@@ -207,6 +216,17 @@ message StaticDataDateRange
     google.type.Date greater_or_equal_than = 2;
 }
 
+
+// Used to specify either a specific date od a date range
+message StaticDataDouble
+{
+    oneof oneof
+    {
+        double exact = 1;
+        StaticDataDoubleRange range = 2;
+    }
+}
+
 // Used to specify either a specific date od a date range
 message StaticDataDoubleRange
 {
@@ -214,6 +234,24 @@ message StaticDataDoubleRange
     google.protobuf.DoubleValue less_than = 1;
     // The lower bound value (included)
     google.protobuf.DoubleValue greater_or_equal_than = 2;
+}
+
+message StaticDataInt
+{
+    oneof oneof
+    {
+        int64 exact = 1;
+        StaticDataIntRange range = 2;
+    }
+}
+
+
+message StaticDataIntRange
+{
+    // The upper bound value (excluded)
+    google.protobuf.Int64Value less_than = 1;
+    // The lower bound value (included)
+    google.protobuf.Int64Value greater_or_equal_than = 2;
 }
 
 // Represents a reference data response grouped by asset type.
