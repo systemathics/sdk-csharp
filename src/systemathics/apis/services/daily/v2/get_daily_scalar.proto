@@ -86,9 +86,9 @@ message DailyScalarRequest
 	// [Mandatory] Fields/measures requested for daily data
 	repeated string fields = 2;
 
-	// [Optional] The date interval used to define the look-back period.
+	// [Optional] The date intervals array used to define the look-back period.
 	// If empty, then all the available data is retrieved.
-	systemathics.apis.type.shared.v1.DateInterval date_interval = 3;
+	repeated systemathics.apis.type.shared.v1.DateInterval date_intervals = 3;
 
 	// [Optional] The corporate action adjustment (dividends).
 	// By default the value is set to false : the split is applied in all cases
