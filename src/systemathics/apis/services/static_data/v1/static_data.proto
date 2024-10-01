@@ -187,6 +187,12 @@ message StaticDataRequest
 
     // [Optional] Cds Reference Entity Data (RED) Pair Code
     google.protobuf.StringValue cds_red_pair_code = 46;
+
+    // [Optional] Swaption type for option (Payer/Receiver)
+    SwaptionType swaption_type = 47;
+
+    // [Optional] Markit Id for option from OTCStreaming
+    google.protobuf.StringValue markit_id = 48;
 }
 
 
@@ -884,6 +890,14 @@ message OptionEntry
     systemathics.apis.type.shared.v1.OptionType option_type =  9;
     // Specific values for the option: The way the option can be exercised:  American, European or Bermudan.
     ExerciseType exercise_type =  10;
+    // Specific values for the swaption:  Indicates whether the swaption is payer or receiver.
+    SwaptionType swaption_type = 11;
+    // Mapping: The Markit id
+    string markit_id = 12;
+        // Mapping: The Financial Instrument Global Identifier (FIGI) is an established global standard of the Object Management Group (www.OMG.org, an international non-profit technology standards consortium founded in 1989) and an identification standard adopted by the American National Committee X9. The FIGI standard is issued and distributed by Bloomberg L.P. as a Registration Authority and Certified Provider under the auspice of OMG. The Financial Instrument Global Identifier (FIGI) is a twelve character, alphanumeric identifier. The first 2 characters are upper-case consonants (including "Y"), the third character is the upper-case "G", characters 4 -11 are any upper-case consonant (including "Y") or integer between 0 and 9, and the last character is a check-digit.
+    string figi = 13;    
+    // General information: The calendar code for that instrument.
+    string calendar = 14;
 }
     
 // Contains the reference data for bonds.
@@ -1246,6 +1260,7 @@ enum FrequencyType
     FREQUENCY_TYPE_BIANNUAL = 8;
 }
 
+
 // Contains the option exercise types : Determines when, how, and under what circumstances, the option holder may exercise it.
 enum ExerciseType
 {
@@ -1510,4 +1525,14 @@ enum DayCount
     // 30M/360 day count
     DAY_COUNT_30M_360 = 997;
    
+}
+
+
+enum SwaptionType
+{
+    SWAPTION_TYPE_UNSPECIFIED = 0;
+
+    SWAPTION_TYPE_PAYER = 1;
+
+    SWAPTION_TYPE_RECEIVER = 2;
 }

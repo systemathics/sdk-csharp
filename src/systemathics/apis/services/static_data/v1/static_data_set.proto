@@ -1,0 +1,71 @@
+// Copyright (c) 2021 Systemathics
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+// Reference data encompasses a wide range of specification data about:
+// <br>- financial instrument such as asset class, symbol, maturity, etc.
+// <br>- counterparties such as issuer information.
+// <br>- pricing such as open, high low and close prices.
+// <br>- The challenge with reference data is that it tends to be sourced from multiple sources: internal, counterparties and providers.
+// <br>- Reference data dedicated service is a result of various data sources and fields sourcing, validation, cross-checking and normalization.
+syntax = "proto3";
+
+
+import "google/api/annotations.proto";
+import "google/type/date.proto";
+import "google/protobuf/empty.proto";
+
+import "systemathics/apis/services/static_data/v1/static_data.proto";
+
+package systemathics.apis.services.static_data.v1;
+
+// Called to request reference data.
+service StaticDataSetService
+{
+    // Gets reference data
+  rpc CreateStaticDataOtcStreaming(StaticDataOtcStreamingRequest) returns (google.protobuf.Empty)
+  {
+          option (google.api.http) = {
+            get: "/v1/staticdata/otc_streaming"
+        };
+  }
+}
+
+message StaticDataOtcStreamingRequest
+{
+    string ticker = 1;
+
+    string provider = 2;
+
+    double strike = 3;
+
+    SwaptionType swaption_type = 4;
+
+    google.type.Date expiry = 5;
+
+    string underlying_ticker = 6;
+
+    string currency = 7;
+
+    string markit_id = 8;
+
+    string figi = 9;
+
+    string calendar = 10;
+}
