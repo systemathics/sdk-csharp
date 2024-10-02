@@ -35,10 +35,10 @@ import "systemathics/apis/services/static_data/v1/static_data.proto";
 
 package systemathics.apis.services.static_data.v1;
 
-// Called to request reference data.
-service StaticDataSetService
+// Called to set static data.
+service SetStaticDataService
 {
-    // Gets reference data
+  // Creates Option Static data from OTC Streaming
   rpc CreateStaticDataOtcStreaming(StaticDataOtcStreamingRequest) returns (google.protobuf.Empty)
   {
           option (google.api.http) = {
@@ -47,25 +47,37 @@ service StaticDataSetService
   }
 }
 
+
+// Static data cration message for OTC Streaming data
 message StaticDataOtcStreamingRequest
 {
+    // [Mandatory] Bloomberg Ticker 
     string ticker = 1;
 
+    // [Mandatory] Provider, ussully the bank contributing
     string provider = 2;
 
+    // [Mandatory] Strike of the option
     double strike = 3;
 
+    // [Mandatory] Swaption type (Payer or Receiver)
     SwaptionType swaption_type = 4;
 
+    // [Mandatory] Expiry date or maturity date of the option.
     google.type.Date expiry = 5;
 
+    // [Mandatory] Bloomberg Ticker of the underlying
     string underlying_ticker = 6;
 
+    // [Mandatory] Currency of the option
     string currency = 7;
 
+    // [Optional] Markit Id of the option
     string markit_id = 8;
 
+    // [Optional] FIGI code of the option
     string figi = 9;
 
+    // [Optional] Trading calendar the option
     string calendar = 10;
 }
