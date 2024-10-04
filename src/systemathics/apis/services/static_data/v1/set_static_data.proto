@@ -28,8 +28,10 @@ syntax = "proto3";
 
 
 import "google/api/annotations.proto";
+import "google/type/datetime.proto";
 import "google/type/date.proto";
 import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
 
 import "systemathics/apis/services/static_data/v1/static_data.proto";
 
@@ -39,22 +41,99 @@ package systemathics.apis.services.static_data.v1;
 service SetStaticDataService
 {
   // Creates Option Static data from OTC Streaming
-  rpc CreateStaticDataOtcStreaming(StaticDataOtcStreamingRequest) returns (google.protobuf.Empty)
+  rpc CreateStaticDataOtcStreaming(CreateStaticDataOtcStreamingRequest) returns (StaticDataOtcStreamingResponse)
+  {
+          option (google.api.http) = {
+            post: "/v1/staticdata/otc_streaming"
+        };
+  }
+
+
+  // Get Option Static data from OTC Streaming by Id
+  rpc GetStaticDataOtcStreaming(SingleStaticDataOtcStreamingRequest) returns (StaticDataOtcStreamingResponse)
+  {
+          option (google.api.http) = {
+            post: "/v1/staticdata/otc_streaming/{id}"
+        };
+  }
+
+  // Get all Option Static data from OTC Streaming
+  rpc GetAllStaticDataOtcStreaming(google.protobuf.Empty) returns (stream StaticDataOtcStreamingResponse)
   {
           option (google.api.http) = {
             get: "/v1/staticdata/otc_streaming"
         };
   }
+
+  // Update Option Static data from OTC Streaming by Id
+  rpc UpdateStaticDataOtcStreaming(UpdateStaticDataOtcStreamingRequest) returns (StaticDataOtcStreamingResponse)
+  {
+        option (google.api.http) = {
+            put: "/v1/staticdata/otc_streaming/{id}"
+        };
+  }
+
+  // Get Option Static data from OTC Streaming by Id
+  rpc DeleteStaticDataOtcStreaming(SingleStaticDataOtcStreamingRequest) returns (google.protobuf.Empty)
+  {
+          option (google.api.http) = {
+            delete: "/v1/staticdata/otc_streaming/{id}"
+        };
+  }
 }
 
 
-// Static data cration message for OTC Streaming data
-message StaticDataOtcStreamingRequest
+message SingleStaticDataOtcStreamingRequest
+{
+    // [Mandatory] The Id of the static data to delete.
+    int64 id = 1;
+}
+
+
+// Static data update message message for OTC Streaming data
+message UpdateStaticDataOtcStreamingRequest
+{
+    // [Mandatory] The Id of the static data to delete
+    int64 id = 1;
+
+    // [Optional] Bloomberg Ticker. Set it only if it needs to be modified.
+    string ticker = 2;
+
+    // [Optional] Provider, usually the bank contributing. Set it only if it needs to be modified.
+    string provider = 3;
+
+    // [Optional] Strike of the option. Set it only if it needs to be modified.
+    google.protobuf.DoubleValue strike = 4;
+
+    // [Optional] Swaption type (Payer or Receiver). Set it only if it needs to be modified.
+    SwaptionType swaption_type = 5;
+
+    // [Optional] Expiry date or maturity date of the option. Set it only if it needs to be modified.
+    google.type.Date expiry = 6;
+
+    // [Optional] Bloomberg Ticker of the underlying. Set it only if it needs to be modified.
+    string underlying_ticker = 7;
+
+    // [Optional] Currency of the option. Set it only if it needs to be modified.
+    string currency = 8;
+
+    // [Optional] Markit Id of the option. Set it only if it needs to be modified.
+    string markit_id = 9;
+
+    // [Optional] FIGI code of the option. Set it only if it needs to be modified.
+    string figi = 10;
+
+    // [Optional] Trading calendar the option. Set it only if it needs to be modified.
+    string calendar = 11;
+}
+
+// Static data creation message for OTC Streaming data
+message CreateStaticDataOtcStreamingRequest
 {
     // [Mandatory] Bloomberg Ticker 
     string ticker = 1;
 
-    // [Mandatory] Provider, ussully the bank contributing
+    // [Mandatory] Provider, usually the bank contributing
     string provider = 2;
 
     // [Mandatory] Strike of the option
@@ -80,4 +159,47 @@ message StaticDataOtcStreamingRequest
 
     // [Optional] Trading calendar the option
     string calendar = 10;
+}
+
+
+message StaticDataOtcStreamingResponse
+{
+    // The Id of the static data
+    int64 id = 1;
+
+    // Creation date
+    google.type.DateTime creation_date = 2;
+
+    // Update date
+    google.type.DateTime update_date = 3;
+
+    // Bloomberg Ticker 
+    string ticker = 4;
+
+    // The Provider, usually the bank contributing
+    string provider = 5;
+
+    // The Strike of the option
+    double strike = 6;
+
+    // The Swaption type (Payer or Receiver)
+    SwaptionType swaption_type = 7;
+
+    // The expiry date or maturity date of the option.
+    google.type.Date expiry = 8;
+
+    // The Bloomberg Ticker of the underlying
+    string underlying_ticker = 9;
+
+    // The Currency of the option
+    string currency = 10;
+
+    // The Markit Id of the option
+    string markit_id = 11;
+
+    // FIGI code of the option
+    string figi = 12;
+
+    // Trading calendar the option
+    string calendar = 13;
 }
