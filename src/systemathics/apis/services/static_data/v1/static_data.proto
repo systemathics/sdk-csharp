@@ -1097,6 +1097,8 @@ message CdsIndexEntry
     google.type.Date first_accrual_date = 14;
     // Cds reference entity data (RED) pair code. Bloomberg field : CDS_RED_PAIR_CODE
     string cds_red_pair_code = 15;
+    // Cds Index recovery. Bloomberg field: CDS_RR
+    double cds_recovery_rate = 16;
 }
 
 // Contains the reference data for Credit default swap Index (CDS Index).
