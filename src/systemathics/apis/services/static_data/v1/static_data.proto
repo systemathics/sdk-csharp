@@ -292,6 +292,43 @@ message StaticDataResponse
 
     // The reference data for CDS Index Tranche: the credit default swaps index tranche array
     CdsIndexTrancheResponse cds_index_tranche  = 11;
+
+    // The reference data for CDS Index Tranche: the credit default swaps index option array
+    CdsIndexOptionResponse cds_index_option = 12;
+
+}
+
+message CdsIndexOptionResponse 
+{
+    // The reference data for CDS Index options: the Cds Index Option array
+    repeated CdsIndexOptionEntry assets  = 1;
+
+    // The total count of bonds entry available
+    int64 total_count = 2;
+}
+
+message CdsIndexOptionEntry
+{
+    // Identifiers: The instrument identifier: a bloomberg ticker and an asset type 
+    systemathics.apis.type.shared.v1.Identifier identifier =  1;
+    // General information: Indicates if the financial instrument is currently active.
+    bool active =  2;
+    // General information: Currency in which the instrument was issued. (ISO 4217)
+    string currency =  3;
+    // General information: Specifies the underlying of th option
+    string underlying =  4;
+    // The strike of the option
+    double strike = 5;
+    // The exipry date of the option
+    google.type.Date expiry  = 6;
+    // The swaption type of the option
+    SwaptionType swaption_type = 7;
+    // The markit identifier
+    string markit_id = 8;
+    // The Financial Instrument Global Identifier (FIGI) is an established global standard of the Object Management Group (www.OMG.org, an international non-profit technology standards consortium founded in 1989) and an identification standard adopted by the American National Committee X9. The FIGI standard is issued and distributed by Bloomberg L.P. as a Registration Authority and Certified Provider under the auspice of OMG. The Financial Instrument Global Identifier (FIGI) is a twelve character, alphanumeric identifier. The first 2 characters are upper-case consonants (including "Y"), the third character is the upper-case "G", characters 4 -11 are any upper-case consonant (including "Y") or integer between 0 and 9, and the last character is a check-digit.
+    string figi = 9;
+    // the calendar Code
+    string calendar = 10;
 }
 
 // Contain data about bonds
@@ -890,14 +927,6 @@ message OptionEntry
     systemathics.apis.type.shared.v1.OptionType option_type =  9;
     // Specific values for the option: The way the option can be exercised:  American, European or Bermudan.
     ExerciseType exercise_type =  10;
-    // Specific values for the swaption:  Indicates whether the swaption is payer or receiver.
-    SwaptionType swaption_type = 11;
-    // Mapping: The Markit id
-    string markit_id = 12;
-    // Mapping: The Financial Instrument Global Identifier (FIGI) is an established global standard of the Object Management Group (www.OMG.org, an international non-profit technology standards consortium founded in 1989) and an identification standard adopted by the American National Committee X9. The FIGI standard is issued and distributed by Bloomberg L.P. as a Registration Authority and Certified Provider under the auspice of OMG. The Financial Instrument Global Identifier (FIGI) is a twelve character, alphanumeric identifier. The first 2 characters are upper-case consonants (including "Y"), the third character is the upper-case "G", characters 4 -11 are any upper-case consonant (including "Y") or integer between 0 and 9, and the last character is a check-digit.
-    string figi = 13;    
-    // General information: The calendar code for that instrument.
-    string calendar = 14;
 }
     
 // Contains the reference data for bonds.

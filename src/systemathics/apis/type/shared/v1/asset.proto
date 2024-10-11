@@ -63,4 +63,7 @@ enum AssetType
 	
 	// Cds index tranche
 	ASSET_TYPE_CDS_INDEX_TRANCHE = 12;
+
+	// Cds index option
+	ASSET_TYPE_CDS_INDEX_OPTION = 13;
 }
