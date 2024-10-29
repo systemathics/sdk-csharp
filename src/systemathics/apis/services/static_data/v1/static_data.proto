@@ -193,6 +193,9 @@ message StaticDataRequest
 
     // [Optional] Markit Id for option from OTCStreaming
     google.protobuf.StringValue markit_id = 48;
+
+    // [Optional] Otc Streaming Id for option from OTCStreaming
+    google.protobuf.StringValue otc_streaming_id = 49;
 }
 
 
@@ -329,6 +332,8 @@ message CdsIndexOptionEntry
     string figi = 9;
     // the calendar Code
     string calendar = 10;
+    // The Otc Streaming Id
+    string otc_streaming_id = 11;
 }
 
 // Contain data about bonds

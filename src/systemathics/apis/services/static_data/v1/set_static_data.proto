@@ -125,6 +125,9 @@ message UpdateStaticDataOtcStreamingRequest
 
     // [Optional] Trading calendar the option. Set it only if it needs to be modified.
     string calendar = 11;
+
+    // [Optional] The Otc Streaming Id. Set it only if it needs to be modified.
+    string otc_streaming_id = 12;
 }
 
 // Static data creation message for OTC Streaming data
@@ -159,6 +162,9 @@ message CreateStaticDataOtcStreamingRequest
 
     // [Optional] Trading calendar the option
     string calendar = 10;
+
+     // [Mandatory] The Otc Streaming Id
+    string otc_streaming_id = 11;
 }
 
 
@@ -202,4 +208,7 @@ message StaticDataOtcStreamingResponse
 
     // Trading calendar the option
     string calendar = 13;
+
+    // The Otc Streaming Id
+    string otc_streaming_id = 14;
 }
