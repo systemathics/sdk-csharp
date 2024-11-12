@@ -35,21 +35,53 @@ import "systemathics/apis/type/shared/v2/set_data_mode.proto";
 package systemathics.apis.services.tick.v2;
 
 // Called to set tick prices data and clear. 
-service SetTickScalarService
+service SetTickService
 {
   // Sets tick scalar timeseries.
-  rpc SetTickScalar(stream SetTickScalarRequest) returns (google.protobuf.Empty)
+  rpc WriteTickScalar(stream SetTickScalarRequest) returns (google.protobuf.Empty)
   {
 	  option (google.api.http) = {
-			post: "/v2/tick"
+			post: "/v2/tick_scalar"
+	  };
+  }
+
+    // Sets tick matrix row timeseries.
+  rpc WriteTickMatrixRow(stream SetTickMatrixRowRequest) returns (google.protobuf.Empty)
+  {
+	  option (google.api.http) = {
+			post: "/v2/tick_matrix_row"
+	  };
+  }
+
+  // Update tick scalar timeseries.
+  rpc UpdateTickScalar(stream SetTickScalarRequest) returns (google.protobuf.Empty)
+  {
+	  option (google.api.http) = {
+			put: "/v2/tick_scalar"
+	  };
+  }
+
+    // Update tick matrix rows timeseries.
+  rpc UpdateTickMatrixRow(stream SetTickMatrixRowRequest) returns (google.protobuf.Empty)
+  {
+	  option (google.api.http) = {
+			put: "/v2/tick_matrix_row"
 	  };
   }
 
   // Delete tick scalar timeseries.
-  rpc ClearTickScalar(ClearTickScalarRequest) returns (google.protobuf.Empty)
+  rpc DeleteTickScalar(DeleteTickScalarRequest) returns (google.protobuf.Empty)
   {
 	  option (google.api.http) = {
-			delete: "/v2/tick"
+			delete: "/v2/tick_scalar"
+	  };
+  }
+
+    // Delete tick scalar timeseries.
+  rpc DeleteTickMatrixRow(DeleteTickMatrixRowRequest) returns (google.protobuf.Empty)
+  {
+	  option (google.api.http) = {
+			delete: "/v2/tick_matrix_row"
 	  };
   }
 }
@@ -61,33 +93,61 @@ message SetTickScalarRequest
 	oneof payload 
 	{
 		// The tick info
-		SetTickScalarInfo info = 1;
+		SetTickInfo info = 1;
 		
 		// The mapping data
 		SetTickScalarData data = 2;
 	}
 }
-// The required input to request ClearTickScalar.
-message ClearTickScalarRequest 
+
+// The required input to request the SetTickScalar endpoint
+message SetTickMatrixRowRequest
+{
+	oneof payload 
+	{
+		// The tick info
+		SetTickInfo info = 1;
+		
+		// The mapping data
+		SetTickMatrixRowData data = 2;
+	}
+}
+
+// The required input to request DeleteTickScalar.
+message DeleteTickScalarRequest 
 {
 	// [Mandatory] The instrument identifiers: a bloomberg ticker and an asset type
 	systemathics.apis.type.shared.v1.Identifier identifier = 1;
 
 	// [Mandatory] The fields to be deleted.
 	repeated string fields = 2;
+
+	// [Mandatory] The dates to be deleted.
+	repeated google.type.DateTime dates = 3;
+}
+
+
+// The required input to request DeleteTickScalar.
+message DeleteTickMatrixRowRequest 
+{
+	// [Mandatory] The instrument identifiers: a bloomberg ticker and an asset type
+	systemathics.apis.type.shared.v1.Identifier identifier = 1;
+
+	// [Mandatory] The fields to be deleted.
+	repeated string fields = 2;
+
+	// [Mandatory] The keys to be deleted.
+	repeated MatrixRowKey keys = 3;
 }
 
 // The required input to request the GetTickByDate endpoint
-message SetTickScalarInfo
+message SetTickInfo
 {
 	// [Mandatory] The instrument identifiers: a bloomberg ticker and an asset type
 	systemathics.apis.type.shared.v1.Identifier identifier = 1;
 
 	// [Mandatory] The data names.
 	repeated string fields = 2;
-
-	// Set the writing mode (write/overwrite or append)
-	systemathics.apis.type.shared.v2.SetDataMode mode = 3;
 }
 
 // Represent the data to be added to the data scalar timeseries.
@@ -96,7 +156,30 @@ message SetTickScalarData
 	// [Mandatory] The date used to request data.
 	google.type.DateTime datetime = 1;
 
-	// [Mandatory] The date used to request data.
+	// [Mandatory] The data.
 	repeated double data = 2;
+}
+
+// Represent the key for a matrix row.
+message MatrixRowKey {
+	// [Mandatory] The date used to request data.
+	google.type.DateTime datetime = 1;
+
+	// [Mandatory] The matrix key.
+	string key = 2;
+}
+ 
+
+// Represent the data to be added to the data scalar timeseries.
+message SetTickMatrixRowData
+{
+	// [Mandatory] The date used to request data.
+	google.type.DateTime datetime = 1;
+
+	// [Mandatory] The matrix key.
+	string key = 2;
+
+	// [Mandatory] The data.
+	repeated double data = 3;
 }
  

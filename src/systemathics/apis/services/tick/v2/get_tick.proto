@@ -25,7 +25,6 @@ syntax = "proto3";
 import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 import "google/type/datetime.proto";
-import "google/protobuf/struct.proto";
 
 import "systemathics/apis/type/shared/v1/asset.proto";
 import "systemathics/apis/type/shared/v1/identifier.proto";
@@ -34,44 +33,45 @@ import "systemathics/apis/type/shared/v1/constraints.proto";
 package systemathics.apis.services.tick.v2;
 
 // Called to request tick prices data. 
-service TickScalarService
+service TickService
 {
 
   // Gets tick historical data timeseries by identifier using streaming
-  rpc TickScalarStream(TickScalarRequest) returns (stream TickScalarStreamResponse)
+  rpc TickScalarStream(TickRequest) returns (stream TickScalarStreamResponse)
   {
 	  option (google.api.http) = {
 			get: "/v2/tick_scalar/"
 	  };
   }
 
-  // Gets tick historical data by date
-  //rpc TickByDate(TickDateRequest) returns (stream GetTickByDateResponse)
-  //{
-	//  option (google.api.http) = {
-	//		get: "/v2/tick_date/"
-	//  };
-  //}
 
-  // Gets all available fields by asset and provider.
-  rpc TickScalarFields(google.protobuf.Empty) returns (TickScalarFieldsResponse)
+  // Gets tick historical data timeseries by identifier using streaming
+  rpc TickMatrixRowStream(TickRequest) returns (stream TickMatrixRowStreamResponse)
   {
 	  option (google.api.http) = {
-			get: "/v2/tick_scalar_fields/"
+			get: "/v2/tick_matrix_row/"
+	  };
+  }
+
+  // Gets all available fields by asset and provider.
+  rpc TickFields(google.protobuf.Empty) returns (TickFieldsResponse)
+  {
+	  option (google.api.http) = {
+			get: "/v2/tick_fields/"
 	  };
   }
 
   // Gets all available provider by asset
-  rpc TickScalarAssetProvider(google.protobuf.Empty) returns (TickScalarAssetProviderResponse)
+  rpc TickAssetProviders(google.protobuf.Empty) returns (TickAssetProvidersResponse)
   {
 	  option (google.api.http) = {
-			get: "/v2/tick_scalar_provider/"
+			get: "/v2/tick_provider/"
 	  };
   }
 }
 
 // The required input to request the GetTickByIdentifier endpoint
-message TickScalarRequest
+message TickRequest
 {
 	// [Mandatory] The instrument identifier: a bloomberg ticker and an asset type 
 	systemathics.apis.type.shared.v1.Identifier identifier = 1;
@@ -79,11 +79,9 @@ message TickScalarRequest
 	// [Mandatory] Fields/measures requested for tick data
 	repeated string fields = 2;
 
-
 	// [Optional] The constraints used to define the look-back period.
 	// If empty, then all the available data is retrieved.
 	systemathics.apis.type.shared.v1.Constraints constraints = 3;
-
 }
 
 // The required input to request the GetTickByDate endpoint
@@ -138,15 +136,29 @@ message TickScalarStreamResponse
 	oneof payload 
 	{
 		// The tick fields. Issued in the first frame.
-		TickScalarStreamFields info = 1;
+		TickStreamFields info = 1;
 		
 		// The mapping data. Issued in the following frames.
 		TickScalarStreamItem data = 2;
 	}
 }
 
+
+// Represents the tick scalar stream response.
+message TickMatrixRowStreamResponse
+{
+	oneof payload 
+	{
+		// The tick fields. Issued in the first frame.
+		TickStreamFields info = 1;
+		
+		// The mapping data. Issued in the following frames.
+		TickMatrixRowStreamItem data = 2;
+	}
+}
+
 // Represents all fields available in a tick scalar stream response.
-message TickScalarStreamFields
+message TickStreamFields
 {
 	// The collection containing fields/measures values.
 	repeated string fields = 1;
@@ -163,32 +175,49 @@ message TickScalarStreamItem
 	repeated double data = 2;
 }
 
-// Represents a response containing an array of items.
-message TickScalarAssetProviderResponse
+// Represents the data part of a tick scalar stream response.
+message TickMatrixRowStreamItem
 {
-	// The collection containing items values.
-	repeated TickScalarAssetProviderItemResponse data = 1;
+	// The data date.
+    google.type.DateTime datetime = 1;
+
+	// The matrix row key
+	string key = 2;
+
+	// The data. Lenght of the array is the same as the fields.
+	repeated double data = 3;
+}
+
+
+// Represents a response containing an array of assets with all their providers
+message TickAssetProvidersResponse
+{
+	// The asset type 
+	repeated TickAssetProviderItemReponse assets = 1;
 }
 
 // Represents a links between an asset and a provider.
-message TickScalarAssetProviderItemResponse
+message TickAssetProviderItemReponse
 {
 	// The asset type 
 	systemathics.apis.type.shared.v1.AssetType asset_type = 1;
 
-	// The provider
-	string provider = 2;
+	// The providers
+	repeated string providers = 2;
 }
 
-message TickScalarFieldsResponse
+
+message TickFieldsResponse
 {
-	// The collection containing items values.
-	// The collection containing items values.
-	repeated TickScalarFieldsItemResponse data = 1;
+	// The collection containing items values for scalars.
+	repeated TickFieldsItemResponse scalars = 1;
+
+	// The collection containing items values for matrix rows.
+	repeated TickFieldsItemResponse matrix_rows = 2;
 }
 
 // Represents a links between an asset and a provider.
-message TickScalarFieldsItemResponse
+message TickFieldsItemResponse
 {
 	// The asset type 
 	systemathics.apis.type.shared.v1.AssetType asset_type = 1;
