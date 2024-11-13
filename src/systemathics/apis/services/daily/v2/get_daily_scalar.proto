@@ -25,7 +25,6 @@ syntax = "proto3";
 import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 import "google/type/date.proto";
-import "google/protobuf/struct.proto";
 
 import "systemathics/apis/type/shared/v1/asset.proto";
 import "systemathics/apis/type/shared/v1/identifier.proto";

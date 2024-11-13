@@ -46,10 +46,10 @@ service TickService
 
 
   // Gets tick historical data timeseries by identifier using streaming
-  rpc TickMatrixRowStream(TickRequest) returns (stream TickMatrixRowStreamResponse)
+  rpc TickVectorStream(TickRequest) returns (stream TickVectorStreamResponse)
   {
 	  option (google.api.http) = {
-			get: "/v2/tick_matrix_row/"
+			get: "/v2/tick_vector/"
 	  };
   }
 
@@ -145,7 +145,7 @@ message TickScalarStreamResponse
 
 
 // Represents the tick scalar stream response.
-message TickMatrixRowStreamResponse
+message TickVectorStreamResponse
 {
 	oneof payload 
 	{
@@ -153,7 +153,7 @@ message TickMatrixRowStreamResponse
 		TickStreamFields info = 1;
 		
 		// The mapping data. Issued in the following frames.
-		TickMatrixRowStreamItem data = 2;
+		TickVectorStreamItem data = 2;
 	}
 }
 
@@ -176,12 +176,12 @@ message TickScalarStreamItem
 }
 
 // Represents the data part of a tick scalar stream response.
-message TickMatrixRowStreamItem
+message TickVectorStreamItem
 {
 	// The data date.
     google.type.DateTime datetime = 1;
 
-	// The matrix row key
+	// The vector key
 	string key = 2;
 
 	// The data. Lenght of the array is the same as the fields.
@@ -212,8 +212,8 @@ message TickFieldsResponse
 	// The collection containing items values for scalars.
 	repeated TickFieldsItemResponse scalars = 1;
 
-	// The collection containing items values for matrix rows.
-	repeated TickFieldsItemResponse matrix_rows = 2;
+	// The collection containing items values for vectors.
+	repeated TickFieldsItemResponse vectors = 2;
 }
 
 // Represents a links between an asset and a provider.

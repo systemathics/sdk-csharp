@@ -45,11 +45,11 @@ service SetTickService
 	  };
   }
 
-    // Sets tick matrix row timeseries.
-  rpc WriteTickMatrixRow(stream SetTickMatrixRowRequest) returns (google.protobuf.Empty)
+    // Sets tick vector timeseries.
+  rpc WriteTickVector(stream SetTickVectorRequest) returns (google.protobuf.Empty)
   {
 	  option (google.api.http) = {
-			post: "/v2/tick_matrix_row"
+			post: "/v2/tick_vector"
 	  };
   }
 
@@ -61,11 +61,11 @@ service SetTickService
 	  };
   }
 
-    // Update tick matrix rows timeseries.
-  rpc UpdateTickMatrixRow(stream SetTickMatrixRowRequest) returns (google.protobuf.Empty)
+    // Update tick vectors timeseries.
+  rpc UpdateTickVector(stream SetTickVectorRequest) returns (google.protobuf.Empty)
   {
 	  option (google.api.http) = {
-			put: "/v2/tick_matrix_row"
+			put: "/v2/tick_vector"
 	  };
   }
 
@@ -78,10 +78,10 @@ service SetTickService
   }
 
     // Delete tick scalar timeseries.
-  rpc DeleteTickMatrixRow(DeleteTickMatrixRowRequest) returns (google.protobuf.Empty)
+  rpc DeleteTickVector(DeleteTickVectorRequest) returns (google.protobuf.Empty)
   {
 	  option (google.api.http) = {
-			delete: "/v2/tick_matrix_row"
+			delete: "/v2/tick_vector"
 	  };
   }
 }
@@ -101,7 +101,7 @@ message SetTickScalarRequest
 }
 
 // The required input to request the SetTickScalar endpoint
-message SetTickMatrixRowRequest
+message SetTickVectorRequest
 {
 	oneof payload 
 	{
@@ -109,7 +109,7 @@ message SetTickMatrixRowRequest
 		SetTickInfo info = 1;
 		
 		// The mapping data
-		SetTickMatrixRowData data = 2;
+		SetTickVectorData data = 2;
 	}
 }
 
@@ -128,7 +128,7 @@ message DeleteTickScalarRequest
 
 
 // The required input to request DeleteTickScalar.
-message DeleteTickMatrixRowRequest 
+message DeleteTickVectorRequest 
 {
 	// [Mandatory] The instrument identifiers: a bloomberg ticker and an asset type
 	systemathics.apis.type.shared.v1.Identifier identifier = 1;
@@ -137,7 +137,7 @@ message DeleteTickMatrixRowRequest
 	repeated string fields = 2;
 
 	// [Mandatory] The keys to be deleted.
-	repeated MatrixRowKey keys = 3;
+	repeated VectorKey keys = 3;
 }
 
 // The required input to request the GetTickByDate endpoint
@@ -160,23 +160,23 @@ message SetTickScalarData
 	repeated double data = 2;
 }
 
-// Represent the key for a matrix row.
-message MatrixRowKey {
+// Represent the key for a vector.
+message VectorKey {
 	// [Mandatory] The date used to request data.
 	google.type.DateTime datetime = 1;
 
-	// [Mandatory] The matrix key.
+	// [Mandatory] The vector key.
 	string key = 2;
 }
  
 
 // Represent the data to be added to the data scalar timeseries.
-message SetTickMatrixRowData
+message SetTickVectorData
 {
 	// [Mandatory] The date used to request data.
 	google.type.DateTime datetime = 1;
 
-	// [Mandatory] The matrix key.
+	// [Mandatory] The vector key.
 	string key = 2;
 
 	// [Mandatory] The data.
