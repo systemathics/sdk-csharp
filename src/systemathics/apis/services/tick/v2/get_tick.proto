@@ -84,51 +84,6 @@ message TickRequest
 	systemathics.apis.type.shared.v1.Constraints constraints = 3;
 }
 
-// The required input to request the GetTickByDate endpoint
-//message GetTickByDateRequest
-//{
-//	// [Mandatory] The instrument identifiers: a bloomberg ticker and an asset type
-//	repeated systemathics.apis.type.shared.v1.Identifier identifiers = 1;
-//
-//	// [Mandatory] The date used to request data.
-//	google.type.Date date = 2;
-//
-//	// [Optional] The corporate action adjustment (dividends).
-//	// By default the value is set to false : the split is applied in all cases
-//	optional bool adjustment = 3;
-//}
-
-
-
-//// Represents a tick response.
-//message GetTickByDateResponse
-//{
-//	oneof payload 
-//	{
-//		// The fields with their order that can be found in `data` values
-//		GetTickByDateFields fields = 1;
-//		
-//		// The mapping data
-//		GetTickByDateData data = 2;
-//	}
-//}
-//
-//message GetTickByDateFields
-//{
-//	// The fields with their order that can be found in `data` values
-//	repeated string fields = 1;
-//}
-//
-//message GetTickByDateData
-//{
-//	// The instrument identifier: a bloomberg ticker and an asset type 
-//	systemathics.apis.type.shared.v1.Identifier identifier = 1;
-//
-//	// The tick data. The mapping is provided by the first element of the stream.
-//	repeated double data = 2;
-//}
-
-
 
 // Represents the tick scalar stream response.
 message TickScalarStreamResponse

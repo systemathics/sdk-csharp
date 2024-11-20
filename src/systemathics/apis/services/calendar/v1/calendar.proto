@@ -25,6 +25,7 @@ import "google/api/annotations.proto";
 import "google/protobuf/wrappers.proto";
 import "google/type/date.proto";
 import "google/type/timeofday.proto";
+import "google/type/datetime.proto";
 
 package systemathics.apis.services.calendar.v1;
 
@@ -269,6 +270,8 @@ message HolidaysRequest
 {
 	// Center code
 	string center_code = 1;
+
+	google.type.DateTime as_of_date = 2;
 }
 
 // All the holiday type provided
