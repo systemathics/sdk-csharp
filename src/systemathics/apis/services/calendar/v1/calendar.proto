@@ -26,6 +26,7 @@ import "google/protobuf/wrappers.proto";
 import "google/type/date.proto";
 import "google/type/timeofday.proto";
 import "google/type/datetime.proto";
+import "google/protobuf/empty.proto";
 
 package systemathics.apis.services.calendar.v1;
 
@@ -33,7 +34,7 @@ package systemathics.apis.services.calendar.v1;
 service CalendarService
 {
   // Gets currencies with holidays information 
-  rpc HolidayCurrencies(EmptyRequest) returns (HolidayCurrenciesResponse)
+  rpc HolidayCurrencies(google.protobuf.Empty) returns (HolidayCurrenciesResponse)
   {
 	  	option (google.api.http) = {
 			get: "/v1/calendar/holidays/currencies"
@@ -48,7 +49,15 @@ service CalendarService
 		};
   }
 
-  // Gets currencies with holidays information 
+   // Gets holidays as of dates with code information 
+  rpc HolidaysAsOfDates(HolidaysAsOfDatesRequest) returns (HolidaysAsOfDatesResponse)
+  {
+	  	option (google.api.http) = {
+			get: "/v1/calendar/holidays_as_of_dates"
+		};
+  }
+
+  // Gets holidays  with code and as of date information 
   rpc Holidays(HolidaysRequest) returns (HolidaysResponse)
   {
 	  	option (google.api.http) = {
@@ -57,7 +66,7 @@ service CalendarService
   }
 
   // Gets mic code with trading hours information
-  rpc TradingHoursMic(EmptyRequest) returns (TradingHoursMicResponse)
+  rpc TradingHoursMic(google.protobuf.Empty) returns (TradingHoursMicResponse)
   {
 	  	option (google.api.http) = {
 			get: "/v1/calendar/trading_hours/mics"
@@ -74,7 +83,7 @@ service CalendarService
 
 
     // Gets mic code with trading hours information
-  rpc HolidayCodeToMics(EmptyRequest) returns (HolidayCodeToMicsResponse)
+  rpc HolidayCodeToMics(google.protobuf.Empty) returns (HolidayCodeToMicsResponse)
   {
 	  	option (google.api.http) = {
 			get: "/v1/calendar/holiday_code_2_mics"
@@ -82,7 +91,7 @@ service CalendarService
   }
 
     // Gets mic code with trading hours information
-  rpc MicToHolidayCodes(EmptyRequest) returns (MicToHolidayCodesResponse)
+  rpc MicToHolidayCodes(google.protobuf.Empty) returns (MicToHolidayCodesResponse)
   {
 	  	option (google.api.http) = {
 			get: "/v1/calendar/mic_2_holiday_codes"
@@ -251,17 +260,18 @@ message TradingHoursMicResponse
 	repeated string  mics = 1;
 }
 
-
-// Empty request .
-message EmptyRequest
-{
-}
-
 // The required input to request Holidays Center .
 message HolidayCenterRequest
 {
 	// Center code
 	string currency = 1;
+}
+
+// The required input to request Holidays.
+message HolidaysAsOfDatesRequest
+{
+	// Center code
+	string center_code = 1;
 }
 
 
@@ -271,6 +281,7 @@ message HolidaysRequest
 	// Center code
 	string center_code = 1;
 
+	// As Of Date
 	google.type.DateTime as_of_date = 2;
 }
 
@@ -348,6 +359,13 @@ message HolidayItem
 	
 	// Name of the closed day
 	string reason = 2;
+}
+
+// Represents Holidays as of dates for a given center
+message HolidaysAsOfDatesResponse
+{
+	// Center information about the given center
+	repeated google.type.DateTime  as_of_dates = 1;
 }
 
 // Represents Holidays for a given center
