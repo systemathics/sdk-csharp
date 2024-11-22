@@ -38,15 +38,30 @@ package systemathics.apis.services.tick.v2;
 service SetTickService
 {
   // Sets tick scalar timeseries.
-  rpc WriteTickScalar(stream SetTickScalarRequest) returns (google.protobuf.Empty)
+  rpc WriteTickScalar(SetTickScalarRequest) returns (google.protobuf.Empty)
+  {
+	  option (google.api.http) = {
+			post: "/v2/tick_scalar"
+	  };
+  }
+  
+  rpc WriteTickScalarStream(stream SetTickScalarStreamRequest) returns (google.protobuf.Empty)
   {
 	  option (google.api.http) = {
 			post: "/v2/tick_scalar"
 	  };
   }
 
-    // Sets tick vector timeseries.
-  rpc WriteTickVector(stream SetTickVectorRequest) returns (google.protobuf.Empty)
+  // Sets tick vector timeseries.
+  rpc WriteTickVector(SetTickVectorRequest) returns (google.protobuf.Empty)
+  {
+	  option (google.api.http) = {
+			post: "/v2/tick_vector"
+	  };
+  }
+
+  // Sets tick vector timeseries.
+  rpc WriteTickVectorStream(stream SetTickVectorStreamRequest) returns (google.protobuf.Empty)
   {
 	  option (google.api.http) = {
 			post: "/v2/tick_vector"
@@ -54,15 +69,32 @@ service SetTickService
   }
 
   // Update tick scalar timeseries.
-  rpc UpdateTickScalar(stream SetTickScalarRequest) returns (google.protobuf.Empty)
+  rpc UpdateTickScalar(SetTickScalarRequest) returns (google.protobuf.Empty)
   {
 	  option (google.api.http) = {
 			put: "/v2/tick_scalar"
 	  };
   }
 
+  // Update tick scalar timeseries.
+  rpc UpdateTickScalarStream(stream SetTickScalarStreamRequest) returns (google.protobuf.Empty)
+  {
+	  option (google.api.http) = {
+			put: "/v2/tick_scalar"
+	  };
+  }
+
+  
+  // Update tick vectors timeseries.
+  rpc UpdateTickVector(SetTickVectorRequest) returns (google.protobuf.Empty)
+  {
+	  option (google.api.http) = {
+			put: "/v2/tick_vector"
+	  };
+  }
+
     // Update tick vectors timeseries.
-  rpc UpdateTickVector(stream SetTickVectorRequest) returns (google.protobuf.Empty)
+  rpc UpdateTickVectorStream(stream SetTickVectorStreamRequest) returns (google.protobuf.Empty)
   {
 	  option (google.api.http) = {
 			put: "/v2/tick_vector"
@@ -85,10 +117,22 @@ service SetTickService
 	  };
   }
 }
+// The required input to request the SetTickScalar endpoint
+message SetTickScalarRequest
+{
+	// [Mandatory] The instrument identifiers: a bloomberg ticker and an asset type
+	systemathics.apis.type.shared.v1.Identifier identifier = 1;
+
+	// [Mandatory] The date used to request data.
+	google.type.DateTime datetime = 2;
+
+	// [Mandatory] The data with field as a key
+	map<string, double> data = 3;
+}
 
 
 // The required input to request the SetTickScalar endpoint
-message SetTickScalarRequest
+message SetTickScalarStreamRequest
 {
 	oneof payload 
 	{
@@ -102,6 +146,22 @@ message SetTickScalarRequest
 
 // The required input to request the SetTickScalar endpoint
 message SetTickVectorRequest
+{
+	// [Mandatory] The instrument identifiers: a bloomberg ticker and an asset type
+	systemathics.apis.type.shared.v1.Identifier identifier = 1;
+
+	// [Mandatory] The date used to request data.
+	google.type.DateTime datetime = 2;
+
+	// [Mandatory] The vector key.
+	string key = 3;
+
+	// [Mandatory] The data with field as a key
+	map<string, double> data = 4;
+}
+
+// The required input to request the SetTickScalar endpoint
+message SetTickVectorStreamRequest
 {
 	oneof payload 
 	{
