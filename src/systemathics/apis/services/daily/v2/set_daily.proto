@@ -1,0 +1,245 @@
+// Copyright (c) 2021 Systemathics
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+// Daily prices illustrates daily price movements for an instrument over a look back period.
+syntax = "proto3";
+
+
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "google/type/date.proto";
+import "google/protobuf/struct.proto";
+
+import "systemathics/apis/type/shared/v1/asset.proto";
+import "systemathics/apis/type/shared/v1/identifier.proto";
+import "systemathics/apis/type/shared/v1/constraints.proto";
+import "systemathics/apis/type/shared/v2/set_data_mode.proto";
+
+package systemathics.apis.services.daily.v2;
+
+// Called to set daily prices data and clear. 
+service SetDailyService
+{
+  // Sets daily scalar timeseries.
+  rpc WriteDailyScalar(SetDailyScalarRequest) returns (google.protobuf.Empty)
+  {
+	  option (google.api.http) = {
+			post: "/v2/daily_scalar"
+	  };
+  }
+  
+  rpc WriteDailyScalarStream(stream SetDailyScalarStreamRequest) returns (google.protobuf.Empty)
+  {
+	  option (google.api.http) = {
+			post: "/v2/daily_scalar"
+	  };
+  }
+
+  // Sets daily vector timeseries.
+  rpc WriteDailyVector(SetDailyVectorRequest) returns (google.protobuf.Empty)
+  {
+	  option (google.api.http) = {
+			post: "/v2/daily_vector"
+	  };
+  }
+
+  // Sets daily vector timeseries.
+  rpc WriteDailyVectorStream(stream SetDailyVectorStreamRequest) returns (google.protobuf.Empty)
+  {
+	  option (google.api.http) = {
+			post: "/v2/daily_vector"
+	  };
+  }
+
+  // Update daily scalar timeseries.
+  rpc UpdateDailyScalar(SetDailyScalarRequest) returns (google.protobuf.Empty)
+  {
+	  option (google.api.http) = {
+			put: "/v2/daily_scalar"
+	  };
+  }
+
+  // Update daily scalar timeseries.
+  rpc UpdateDailyScalarStream(stream SetDailyScalarStreamRequest) returns (google.protobuf.Empty)
+  {
+	  option (google.api.http) = {
+			put: "/v2/daily_scalar"
+	  };
+  }
+
+  
+  // Update daily vectors timeseries.
+  rpc UpdateDailyVector(SetDailyVectorRequest) returns (google.protobuf.Empty)
+  {
+	  option (google.api.http) = {
+			put: "/v2/daily_vector"
+	  };
+  }
+
+    // Update daily vectors timeseries.
+  rpc UpdateDailyVectorStream(stream SetDailyVectorStreamRequest) returns (google.protobuf.Empty)
+  {
+	  option (google.api.http) = {
+			put: "/v2/daily_vector"
+	  };
+  }
+
+  // Delete daily scalar timeseries.
+  rpc DeleteDailyScalar(DeleteDailyScalarRequest) returns (google.protobuf.Empty)
+  {
+	  option (google.api.http) = {
+			delete: "/v2/daily_scalar"
+	  };
+  }
+
+    // Delete daily scalar timeseries.
+  rpc DeleteDailyVector(DeleteDailyVectorRequest) returns (google.protobuf.Empty)
+  {
+	  option (google.api.http) = {
+			delete: "/v2/daily_vector"
+	  };
+  }
+}
+// The required input to request the SetDailyScalar endpoint
+message SetDailyScalarRequest
+{
+	// [Mandatory] The instrument identifiers: a bloomberg dailyer and an asset type
+	systemathics.apis.type.shared.v1.Identifier identifier = 1;
+
+	// [Mandatory] The date used to request data.
+	google.type.Date date = 2;
+
+	// [Mandatory] The data with field as a key
+	map<string, double> data = 3;
+}
+
+
+// The required input to request the SetDailyScalar endpoint
+message SetDailyScalarStreamRequest
+{
+	oneof payload 
+	{
+		// The daily info
+		SetDailyInfo info = 1;
+		
+		// The mapping data
+		SetDailyScalarData data = 2;
+	}
+}
+
+// The required input to request the SetDailyScalar endpoint
+message SetDailyVectorRequest
+{
+	// [Mandatory] The instrument identifiers: a bloomberg dailyer and an asset type
+	systemathics.apis.type.shared.v1.Identifier identifier = 1;
+
+	// [Mandatory] The date used to request data.
+	google.type.Date date = 2;
+
+	// [Mandatory] The vector key.
+	string key = 3;
+
+	// [Mandatory] The data with field as a key
+	map<string, double> data = 4;
+}
+
+// The required input to request the SetDailyScalar endpoint
+message SetDailyVectorStreamRequest
+{
+	oneof payload 
+	{
+		// The daily info
+		SetDailyInfo info = 1;
+		
+		// The mapping data
+		SetDailyVectorData data = 2;
+	}
+}
+
+// The required input to request DeleteDailyScalar.
+message DeleteDailyScalarRequest 
+{
+	// [Mandatory] The instrument identifiers: a bloomberg dailyer and an asset type
+	systemathics.apis.type.shared.v1.Identifier identifier = 1;
+
+	// [Mandatory] The fields to be deleted.
+	repeated string fields = 2;
+
+	// [Mandatory] The dates to be deleted.
+	repeated google.type.Date dates = 3;
+}
+
+
+// The required input to request DeleteDailyScalar.
+message DeleteDailyVectorRequest 
+{
+	// [Mandatory] The instrument identifiers: a bloomberg dailyer and an asset type
+	systemathics.apis.type.shared.v1.Identifier identifier = 1;
+
+	// [Mandatory] The fields to be deleted.
+	repeated string fields = 2;
+
+	// [Mandatory] The keys to be deleted.
+	repeated VectorKey keys = 3;
+}
+
+// The required input to request the GetDailyByDate endpoint
+message SetDailyInfo
+{
+	// [Mandatory] The instrument identifiers: a bloomberg dailyer and an asset type
+	systemathics.apis.type.shared.v1.Identifier identifier = 1;
+
+	// [Mandatory] The data names.
+	repeated string fields = 2;
+}
+
+// Represent the data to be added to the data scalar timeseries.
+message SetDailyScalarData
+{
+	// [Mandatory] The date used to request data.
+	google.type.Date date = 1;
+
+	// [Mandatory] The data.
+	repeated double data = 2;
+}
+
+// Represent the key for a vector.
+message VectorKey {
+	// [Mandatory] The date used to request data.
+	google.type.Date date = 1;
+
+	// [Mandatory] The vector key.
+	string key = 2;
+}
+ 
+
+// Represent the data to be added to the data scalar timeseries.
+message SetDailyVectorData
+{
+	// [Mandatory] The date used to request data.
+	google.type.Date date = 1;
+
+	// [Mandatory] The vector key.
+	string key = 2;
+
+	// [Mandatory] The data.
+	repeated double data = 3;
+}
+ 
