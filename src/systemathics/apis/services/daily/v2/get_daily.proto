@@ -53,6 +53,14 @@ service DailyService
 	  };
   }
 
+    // Gets daily historical data timeseries by identifier and key using streaming
+  rpc DailyVectorKeyStream(DailyVectorKeyRequest) returns (stream DailyVectorStreamResponse)
+  {
+	  option (google.api.http) = {
+			get: "/v2/daily_vector_key/"
+	  };
+  }
+
   // Gets all available fields by asset and provider.
   rpc DailyFields(google.protobuf.Empty) returns (DailyFieldsResponse)
   {
@@ -70,10 +78,10 @@ service DailyService
   }
 }
 
-// The required input to request the GetDailyByIdentifier endpoint
+// The required input to request the DailyVectorStream or DailyScalarStream endpoint
 message DailyRequest
 {
-	// [Mandatory] The instrument identifier: a bloomberg dailyer and an asset type 
+	// [Mandatory] The instrument identifier: a bloomberg ticker and an asset type 
 	systemathics.apis.type.shared.v1.Identifier identifier = 1;
 
 	// [Mandatory] Fields/measures requested for daily data
@@ -84,6 +92,23 @@ message DailyRequest
 	systemathics.apis.type.shared.v1.Constraints constraints = 3;
 }
 
+
+// The required input to request the DailyVectorKeyStream endpoint
+message DailyVectorKeyRequest
+{
+	// [Mandatory] The instrument identifier: a bloomberg ticker and an asset type 
+	systemathics.apis.type.shared.v1.Identifier identifier = 1;
+
+	// [Mandatory] Fields/measures requested for daily data
+	repeated string fields = 2;
+
+	// [Mandatory] Key requested for daily data
+	string key = 3;
+
+	// [Optional] The constraints used to define the look-back period.
+	// If empty, then all the available data is retrieved.
+	systemathics.apis.type.shared.v1.Constraints constraints = 4;
+}
 
 // Represents the daily scalar stream response.
 message DailyScalarStreamResponse
