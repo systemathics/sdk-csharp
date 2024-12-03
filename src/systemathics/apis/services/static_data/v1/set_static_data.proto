@@ -40,8 +40,8 @@ package systemathics.apis.services.static_data.v1;
 // Called to set static data.
 service SetStaticDataService
 {
-  // Creates Option Static data from OTC Streaming
-  rpc CreateStaticDataOtcStreaming(CreateStaticDataOtcStreamingRequest) returns (StaticDataOtcStreamingResponse)
+  // Create Cds Index Option Static data 
+  rpc CreateCdsIndexOption(CreateCdsIndexOptionRequest) returns (CdsIndexOptionIdResponse)
   {
           option (google.api.http) = {
             post: "/v1/staticdata/otc_streaming"
@@ -49,24 +49,24 @@ service SetStaticDataService
   }
 
 
-  // Get Option Static data from OTC Streaming by Id
-  rpc GetStaticDataOtcStreaming(SingleStaticDataOtcStreamingRequest) returns (StaticDataOtcStreamingResponse)
+  // Get Cds Index Option Static data by Id
+  rpc GetCdsIndexOption(CdsIndexOptionIdRequest) returns (CdsIndexOptionIdResponse)
   {
           option (google.api.http) = {
             post: "/v1/staticdata/otc_streaming/{id}"
         };
   }
 
-  // Get all Option Static data from OTC Streaming
-  rpc GetAllStaticDataOtcStreaming(google.protobuf.Empty) returns (stream StaticDataOtcStreamingResponse)
+  // Get all Cds Index Option Static data
+  rpc GetAllCdsIndexOption(google.protobuf.Empty) returns (stream CdsIndexOptionIdResponse)
   {
           option (google.api.http) = {
             get: "/v1/staticdata/otc_streaming"
         };
   }
 
-  // Update Option Static data from OTC Streaming by Id
-  rpc UpdateStaticDataOtcStreaming(UpdateStaticDataOtcStreamingRequest) returns (StaticDataOtcStreamingResponse)
+  // Update Cds Index Option Static data by Id
+  rpc UpdateCdsIndexOption(UpdateCdsIndexOptionRequest) returns (CdsIndexOptionIdResponse)
   {
         option (google.api.http) = {
             put: "/v1/staticdata/otc_streaming/{id}"
@@ -74,7 +74,7 @@ service SetStaticDataService
   }
 
   // Get Option Static data from OTC Streaming by Id
-  rpc DeleteStaticDataOtcStreaming(SingleStaticDataOtcStreamingRequest) returns (google.protobuf.Empty)
+  rpc DeleteCdsIndexOption(CdsIndexOptionIdRequest) returns (google.protobuf.Empty)
   {
           option (google.api.http) = {
             delete: "/v1/staticdata/otc_streaming/{id}"
@@ -83,7 +83,7 @@ service SetStaticDataService
 }
 
 
-message SingleStaticDataOtcStreamingRequest
+message CdsIndexOptionIdRequest
 {
     // [Mandatory] The Id of the static data to delete.
     int64 id = 1;
@@ -91,7 +91,7 @@ message SingleStaticDataOtcStreamingRequest
 
 
 // Static data update message message for OTC Streaming data
-message UpdateStaticDataOtcStreamingRequest
+message UpdateCdsIndexOptionRequest
 {
     // [Mandatory] The Id of the static data to delete
     int64 id = 1;
@@ -117,8 +117,8 @@ message UpdateStaticDataOtcStreamingRequest
     // [Optional] Currency of the option. Set it only if it needs to be modified.
     string currency = 8;
 
-    // [Optional] Markit Id of the option. Set it only if it needs to be modified.
-    string markit_id = 9;
+    // [Optional] Version of the CDS index
+    int32 version = 9;
 
     // [Optional] FIGI code of the option. Set it only if it needs to be modified.
     string figi = 10;
@@ -131,7 +131,7 @@ message UpdateStaticDataOtcStreamingRequest
 }
 
 // Static data creation message for OTC Streaming data
-message CreateStaticDataOtcStreamingRequest
+message CreateCdsIndexOptionRequest
 {
     // [Mandatory] Bloomberg Ticker 
     string ticker = 1;
@@ -154,8 +154,8 @@ message CreateStaticDataOtcStreamingRequest
     // [Mandatory] Currency of the option
     string currency = 7;
 
-    // [Optional] Markit Id of the option
-    string markit_id = 8;
+    // [Mandatory] Version of the CDS index
+    int32 version = 8;
 
     // [Optional] FIGI code of the option
     string figi = 9;
@@ -168,7 +168,7 @@ message CreateStaticDataOtcStreamingRequest
 }
 
 
-message StaticDataOtcStreamingResponse
+message CdsIndexOptionIdResponse
 {
     // The Id of the static data
     int64 id = 1;
@@ -200,8 +200,8 @@ message StaticDataOtcStreamingResponse
     // The Currency of the option
     string currency = 10;
 
-    // The Markit Id of the option
-    string markit_id = 11;
+    // Version of the CDS index
+    int32 version = 11;
 
     // FIGI code of the option
     string figi = 12;
