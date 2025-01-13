@@ -72,67 +72,67 @@ message StaticDataRequest
     google.protobuf.Int32Value count = 3;
 
     // [Optional] Bloomberg
-    google.protobuf.StringValue bloomberg = 4;
+    string bloomberg = 4;
 
     // [Optional] Cik
-    google.protobuf.StringValue cik = 5;
+    string cik = 5;
 
     // [Optional] Components
-    google.protobuf.StringValue components = 6;
+    string components = 6;
 
     // [Optional] Contract
-    google.protobuf.StringValue contract = 7;
+    string contract = 7;
 
     // [Optional] Currency
-    google.protobuf.StringValue currency = 8;
+    string currency = 8;
 
     // [Optional] Quote Currency
-    google.protobuf.StringValue quote_currency = 9;
+    string quote_currency = 9;
 
     // [Optional] Cusip
-    google.protobuf.StringValue cusip = 10;
+    string cusip = 10;
 
     // [Optional] Description
-    google.protobuf.StringValue description = 11;
+    string description = 11;
 
     // [Optional] Exchange
-    google.protobuf.StringValue exchange = 12;
+    string exchange = 12;
 
     // [Optional] Figi
-    google.protobuf.StringValue figi = 13;
+    string figi = 13;
 
     // [Optional] Figic
-    google.protobuf.StringValue figic = 14;
+    string figic = 14;
 
     // [Optional] Index
-    google.protobuf.StringValue index = 15;
+    string index = 15;
 
     // [Optional] Isin
-    google.protobuf.StringValue isin = 16;
+    string isin = 16;
 
     // [Optional] Name
-    google.protobuf.StringValue name = 19;
-
-    // [Optional] Operating
-    google.protobuf.StringValue operating = 20;
+    string name = 19;
 
     // [Optional] Primary
-    google.protobuf.StringValue primary = 21;
+    string primary = 21;
+
+    // [Optional] Operatin
+    string operating = 22;
 
     // [Optional] Sector
-    google.protobuf.StringValue sector = 23;
+    string sector = 23;
 
     // [Optional] Sedol
-    google.protobuf.StringValue sedol = 24;
+    string sedol = 24;
 
     // [Optional] Ticker
-    google.protobuf.StringValue ticker = 25;
+    string ticker = 25;
 
-    // [Optional] Underlying : Ticker-Exchange
-    google.protobuf.StringValue underlying = 26;
+    // [Optional] Underlying
+    string underlying = 26;
 
     // [Optional] Classification : CFI (Classification of Financial Instruments)
-    google.protobuf.StringValue classification = 27;
+    string classification = 27;
 
     // [Optional] Maturity for bond, future.
     StaticDataDate maturity = 28;
@@ -150,16 +150,16 @@ message StaticDataRequest
     ExerciseType exercise_type = 32;
 
     // [Optional] Seniority or Payment Rank for bond
-    google.protobuf.StringValue payment_rank = 34;
+    string payment_rank = 34;
 
     // [Optional] issuer
-    google.protobuf.StringValue issuer = 35;
+    string issuer = 35;
 
     // [Optional] bond coupon type
-    google.protobuf.StringValue coupon_type = 36;
+    string coupon_type = 36;
 
     // [Optional] country
-    google.protobuf.StringValue country = 37;
+    string country = 37;
 
     // [Optional] Month for futures
     StaticDataInt month = 38;
@@ -171,13 +171,13 @@ message StaticDataRequest
     StaticDataDouble strike = 40;
 
     // [Optional] Cds Index or Cds Index Tranche Company Name
-    google.protobuf.StringValue cds_company_name = 41;
+    string cds_company_name = 41;
 
     // [Optional] Cds Index or Cds Index Tranche Tenor
     StaticDataDouble tenor = 42;
 
     // [Optional] Cds Index Id for Cds Index Tranche
-    google.protobuf.StringValue cds_index_id = 43;
+    string cds_index_id = 43;
 
     // [Optional] Cds Index Rolling Series
     StaticDataInt rolling_series = 44;
@@ -186,16 +186,19 @@ message StaticDataRequest
     StaticDataInt version = 45;
 
     // [Optional] Cds Reference Entity Data (RED) Pair Code
-    google.protobuf.StringValue cds_red_pair_code = 46;
+    string cds_red_pair_code = 46;
 
     // [Optional] Swaption type for option (Payer/Receiver)
     SwaptionType swaption_type = 47;
 
     // [Optional] Markit Id for option from OTCStreaming
-    google.protobuf.StringValue markit_id = 48;
+    string markit_id = 48;
 
     // [Optional] Otc Streaming Id for option from OTCStreaming
-    google.protobuf.StringValue otc_streaming_id = 49;
+    string otc_streaming_id = 49;
+
+    // [Optional] Market Status
+    string market_status = 50;
 }
 
 
@@ -437,190 +440,404 @@ message OptionResponse
     int64 total_count = 2;
 }
 
-
-// Contains the reference data for equities.
-message EquityEntry
+message EquityEntry 
 {
-    // Identifiers: The instrument identifier: a bloomberg ticker and an asset type 
-    systemathics.apis.type.shared.v1.Identifier identifier =  1;
-    // General information: The instrument class.
-    string type =  2;
-    // General information: Indicates if the financial instrument is currently active.
-    bool active =  3;
-    // General information: The Market Identifier Code (MIC) of the assigned primary exchange on which this specific instrument is traded. (ISO 10383)
-    string primary =  4;
-    // General information: The entity operating an exchange/market/trade reporting facility in a specific market/country (ISO 10383).
-    string operating =  5;
-    // General information: Name of the company or brief description of the instrument. The name of an instrument may change in conjunction with corporate actions.
-    string name =  6;
-    // General information: Currency in which the instrument was issued. (ISO 4217)
-    string currency =  7;
-    // General information: Specifies the  country or territory code of where the instrument trades. (ISO 3166)
-    string country =  8;
-    // General information: The minimum amount by which the price of the instrument can change.  Data is represented as a table where there are different tick sizes for different price ranges.
-    repeated TickSize tick_size_rule =  9;
-    // General information: The different indices to which this instrument belongs The output is presented as a collection Ticker-Exchange identifying indices.
-    repeated string index =  10;
-    // General information: The Market Identifier Code (MIC) to use in order to retrieve the calendar for that instrument.
-    string calendar =  11;
-    // General information: A brief description of the instrument.
-    string description =  12;
-    
-    // Trading hours: Hours the exchange opens for continuous trading, reported in the time zone of the exchange.
-    google.protobuf.Duration open =  13;
-    // Trading hours: Hours the exchange closes for continuous  trading, reported in the time zone of the exchange.
-    google.protobuf.Duration close =  14;
-    // Trading hours: The time zone.
-    string time_zone =  15;
-    
-    // Specifications: Specifies the minimum number of shares that can be purchased, as regulated by an exchange.
-    int64 lot_size =  16;
-    // Specifications: The amount value of one point basis on a price.
-    double point_value =  17;
-    
-    // Reference data: Reference price for the instrument.
-    google.protobuf.DoubleValue price =  18;
-    // Reference data: Reference volume for the instrument. 
-    google.protobuf.Int64Value volume =  19;
-    // Reference data: Time of the reference price and volume.
-    google.type.Date time =  20;
-    
-    // Mapping: List of sources contributing to the instrument fields description.
-    int32 sources =  21;
-    // Mapping: The different codes used to identify the instrument represented in a single string. The output is presented as a collection of pairs of mapping name (ISIN, RIC, SEDOL, FIGI, etc) with its code.
-    map<string, string> mapping =  22;
-    // Mapping: The bloomberg ticker.
-    string bloomberg =  23;
-    // Mapping: The Reuters Instrument Code (RIC) is a ticker-like code used to identify financial instruments and indices. The RIC is made up primarily of the security's ticker symbol, optionally followed by a period and exchange code based on the name of the stock exchange using that ticker.
-    string reuters =  24;
-    // Mapping: The Morningstar ticker used to identify an instrument.
-    string morningstar =  25;
-    // Mapping: The Markit code, also known as RED Code.
-    string markit =  26;
-    // Mapping: The Financial Instrument Global Identifier (FIGI) is an established global standard of the Object Management Group (www.OMG.org, an international non-profit technology standards consortium founded in 1989) and an identification standard adopted by the American National Committee X9. The FIGI standard is issued and distributed by Bloomberg L.P. as a Registration Authority and Certified Provider under the auspice of OMG. The Financial Instrument Global Identifier (FIGI) is a twelve character, alphanumeric identifier. The first 2 characters are upper-case consonants (including "Y"), the third character is the upper-case "G", characters 4 -11 are any upper-case consonant (including "Y") or integer between 0 and 9, and the last character is a check-digit.
-    string figi =  27;
-    // Mapping: The Composite Financial Instrument Global Identifier (FIGI) enables users to link multiple FIGIs at the Trading Venue-level within the same country or market in order to obtain an aggregated view for that instrument.
-    string figic =  28;
-    // Mapping: The International Securities Identification Number (ISIN) is a twelve-character number assigned by the local national numbering agency. It consists of a two-letter country code, followed by the nine character alphanumerical national security identifier, and a check digit.
-    string isin =  29;
-    // Mapping: The Committee on Uniform Security Identification Procedures (CUSIP) number is aSecurity identification number for the U.S. and Canada.  It consists of nine alpha-numeric characters. The first six characters identify the issuer, the following two identify the issue, and the final character is a check digit.
-    string cusip =  30;
-    // Mapping: The Stock Exchange Daily Official List number (SEDOL) identifier. Numbers issued prior to March 8, 2004 consist of 7 digits.  SEDOLs issued after this date consist of 7 alphanumeric characters, where the first character is always a letter. 
-    string sedol =  31;
-    // Mapping: The Classification of Financial Instruments (CFI), is a six-letter-code used in the financial services industry to classify and describe the structure and function of a financial instrument. (ISO 10962)
-    string classification =  32;
-    
-    // Specific values for the equity: The Central Index Key (CIK) number is a unique number assigned to an individual, company, filing agent or foreign government by the United States Securities and Exchange Commission.  The numbers are up to ten digits in length and are permanent identifiers that may not be changed
-    string cik =  33;
-    // Specific values for the equity:  sectors definitions: The market sector assigned to the instrument in the commonly used market sector classification.  The output is presented as a collection of pairs of classification description (BICS, SIC, GICS, TRBC, etc) with its code.
-    map<string, string> sectors =  34;
-    // Specific values for the equity:  market capitalization: 
-    google.protobuf.DoubleValue capitalization = 35;
-    // Specific values for the equity: Company address associated with the company's domicile which is determined by the location of senior management.
-    string address =  36;
-    // Specific values for the equity: The issuer's phone number at corporate headquarters.
-    string phone =  37;
-    // Specific values for the equity: The main email of the company.
-    string email =  38;
-    // Specific values for the equity: The website link of the company.
-    string url =  39;
-    // Specific values for the equity: A list of the major shareholders of the company.  The output is presented as a collection of pairs composed of a holders' name with its percentage owned.
-    map<string, double> holders =  40;
+  // Identifiers: The instrument identifier: a bloomberg ticker and an asset type 
+  systemathics.apis.type.shared.v1.Identifier identifier = 1;
+
+  // ISO country code of the security's primary market
+  string country = 2;
+
+  // Trading currency of the security
+  string currency = 3;
+
+  // Bloomberg's parseable description source identifier
+  string parse_keyable_des_source = 4;
+
+  // Bloomberg Global Identifier (BBGID)
+  string figi = 5;
+
+  // Composite Bloomberg Global Identifier for the security
+  string figic = 6;
+
+  // International Securities Identification Number (ISIN)
+  string isin = 7;
+
+  // Committee on Uniform Securities Identification Procedures (CUSIP) number
+  string cusip = 8;
+
+  // Stock Exchange Daily Official List (SEDOL) identifier
+  string sedol = 9;
+
+  // Current trading status of the security (e.g., Active, Suspended, Delisted)
+  string market_status = 10;
+
+  // Classification of Financial Instruments (CFI) code
+  string classification = 11;
+
+  // Industry Classification Benchmark (ICB) subsector number
+  string icb_subsector_num = 12;
+
+  // Current market capitalization in local currency
+  double capitalization = 13;
+
+  // Minimum trading lot size
+  double px_trade_lot_size = 14;
+
+  // Price-dependent tick size rules
+  repeated TickSize tick_size_table = 15;
+
+  // Previous day's closing price
+  double prev_close_val = 16;
+
+  // Date of the previous trading day
+  google.type.Date previous_trading_date = 17;
+
+  // Total trading volume from the previous day
+  int64 previous_total_volume = 18;
+
+  // End time of the trading day for EOD calculations
+  google.type.TimeOfDay trading_day_end_time_eod = 19;
+
+  // Start time of the trading day for EOD calculations
+  google.type.TimeOfDay trading_day_start_time_eod = 20;
+
+  // List of indices that include this security
+  repeated string index = 21;
+
+  // Registered address of the company
+  string company_address = 22;
+
+  // Company's contact telephone number
+  string company_tel_number = 23;
+
+  // Investor relations email address
+  string ir_email_address = 24;
+
+  // Company's website URL
+  string company_web_address = 25;
+
+  // Top 20 institutional holders and their ownership percentages
+  repeated Holder top20_holders_public_filings = 26;
+
+  // Brief description of the company's business
+  string description = 27;
+
+  // GICS (Global Industry Classification Standard) sub-industry classification
+  string gics_sub_industry = 28;
+
+  // Bloomberg Industry Classification System (BICS) Level 4 code
+  string bics_level4_sub_industry_code = 29;
+
+  // Standard Industrial Classification (SIC) code
+  string eqy_sic_code = 30;
+
+  // Short name of the primary exchange
+  string eqy_prim_exch_shrt = 31;
+
+  // GICS sector name classification
+  string gics_sector_name = 32;
+
+  // Bloomberg industry sector classification
+  string industry_sector = 33;
+
+  // Bloomberg industry group classification
+  string industry_group = 34;
+
+  // Bloomberg industry subgroup classification
+  string industry_subgroup = 35;
+
+  // Frequency of dividend payments (e.g., Monthly, Quarterly, Annual)
+  string dividend_frequency = 36;
+
+  // Currency in which dividends are paid
+  string dividend_currency = 37;
+
+  // Currency of the fund (for ADRs and similar securities)
+  string eqy_fund_currency = 38;
+
+  // Indicates if options are available for this security
+  bool eqy_option_available = 39;
+
+  // Initial public offering (IPO) date
+  google.type.Date eqy_initial_po_date = 40;
+
+  // Real-time number of shares outstanding
+  double eqy_shares_outstanding_real = 41;
+
+  // Percentage of shares available for public trading
+  double eqy_free_float_pct = 42;
+
+  // Fund ticker symbol (if applicable)
+  string eqy_fund_ticker = 43;
+
+  // Bloomberg security type classification
+  string security_type = 44;
+
+  // Ticker and exchange of the immediate parent company
+  string parent_ticker_exchange = 45;
+
+  // Ticker and exchange of the ultimate parent company
+  string ult_parent_ticker_exchange = 46;
+
+  // Underlying security ticker for ADRs
+  string adr_underlier_ticker = 47;
+
+  // Number of underlying shares per ADR
+  double adr_shares_per_adr = 48;
+
+  // Secondary SEDOL identifier
+  string sedol2 = 49;
+
+  // SEC Central Index Key identifier
+  string cik = 50;
+
+  // Bloomberg Exchange Internal ID for primary feed
+  string feed_eid1 = 51;
+
+  // Bloomberg Exchange Internal ID for delayed primary feed
+  string feed_delayed_eid1 = 52;
+
+  // Bloomberg Exchange Internal ID for secondary feed
+  string feed_eid2 = 53;
+
+  // Bloomberg Exchange Internal ID for tertiary feed
+  string feed_eid3 = 54;
+
+  // Bloomberg Exchange Internal ID for quaternary feed
+  string feed_eid4 = 55;
+
+  // Detailed company description from Bloomberg
+  repeated string company_description_bulk = 56;
+
+  // ICB supersector classification name
+  string icb_supersector_name = 57;
+
+  // Complete dividend payment history
+  repeated Dividend dividend_history_all = 58;
+
+  // Ticker symbol of the parent company
+  string parent_company_ticker = 59;
+
+  // Bloomberg market sector description
+  string market_sector_description = 60;
+
+  // Operating MIC (Market Identifier Code)
+  string operating = 61;
+
+  // MIC of the primary exchange
+  string primary = 62;
+
+  // Bloomberg ticker symbol
+  string ticker = 64;
+
+  // Full name of the security
+  string name = 65;
+
+  // Historical earnings announcement dates and EPS figures
+  repeated EarningsAnnouncement earnings_announcement_date_time_history_with_eps = 66;
+
+  // Aggregated analyst recommendations
+  repeated BestAnalystRecommendation best_analyst_recommendations_bulk = 67;
+
+  // Top analyst performance rankings based on total rate of return
+  repeated AnalystPerformance top_analyst_performance_rank_trr = 68;
 }
+
     
 // Contains the reference data for exchange traded fund (ETF).
 message EtfEntry
-{
-    // Identifiers: The instrument identifier: a bloomberg ticker and an asset type 
-    systemathics.apis.type.shared.v1.Identifier identifier =  1;
-    // General information: The instrument class.
-    string type =  2;
-    // General information: Indicates if the financial instrument is currently active.
-    bool active =  3;
-    // General information: The Market Identifier Code (MIC) of the assigned primary exchange on which this specific instrument is traded. (ISO 10383)
-    string primary =  4;
-    // General information: The entity operating an exchange/market/trade reporting facility in a specific market/country (ISO 10383).
-    string operating =  5;
-    // General information: Name of the company or brief description of the instrument. The name of an instrument may change in conjunction with corporate actions.
-    string name =  6;
-    // General information: Currency in which the instrument was issued. (ISO 4217)
-    string currency =  7;
-    // General information: Specifies the  country or territory code of where the instrument trades. (ISO 3166)
-    string country =  8;
-    // General information: The minimum amount by which the price of the instrument can change.  Data is represented as a table where there are different tick sizes for different price ranges.
-    repeated TickSize tick_size_rule =  9;
-    // General information: The different indices to which this instrument belongs The output is presented as a collection Ticker-Exchange identifying indices.
-    repeated string index =  10;
-    // General information: The Market Identifier Code (MIC) to use in order to retrieve the calendar for that instrument.
-    string calendar =  11;
-    // General information: A brief description of the instrument.
-    string description =  12;
-    
-    // Trading hours: Hours the exchange opens for continuous trading, reported in the time zone of the exchange.
-    google.protobuf.Duration open =  13;
-    // Trading hours: Hours the exchange closes for continuous  trading, reported in the time zone of the exchange.
-    google.protobuf.Duration close =  14;
-    // Trading hours: The time zone.
-    string time_zone =  15;
-    
-    // Specifications: Specifies the minimum number of shares that can be purchased, as regulated by an exchange.
-    int64 lot_size =  16;
-    // Specifications: The amount value of one point basis on a price.
-    double point_value =  17;
-    
-    // Reference data: Reference price for the instrument.
-    google.protobuf.DoubleValue price =  18;
-    // Reference data: Reference volume for the instrument. 
-    google.protobuf.Int64Value volume =  19;
-    // Reference data: Time of the reference price and volume.
-    google.type.Date time =  20;
-    
-    // Mapping: List of sources contributing to the instrument fields description.
-    int32 sources =  21;
-    // Mapping: The different codes used to identify the instrument represented in a single string. The output is presented as a collection of pairs of mapping name (ISIN, RIC, SEDOL, FIGI, etc) with its code.
-    map<string, string> mapping =  22;
-    // Mapping: The bloomberg ticker.
-    string bloomberg =  23;
-    // Mapping: The Reuters Instrument Code (RIC) is a ticker-like code used to identify financial instruments and indices. The RIC is made up primarily of the security's ticker symbol, optionally followed by a period and exchange code based on the name of the stock exchange using that ticker.
-    string reuters =  24;
-    // Mapping: The Morningstar ticker used to identify an instrument.
-    string morningstar =  25;
-    // Mapping: The Markit code, also known as RED Code.
-    string markit =  26;
-    // Mapping: The Financial Instrument Global Identifier (FIGI) is an established global standard of the Object Management Group (www.OMG.org, an international non-profit technology standards consortium founded in 1989) and an identification standard adopted by the American National Committee X9. The FIGI standard is issued and distributed by Bloomberg L.P. as a Registration Authority and Certified Provider under the auspice of OMG. The Financial Instrument Global Identifier (FIGI) is a twelve character, alphanumeric identifier. The first 2 characters are upper-case consonants (including "Y"), the third character is the upper-case "G", characters 4 -11 are any upper-case consonant (including "Y") or integer between 0 and 9, and the last character is a check-digit.
-    string figi =  27;
-    // Mapping: The Composite Financial Instrument Global Identifier (FIGI) enables users to link multiple FIGIs at the Trading Venue-level within the same country or market in order to obtain an aggregated view for that instrument.
-    string figic =  28;
-    // Mapping: The International Securities Identification Number (ISIN) is a twelve-character number assigned by the local national numbering agency. It consists of a two-letter country code, followed by the nine character alphanumerical national security identifier, and a check digit.
-    string isin = 29;
-    // Mapping: The Committee on Uniform Security Identification Procedures (CUSIP) number is aSecurity identification number for the U.S. and Canada.  It consists of nine alpha-numeric characters. The first six characters identify the issuer, the following two identify the issue, and the final character is a check digit.
-    string cusip =  30;
-    // Mapping: The Stock Exchange Daily Official List number (SEDOL) identifier. Numbers issued prior to March 8, 2004 consist of 7 digits.  SEDOLs issued after this date consist of 7 alphanumeric characters, where the first character is always a letter. 
-    string sedol =  31;
-    // Mapping: The Classification of Financial Instruments (CFI), is a six-letter-code used in the financial services industry to classify and describe the structure and function of a financial instrument. (ISO 10962)
-    string classification =  32;
-    
-    // Specific values for the etf: The Central Index Key (CIK) number is a unique number assigned to an individual, company, filing agent or foreign government by the United States Securities and Exchange Commission.  The numbers are up to ten digits in length and are permanent identifiers that may not be changed
-    string cik =  33;
-    // Specific values for the etf:  sectors definitions: The market sector assigned to the instrument in the commonly used market sector classification.  The output is presented as a collection of pairs of classification description (BICS, SIC, GICS, TRBC, etc) with its code.
-    map<string, string> sectors =  34;
-    // Specific values for the etf:  market capitalization: 
-    google.protobuf.DoubleValue capitalization = 35;
-    // Specific values for the etf: Company address associated with the company's domicile which is determined by the location of senior management.
-    string address =  36;
-    // Specific values for the etf: The issuer's phone number at corporate headquarters.
-    string phone =  37;
-    // Specific values for the etf: The main email of the company.
-    string email =  38;
-    // Specific values for the etf: The website link of the company.
-    string url =  39;
-    // Specific values for the etf: Name of the issuing entity of the instrument.
-    string issuer =  40;
-    // Specific values for the etf: Description of the product designation provided by the fund company.
-    string fund_type =  41;
-    // Specific values for the etf: Date the instrument is issued.
-    google.type.Date issue_date =  42;
+{  
+  // Identifiers: The instrument identifier: a bloomberg ticker and an asset type 
+  systemathics.apis.type.shared.v1.Identifier identifier = 1;
+
+  // Full name of the ETF
+  string name = 2;
+
+  // MIC (Market Identifier Code) of the primary exchange where the ETF is traded
+  string primary = 3;
+
+  // MIC of the local exchange where the ETF is traded
+  string operating = 4;
+
+  // List of all MIC codes where the ETF is listed for trading
+  repeated string listed_mic = 5;
+
+  // Company description from Bloomberg
+  string description = 6;
+
+  // Bloomberg industry sector classification
+  string industry_sector = 7;
+
+  // Bloomberg industry group classification
+  string industry_group = 8;
+
+  // Name of the ETF issuer/sponsor
+  string issuer = 9;
+
+  // Physical address of the issuing company
+  string company_address = 10;
+
+  // Contact telephone number of the issuing company
+  string company_tel_number = 11;
+
+  // Investor relations email address
+  string ir_email_address = 12;
+
+  // Company's website URL
+  string company_web_address = 13;
+
+  // Top 20 holdings and their weights from public filings
+  repeated Holder top20_holders_public_filings = 14;
+
+  // Inception date of the fund (FUND_INCEPTION_DT)
+  google.type.Date fund_incept_date = 15;
+
+  // Current market capitalization in fund's trading currency
+  double capitalization = 16;
+
+  // CFI (Classification of Financial Instruments) code
+  string classification = 17;
+
+  // Bloomberg security type classification
+  string security_type = 18;
+
+  // Country of domicile
+  string country = 19;
+
+  // Bloomberg market sector description
+  string market_sector_description = 20;
+
+  // Bloomberg ticker symbol
+  string ticker = 21;
+
+  // Bloomberg Global Identifier
+  string figi = 22;
+
+  // Abbreviated name of the ETF
+  string short_name = 23;
+
+  // Trading currency of the ETF
+  string currency = 24;
+
+  // Indicates if equity options are available for this ETF
+  bool equity_option_available = 25;
+
+  // Primary asset class focus of the fund (e.g., Equity, Fixed Income)
+  string fund_asset_class_focus = 26;
+
+  // Geographic focus of the fund (e.g., North America, Global)
+  string fund_geo_focus = 27;
+
+  // Bloomberg industry subgroup classification
+  string industry_subgroup = 28;
+
+  // ETF replication method (e.g., Physical, Synthetic)
+  string replication_strategy = 29;
+
+  // Type of leverage used by the fund
+  string fund_leverage_type = 30;
+
+  // Leverage description
+  string fund_leverage = 31;
+
+  // Numerical value of the fund's leverage
+  string fund_leverage_amount = 32;
+
+  // Method used for weighting index components
+  string index_weighting_methodology = 33;
+
+  // Frequency of index rebalancing
+  string rebalancing_frequency = 34;
+
+  // Current market status (e.g., Active, Delisted)
+  string market_status = 35;
+
+  // International Securities Identification Number
+  string isin = 36;
+
+  // CUSIP (Committee on Uniform Securities Identification Procedures) identifier
+  string cusip = 37;
+
+  // SEDOL (Stock Exchange Daily Official List) identifier
+  string sedol = 38;
+
+  // Price scaling factor for the security
+  double px_scaling_factor = 39;
+
+  // Previous day's total trading volume
+  double previous_total_volume = 40;
+
+  // Previous closing price
+  double prev_close_val = 41;
+
+  // Trading volume for the last 24 hours
+  double px_volume1d = 42;
+
+  // Date of the previous trading day
+  google.type.Date previous_trading_date = 43;
+
+  // Reference to the applicable tick size table
+  string tick_size_table = 47;
+
+  // Minimum number of decimal places for price display
+  int32 px_disp_format_min_num_dec = 48;
+
+  // Complete legal name of the company/fund
+  string long_comp_name = 49;
+
+  // Total fund assets in USD
+  double fund_assets_usd = 50;
+
+  // Primary exchange for the security
+  string eqy_prim_security_prim_exch = 51;
+
+  // Date of the last closing price
+  google.type.Date price_close_date = 52;
+
+  // Specific industry focus of the fund
+  string fund_industry_focus = 53;
+
+  // Bloomberg EID (Exchange Internal ID) for primary feed
+  string feed_eid1 = 54;
+
+  // Bloomberg EID for delayed primary feed
+  string feed_delayed_eid1 = 55;
+
+  // Bloomberg EID for secondary feed
+  string feed_eid2 = 56;
+
+  // Bloomberg EID for tertiary feed
+  string feed_eid3 = 57;
+
+  // Bloomberg EID for quaternary feed
+  string feed_eid4 = 58;
+
+  // Real-time shares outstanding
+  double eqy_sh_out_real = 59;
+
+  // Dividend payment frequency (e.g., Monthly, Quarterly)
+  string dvd_freq = 60;
+
+  // Currency of dividend payments
+  string dvd_crncy = 61;
+
+  // Type of the last dividend payment
+  string dvd_typ_last = 62;
+
+  // Investment strategy description
+  string fund_strategy = 63;
+
+  // Status of historical dividend amount records
+  repeated Dividend dvd_hist_all_with_amt_status = 64;
+
+  // Ticker of the underlying index tracked by the ETF
+  string etf_underlierl_index_ticker = 65;
+
+  // Type of fund classification
+  string fund_type = 66;
 }
+
     
 // Contains the reference data for futures.
 message FutureEntry
@@ -634,7 +851,7 @@ message FutureEntry
     // Year the principal of the instrument is due and payable.
     int32 year = 4;
     // Bloomberg Generated CFI Code. Bloomberg field: BLOOMBERG_CFI_CODE
-    google.protobuf.StringValue cfi_code =  5;
+    google.protobuf.StringValue classification =  5;
     // Is Cash Settled - Indicator. Bloomberg field: CASH_SETTLED
     google.protobuf.StringValue cash_settled = 6;
     // The calendar code on CDR associated with the exchange or country calendar used for settlement of the security. Bloomberg field: CDR_SETTLE_CODE
@@ -648,7 +865,7 @@ message FutureEntry
     // Exchange Code. Bloomberg Value: EXCH_CODE
     google.protobuf.StringValue exchange_code = 11;
     // Exchange Market Status Code. Bloomberg Value: EXCH_MARKET_STATUS
-    google.protobuf.StringValue exchange_market_status = 12;
+    google.protobuf.StringValue market_status = 12;
     // Delayed Entitlement ID 1. Bloomberg Value: FEED_DELAYED_EID1
     google.protobuf.StringValue feed_delayed_entitlement_id_1 = 13;
     // Feed Entitlement ID 1. Bloomberg Value: FEED_EID1
@@ -980,10 +1197,10 @@ message BondEntry
     google.protobuf.StringValue  sedol = 14;
 
     // Exchange Market Status. Bloomberg field: EXCH_MARKET_STATUS
-    google.protobuf.StringValue  exchange_market_status = 15;
+    google.protobuf.StringValue  market_status = 15;
 
     // CFI Code. Bloomberg field: CFI_CODE
-    google.protobuf.StringValue  cfi_code = 16;
+    google.protobuf.StringValue  classification = 16;
 
     // Previous Closing Value. Bloomberg field: PREV_CLOSE_VAL
     google.protobuf.DoubleValue previous_closing_value = 17;
@@ -1571,4 +1788,66 @@ enum SwaptionType
     SWAPTION_TYPE_PAYER = 1;
 
     SWAPTION_TYPE_RECEIVER = 2;
+}
+
+message AnalystPerformance {
+    string firm_name = 1;
+    string analyst_name = 2;
+    string ranking = 3;
+    double total_returns = 4;
+    string recommendation = 5;
+    google.type.Date date = 6;
+}
+
+message BestAnalystRecommendation {
+    string firm_name = 1;
+    string analyst = 2;
+    string recommendation = 3;
+    int32 rating = 4;
+    string action_code = 5;
+    double target_price = 6;
+    string period = 7;    
+    google.type.Date date = 8;
+    int32 best_analyst_rankink_rank = 9;
+    double one_year_return = 10;
+}
+
+// Individual earnings announcement record
+message EarningsAnnouncement {
+    // Year and quarter identifier (e.g., "2024:Q1")
+    string year_period = 1;
+    
+    // Announcement date
+    google.type.Date announcement_date = 2;
+    
+    // Announcement time
+    string announcement_time = 3;
+    
+    // EPS values
+    double earnings_eps = 4;
+    double comparable_eps = 5;
+    double estimate_eps = 6;
+}
+
+message Dividend {
+    google.type.Date declared_date = 1;
+    google.type.Date ex_date = 2;
+    google.type.Date record_date = 3;
+    google.type.Date payable_date = 4;   
+    double dividend_amount = 5;
+    string dividend_frequency = 6;
+    string dividend_type = 7;
+}
+
+message Holder {
+ string holder_name = 1;
+ string portfolio_name = 2;
+ string source = 3;
+ double amount_held = 4;
+ double percent_outstanding = 5; 
+ double latest_change = 6;
+ google.type.Date filing_date = 7;
+ string institution_type = 8;
+ string country = 9;
+ string metro_area = 10;
 }
