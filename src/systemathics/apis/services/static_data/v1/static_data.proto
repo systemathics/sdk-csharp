@@ -500,7 +500,7 @@ message EquityEntry
   repeated string index = 21;
 
   // Registered address of the company
-  string company_address = 22;
+  repeated string company_address = 22;
 
   // Company's contact telephone number
   string company_tel_number = 23;
@@ -670,7 +670,7 @@ message EtfEntry
   string issuer = 9;
 
   // Physical address of the issuing company
-  string company_address = 10;
+  repeated string company_address = 10;
 
   // Contact telephone number of the issuing company
   string company_tel_number = 11;
