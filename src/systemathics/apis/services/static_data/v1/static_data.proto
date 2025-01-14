@@ -496,12 +496,6 @@ message EquityEntry
   // Total trading volume from the previous day
   int64 previous_total_volume = 18;
 
-  // End time of the trading day for EOD calculations
-  google.type.TimeOfDay trading_day_end_time_eod = 19;
-
-  // Start time of the trading day for EOD calculations
-  google.type.TimeOfDay trading_day_start_time_eod = 20;
-
   // List of indices that include this security
   repeated string index = 21;
 
